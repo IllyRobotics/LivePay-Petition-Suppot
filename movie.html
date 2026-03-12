@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>I-RIS — Illy Robotic Instruments Studios</title>
-  <meta name="description" content="I-RIS (Illy Robotic Instruments Studios) — Original content cultivated for major film platforms. Mini-series, IRL content, and more." />
-  <meta name="theme-color" content="#4fd1ff">
+  <title>I-RIS — Stream Original Series & IRL Content</title>
+  <meta name="description" content="I-RIS (Illy Robotic Instruments Studios) — Stream original mini-series, IRL shows, and exclusive content. A film production studio by Illy Robotics." />
+  <meta name="theme-color" content="#0a0a0a">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,768 +13,883 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%234fd1ff' width='100' height='100'/><text x='50%' y='50%' font-size='60' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>IR</text></svg>">
   <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
     :root{
-      --bg:#050810;
-      --panel:#12182b;
-      --panel2:#0f1526;
-      --text:#ffffff;
-      --muted:#c7d2fe;
-      --muted2:#8b9cff;
+      --bg:#0a0a0a;
+      --surface:#141414;
+      --surface2:#1a1a1a;
+      --surface3:#222;
+      --text:#fff;
+      --text-muted:#a0a0a0;
+      --text-dim:#666;
+      --accent:#4fd1ff;
+      --accent2:#7c5cff;
+      --iris-grad:linear-gradient(135deg,#4fd1ff,#7c5cff);
+      --red:#e50914;
+      --green:#46d369;
+      --gold:#f5c518;
       --border:rgba(255,255,255,.08);
-      --shadow:0 20px 40px rgba(0,0,0,.4);
-      --grad:linear-gradient(90deg,#4fd1ff,#7c5cff);
-      --iris-glow:linear-gradient(135deg,#4fd1ff,#7c5cff,#4fd1ff);
-      --gold:linear-gradient(135deg,#ffd700,#ffed4e,#ffd700);
-      --neon-blue:#4fd1ff;
-      --neon-purple:#7c5cff;
+      --radius:6px;
     }
+
+    html{scroll-behavior:smooth;}
 
     body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;
-      background:radial-gradient(1200px 800px at 50% -200px, rgba(79,209,255,.1), transparent 60%),
-                 radial-gradient(900px 600px at 90% 0%, rgba(124,92,255,.08), transparent 55%),
-                 var(--bg);
+      font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+      background:var(--bg);
       color:var(--text);
       min-height:100vh;
+      -webkit-font-smoothing:antialiased;
     }
 
-    .container{max-width:1100px;margin:auto;padding:26px 18px 60px;}
-
-    /* Top bar */
-    .topbar{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter: blur(12px);
-      background: rgba(5,8,16,.85);
-      border-bottom:1px solid var(--border);
+    /* ===== STREAMING NAV BAR ===== */
+    .nav-bar{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      background:linear-gradient(180deg,rgba(0,0,0,.95) 0%,rgba(0,0,0,.7) 70%,transparent);
+      padding:0;
+      transition:background .3s;
     }
-    .topbar-inner{
-      max-width:1100px;margin:auto;
-      display:flex;align-items:center;justify-content:space-between;
-      padding:14px 18px;
-      flex-wrap:wrap;
-      gap:10px;
+    .nav-bar.scrolled{
+      background:rgba(10,10,10,.98);
+      box-shadow:0 2px 20px rgba(0,0,0,.5);
     }
-    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
-    .mark{
-      width:34px;height:34px;border-radius:10px;
-      background: var(--grad);
-      box-shadow: 0 10px 25px rgba(79,209,255,.18);
-      position:relative;
-    }
-    .mark:after{
-      content:"";
-      position:absolute;inset:9px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,.65);
-      opacity:.55;
-    }
-    .brand .name{font-weight:800;letter-spacing:.2px;}
-    .brand .tag{font-size:.85rem;color:var(--muted2)}
-
-    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-    .chip{
-      border:1px solid var(--border);
-      background: rgba(18,24,43,.6);
-      color: var(--muted);
-      padding:10px 12px;
-      border-radius: 999px;
-      text-decoration:none;
-      font-weight:600;
-      font-size:.9rem;
-    }
-    .chip:hover{border-color: rgba(255,255,255,.18)}
-    .chip.active{
-      background: var(--grad);
-      color: white;
-      border-color: transparent;
-    }
-    .chip.demo{
-      background: var(--grad);
-      color: white;
-      font-weight:800;
-      border:none;
-      box-shadow: 0 8px 20px rgba(79,209,255,.3);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    .chip.demo:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(79,209,255,.4);
-    }
-    @keyframes pulse{
-      0%, 100% { box-shadow: 0 8px 20px rgba(79,209,255,.3); }
-      50% { box-shadow: 0 8px 25px rgba(79,209,255,.5); }
-    }
-
-    /* Studio Hero */
-    .studio-hero{
-      text-align:center;
-      margin:40px 0 50px;
-      padding:50px 20px;
-      background: radial-gradient(600px 400px at 50% 50%, rgba(79,209,255,.08), transparent 70%),
-                  radial-gradient(400px 300px at 50% 60%, rgba(124,92,255,.06), transparent 60%);
-      border-radius:24px;
-      position:relative;
-      overflow:hidden;
-    }
-    .studio-hero::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      border-radius:24px;
-      background: linear-gradient(180deg, rgba(79,209,255,.15), transparent 40%, transparent 60%, rgba(124,92,255,.1));
-      pointer-events:none;
-    }
-
-    .studio-logo{
-      width:120px;
-      height:120px;
-      margin:0 auto 24px;
-      border-radius:20px;
-      background: linear-gradient(135deg, rgba(79,209,255,.15), rgba(124,92,255,.15));
-      border:2px solid rgba(79,209,255,.3);
-      display:flex;align-items:center;justify-content:center;
-      box-shadow: 0 0 40px rgba(79,209,255,.15), 0 0 80px rgba(124,92,255,.08);
-      position:relative;
-    }
-    .studio-logo svg{width:70px;height:70px;}
-
-    .studio-badge{
-      display:inline-block;
-      padding:8px 20px;
-      border-radius:999px;
-      background: linear-gradient(135deg, rgba(79,209,255,.2), rgba(124,92,255,.2));
-      border:1px solid rgba(79,209,255,.3);
-      color:var(--neon-blue);
-      font-weight:700;
-      font-size:.85rem;
-      letter-spacing:1.5px;
-      text-transform:uppercase;
-      margin-bottom:20px;
-    }
-
-    .studio-title{
-      font-size: clamp(2.8rem, 8vw, 5rem);
-      margin: 0 0 8px;
-      font-weight:900;
-      letter-spacing:4px;
-      line-height:1;
-      background: linear-gradient(135deg, #4fd1ff 0%, #ffffff 40%, #7c5cff 100%);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
-
-    .studio-full-name{
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color:var(--muted2);
-      font-weight:600;
-      letter-spacing:2px;
-      text-transform:uppercase;
-      margin-bottom:24px;
-    }
-
-    .studio-desc{
-      font-size:1.1rem;
-      color:var(--muted);
-      max-width:750px;
-      margin:0 auto;
-      line-height:1.8;
-    }
-    .studio-desc strong{color:#fff;}
-
-    /* Section styling */
-    .section{
-      background: linear-gradient(180deg, rgba(18,24,43,.95), rgba(15,21,38,.95));
-      padding: 40px 32px;
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      border:1px solid var(--border);
-      margin-bottom:32px;
-    }
-
-    .section-header{
-      font-size:1.8rem;
-      font-weight:900;
-      margin:0 0 12px;
-      text-align:center;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      background: var(--grad);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
-
-    .section-subtitle{
-      text-align:center;
-      color:var(--muted2);
-      font-size:1rem;
-      margin:0 0 32px;
-    }
-
-    /* Platform badges */
-    .platforms{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      justify-content:center;
-      margin:28px 0 0;
-    }
-    .platform-badge{
-      padding:8px 18px;
-      border-radius:999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid var(--border);
-      color:var(--muted);
-      font-weight:700;
-      font-size:.85rem;
-      letter-spacing:.5px;
-    }
-
-    /* Series Grid */
-    .series-grid{
-      display:grid;
-      grid-template-columns:1fr;
+    .nav-inner{
+      max-width:1400px;margin:auto;
+      display:flex;align-items:center;
+      padding:16px 48px;
       gap:32px;
     }
-
-    .series-card{
-      background: rgba(11,15,26,.6);
-      border:1px solid var(--border);
-      border-radius:20px;
-      overflow:hidden;
-      transition: transform .2s, box-shadow .2s;
-    }
-    .series-card:hover{
-      transform:translateY(-4px);
-      box-shadow: 0 20px 50px rgba(0,0,0,.4);
-    }
-
-    .series-card-header{
-      padding:28px 28px 20px;
-      display:flex;
-      align-items:center;
-      gap:16px;
-    }
-
-    .series-icon{
-      width:56px;height:56px;
-      border-radius:14px;
-      display:flex;align-items:center;justify-content:center;
-      font-size:1.5rem;
-      font-weight:900;
+    .nav-logo{
+      display:flex;align-items:center;gap:10px;
+      text-decoration:none;color:var(--text);
       flex-shrink:0;
     }
-    .series-icon.a{
-      background: linear-gradient(135deg, rgba(79,209,255,.2), rgba(79,209,255,.05));
-      border:1px solid rgba(79,209,255,.3);
-      color:var(--neon-blue);
+    .nav-logo-text{
+      font-size:1.6rem;
+      font-weight:900;
+      letter-spacing:3px;
+      background:var(--iris-grad);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
-    .series-icon.b{
-      background: linear-gradient(135deg, rgba(124,92,255,.2), rgba(124,92,255,.05));
-      border:1px solid rgba(124,92,255,.3);
-      color:var(--neon-purple);
-    }
-
-    .series-info h3{
-      margin:0 0 4px;
-      font-size:1.4rem;
-      font-weight:800;
-      letter-spacing:.5px;
-    }
-    .series-info .series-label{
-      font-size:.85rem;
-      color:var(--muted2);
-      font-weight:600;
+    .nav-logo-sub{
+      font-size:.6rem;
+      color:var(--text-muted);
+      letter-spacing:1.5px;
       text-transform:uppercase;
-      letter-spacing:1px;
+      display:block;
+      margin-top:-2px;
     }
-
-    .series-desc{
-      padding:0 28px 20px;
-      color:var(--muted);
-      line-height:1.7;
-      font-size:.98rem;
+    .nav-links{
+      display:flex;gap:24px;align-items:center;
+      list-style:none;flex:1;
     }
+    .nav-links a{
+      color:var(--text-muted);
+      text-decoration:none;
+      font-size:.9rem;
+      font-weight:500;
+      transition:color .2s;
+      white-space:nowrap;
+    }
+    .nav-links a:hover,.nav-links a.active{color:#fff;}
+    .nav-right{
+      display:flex;gap:12px;align-items:center;
+      margin-left:auto;
+    }
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 22px;
+      border-radius:var(--radius);
+      font-weight:700;
+      font-size:.9rem;
+      text-decoration:none;
+      border:none;cursor:pointer;
+      transition:all .2s;
+    }
+    .btn-primary{
+      background:var(--iris-grad);
+      color:#fff;
+      box-shadow:0 4px 15px rgba(79,209,255,.25);
+    }
+    .btn-primary:hover{
+      transform:scale(1.03);
+      box-shadow:0 6px 20px rgba(79,209,255,.35);
+    }
+    .btn-outline{
+      background:transparent;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.3);
+    }
+    .btn-outline:hover{background:rgba(255,255,255,.08);}
+    .btn-play{
+      background:rgba(255,255,255,.95);
+      color:#000;
+      font-weight:800;
+      padding:12px 28px;
+      font-size:1.05rem;
+    }
+    .btn-play:hover{background:#fff;}
+    .btn-info{
+      background:rgba(255,255,255,.15);
+      color:#fff;
+      font-weight:700;
+      padding:12px 28px;
+      font-size:1.05rem;
+      backdrop-filter:blur(4px);
+    }
+    .btn-info:hover{background:rgba(255,255,255,.25);}
+    .btn-sm{padding:8px 16px;font-size:.8rem;}
 
-    .series-video{
-      margin:0 20px 24px;
-      border-radius:16px;
+    /* ===== HERO BILLBOARD ===== */
+    .hero-billboard{
+      position:relative;
+      width:100%;
+      min-height:85vh;
+      display:flex;align-items:flex-end;
       overflow:hidden;
       background:#000;
-      box-shadow: 0 10px 30px rgba(0,0,0,.4);
     }
-
-    .video-wrapper{
-      position:relative;
-      padding-bottom:177.78%;
-      height:0;
-      overflow:hidden;
+    .hero-bg{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 120% 80% at 70% 30%, rgba(79,209,255,.12), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 20% 60%, rgba(124,92,255,.1), transparent 50%),
+        linear-gradient(180deg, #0a0a0a 0%, #0d1117 30%, #0a0e1a 60%, #0a0a0a 100%);
     }
-    .video-wrapper iframe{
-      position:absolute;
-      top:0;left:0;
-      width:100%;height:100%;
-      border:none;
-    }
-
-    .series-status{
-      padding:0 28px 24px;
-    }
-    .status-badge{
-      display:inline-block;
-      padding:6px 16px;
-      border-radius:999px;
-      font-size:.8rem;
-      font-weight:700;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-    }
-    .status-badge.streaming{
-      background: linear-gradient(135deg, rgba(0,200,100,.2), rgba(0,200,100,.05));
-      border:1px solid rgba(0,200,100,.3);
-      color:#00c864;
-    }
-    .status-badge.production{
-      background: linear-gradient(135deg, rgba(255,215,0,.2), rgba(255,215,0,.05));
-      border:1px solid rgba(255,215,0,.3);
-      color:#ffd700;
-    }
-
-    /* IRL Content Section */
-    .irl-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
-      gap:24px;
-    }
-
-    .irl-card{
-      background: rgba(11,15,26,.6);
-      border:1px solid var(--border);
-      border-radius:20px;
-      overflow:hidden;
-      transition: transform .2s, box-shadow .2s;
-    }
-    .irl-card:hover{
-      transform:translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.4);
-    }
-
-    .irl-image{
-      width:100%;
-      height:220px;
-      object-fit:cover;
-      display:block;
-      background: linear-gradient(135deg, rgba(79,209,255,.08), rgba(124,92,255,.08));
-    }
-
-    .irl-image-placeholder{
-      width:100%;
-      height:220px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:3rem;
-      font-weight:900;
-      position:relative;
-      overflow:hidden;
-    }
-    .irl-image-placeholder.swami{
-      background: linear-gradient(135deg, #ff6b35, #ff4500, #ff6b35);
-      color:rgba(255,255,255,.9);
-    }
-    .irl-image-placeholder.jacob{
-      background: linear-gradient(135deg, #7c5cff, #4fd1ff, #7c5cff);
-      color:rgba(255,255,255,.9);
-    }
-    .irl-image-placeholder.milky{
-      background: linear-gradient(135deg, #8b6914, #c49a2a, #8b6914);
-      color:rgba(255,255,255,.9);
-    }
-    .irl-image-placeholder .overlay-text{
-      position:relative;z-index:1;
-      text-shadow: 0 2px 10px rgba(0,0,0,.3);
-      letter-spacing:1px;
-    }
-    .irl-image-placeholder::after{
+    .hero-bg::after{
       content:"";
       position:absolute;
-      inset:0;
-      background: radial-gradient(circle at 30% 70%, rgba(255,255,255,.15), transparent 50%);
+      bottom:0;left:0;right:0;
+      height:300px;
+      background:linear-gradient(transparent,var(--bg));
+    }
+    .hero-iframe-bg{
+      position:absolute;inset:0;
+      overflow:hidden;
+      opacity:.35;
+    }
+    .hero-iframe-bg iframe{
+      position:absolute;
+      top:50%;left:50%;
+      width:180%;height:180%;
+      transform:translate(-50%,-50%);
+      border:none;
+      pointer-events:none;
+    }
+    .hero-content{
+      position:relative;z-index:2;
+      max-width:1400px;
+      margin:auto;
+      padding:0 48px 80px;
+      width:100%;
+    }
+    .hero-studio-tag{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:.8rem;
+      font-weight:700;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:var(--accent);
+      margin-bottom:16px;
+    }
+    .hero-studio-tag svg{width:16px;height:16px;}
+    .hero-title{
+      font-size:clamp(3rem,7vw,5.5rem);
+      font-weight:900;
+      letter-spacing:-1px;
+      line-height:.95;
+      margin-bottom:16px;
+      text-shadow:0 4px 30px rgba(0,0,0,.6);
+    }
+    .hero-title span{
+      display:block;
+      background:var(--iris-grad);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      font-size:.35em;
+      letter-spacing:4px;
+      margin-bottom:8px;
+    }
+    .hero-meta{
+      display:flex;gap:16px;align-items:center;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+    .hero-badge{
+      padding:3px 8px;border-radius:3px;
+      font-size:.75rem;font-weight:700;
+      text-transform:uppercase;letter-spacing:.5px;
+    }
+    .hero-badge.new{background:var(--green);color:#000;}
+    .hero-badge.series{background:var(--accent);color:#000;}
+    .hero-meta-text{color:var(--text-muted);font-size:.9rem;}
+    .hero-desc{
+      max-width:550px;
+      font-size:1.1rem;
+      line-height:1.5;
+      color:rgba(255,255,255,.85);
+      margin-bottom:28px;
+      text-shadow:0 2px 10px rgba(0,0,0,.5);
+    }
+    .hero-actions{
+      display:flex;gap:12px;flex-wrap:wrap;
     }
 
-    .irl-body{
-      padding:24px;
+    /* ===== CONTENT ROWS (Netflix-style) ===== */
+    .content-area{
+      max-width:1400px;
+      margin:auto;
+      padding:0 48px;
     }
-    .irl-body h3{
-      margin:0 0 4px;
-      font-size:1.2rem;
+
+    .row{
+      margin-bottom:48px;
+    }
+    .row-header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:18px;
+      padding:0 4px;
+    }
+    .row-title{
+      font-size:1.4rem;
       font-weight:800;
-      letter-spacing:.3px;
+      letter-spacing:-.3px;
     }
-    .irl-body .show-name{
-      font-size:1rem;
-      color:var(--neon-blue);
-      font-weight:700;
-      margin:0 0 12px;
-    }
-    .irl-body .show-desc{
-      color:var(--muted);
-      font-size:.92rem;
-      line-height:1.6;
-      margin:0;
-    }
-    .irl-number{
-      display:inline-flex;
-      align-items:center;justify-content:center;
-      width:28px;height:28px;
-      border-radius:50%;
-      background:var(--grad);
-      color:#fff;
-      font-weight:800;
+    .row-title .accent{color:var(--accent);}
+    .row-more{
+      color:var(--accent);
       font-size:.85rem;
-      margin-right:8px;
-      flex-shrink:0;
+      font-weight:600;
+      text-decoration:none;
+      display:flex;align-items:center;gap:4px;
     }
-    .irl-body .creator-row{
+    .row-more:hover{text-decoration:underline;}
+
+    /* Horizontal scroll row */
+    .card-scroll{
       display:flex;
+      gap:16px;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:8px;
+      scrollbar-width:none;
+    }
+    .card-scroll::-webkit-scrollbar{display:none;}
+
+    /* Title Cards (landscape) */
+    .title-card{
+      flex:0 0 420px;
+      scroll-snap-align:start;
+      border-radius:8px;
+      overflow:hidden;
+      background:var(--surface);
+      cursor:pointer;
+      transition:transform .25s,box-shadow .25s;
+      position:relative;
+    }
+    .title-card:hover{
+      transform:scale(1.04);
+      box-shadow:0 16px 40px rgba(0,0,0,.6);
+      z-index:5;
+    }
+    .title-card-video{
+      width:100%;
+      aspect-ratio:16/9;
+      background:#000;
+      position:relative;
+      overflow:hidden;
+    }
+    .title-card-video iframe{
+      width:100%;height:100%;border:none;
+    }
+    .title-card-video .play-overlay{
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.3);
+      opacity:0;
+      transition:opacity .2s;
+    }
+    .title-card:hover .play-overlay{opacity:1;}
+    .play-overlay .play-circle{
+      width:56px;height:56px;
+      border-radius:50%;
+      background:rgba(255,255,255,.9);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .play-overlay .play-circle svg{
+      width:22px;height:22px;fill:#000;margin-left:3px;
+    }
+    .title-card-body{
+      padding:16px 18px 20px;
+    }
+    .title-card-row{
+      display:flex;align-items:center;gap:10px;
+      margin-bottom:8px;
+    }
+    .card-badge{
+      padding:2px 7px;border-radius:3px;
+      font-size:.7rem;font-weight:700;letter-spacing:.3px;
+      text-transform:uppercase;
+    }
+    .card-badge.live{background:var(--green);color:#000;}
+    .card-badge.new{background:var(--gold);color:#000;}
+    .card-badge.coming{background:var(--accent2);color:#fff;}
+    .card-match{color:var(--green);font-weight:700;font-size:.85rem;}
+    .title-card-name{
+      font-size:1.15rem;font-weight:800;
+      margin-bottom:4px;letter-spacing:.2px;
+    }
+    .title-card-genre{
+      color:var(--text-muted);font-size:.82rem;
+      display:flex;align-items:center;gap:8px;
+    }
+    .title-card-genre .dot{color:var(--text-dim);}
+    .title-card-desc{
+      color:var(--text-muted);
+      font-size:.85rem;
+      line-height:1.5;
+      margin-top:10px;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    /* Portrait Cards (for IRL/shows) */
+    .show-card{
+      flex:0 0 240px;
+      scroll-snap-align:start;
+      border-radius:8px;
+      overflow:hidden;
+      background:var(--surface);
+      cursor:pointer;
+      transition:transform .25s,box-shadow .25s;
+      position:relative;
+    }
+    .show-card:hover{
+      transform:scale(1.05);
+      box-shadow:0 16px 40px rgba(0,0,0,.6);
+      z-index:5;
+    }
+    .show-card-img{
+      width:100%;
+      aspect-ratio:3/4;
+      object-fit:cover;
+      display:block;
+      background:var(--surface2);
+    }
+    .show-card-overlay{
+      position:absolute;
+      bottom:0;left:0;right:0;
+      padding:60px 16px 16px;
+      background:linear-gradient(transparent,rgba(0,0,0,.95));
+    }
+    .show-card-badge{
+      display:inline-block;
+      padding:2px 8px;border-radius:3px;
+      font-size:.65rem;font-weight:700;
+      text-transform:uppercase;letter-spacing:.5px;
+      margin-bottom:6px;
+    }
+    .show-card-badge.irl{background:#e50914;color:#fff;}
+    .show-card-badge.upcoming{background:var(--gold);color:#000;}
+    .show-card-title{
+      font-size:1rem;font-weight:800;
+      margin-bottom:2px;
+    }
+    .show-card-sub{
+      font-size:.8rem;color:var(--text-muted);
+    }
+    .show-rank{
+      position:absolute;top:12px;left:12px;
+      width:32px;height:32px;border-radius:6px;
+      background:rgba(0,0,0,.7);
+      backdrop-filter:blur(4px);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:.9rem;
+      border:1px solid rgba(255,255,255,.15);
+    }
+
+    /* ===== FEATURED PLAYER SECTION ===== */
+    .featured-player{
+      margin:16px 0 56px;
+      border-radius:12px;
+      overflow:hidden;
+      background:#000;
+      position:relative;
+    }
+    .featured-video{
+      width:100%;
+      aspect-ratio:16/9;
+    }
+    .featured-video iframe{
+      width:100%;height:100%;border:none;
+    }
+
+    /* ===== CATEGORY TABS ===== */
+    .cat-tabs{
+      display:flex;gap:8px;
+      margin-bottom:32px;
+      overflow-x:auto;
+      scrollbar-width:none;
+      padding-bottom:4px;
+    }
+    .cat-tabs::-webkit-scrollbar{display:none;}
+    .cat-tab{
+      padding:8px 20px;
+      border-radius:999px;
+      font-size:.85rem;
+      font-weight:600;
+      white-space:nowrap;
+      background:var(--surface2);
+      color:var(--text-muted);
+      border:1px solid transparent;
+      cursor:pointer;
+      transition:all .2s;
+    }
+    .cat-tab:hover{color:#fff;background:var(--surface3);}
+    .cat-tab.active{
+      background:var(--iris-grad);
+      color:#fff;
+      border-color:transparent;
+    }
+
+    /* ===== ABOUT STRIP ===== */
+    .about-strip{
+      background:var(--surface);
+      border-top:1px solid var(--border);
+      padding:64px 48px;
+      margin-top:32px;
+    }
+    .about-inner{
+      max-width:1400px;margin:auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:48px;
       align-items:center;
+    }
+    .about-text h2{
+      font-size:2rem;font-weight:900;
+      margin-bottom:16px;
+    }
+    .about-text h2 span{
+      background:var(--iris-grad);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .about-text p{
+      color:var(--text-muted);
+      line-height:1.7;
+      margin-bottom:16px;
+      font-size:.95rem;
+    }
+    .about-text p strong{color:#fff;}
+    .about-platforms{
+      display:flex;flex-wrap:wrap;gap:10px;
+      margin-top:20px;
+    }
+    .about-platforms span{
+      padding:6px 16px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      font-size:.8rem;font-weight:600;
+      color:var(--text-muted);
+    }
+    .about-stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+    .stat-card{
+      background:var(--surface2);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:24px;
+      text-align:center;
+    }
+    .stat-num{
+      font-size:2.2rem;font-weight:900;
+      background:var(--iris-grad);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
       margin-bottom:4px;
     }
-
-    /* Emphasis */
-    .emphasis-box{
-      background: linear-gradient(135deg, rgba(79,209,255,.12), rgba(124,92,255,.12));
-      border:2px solid rgba(79,209,255,.3);
-      border-radius:16px;
-      padding:24px;
-      margin:24px 0;
-      text-align:center;
-    }
-    .emphasis-box .quote{
-      font-size:1.3rem;
-      font-weight:700;
-      line-height:1.5;
-      color:#fff;
-      font-style:italic;
-      margin:0;
+    .stat-label{
+      font-size:.8rem;color:var(--text-muted);
+      text-transform:uppercase;letter-spacing:1px;
+      font-weight:600;
     }
 
-    .content-block{
-      background: rgba(11,15,26,.5);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:24px;
-      margin:20px 0;
-      line-height:1.8;
-      color:var(--muted);
-    }
-    .content-block strong{color:#fff;font-weight:700;}
-    .content-block p{margin:0 0 16px;}
-    .content-block p:last-child{margin:0;}
-
-    .bullet-list{
-      list-style:none;
-      padding:0;
-      margin:20px 0;
-    }
-    .bullet-list li{
-      padding:12px 0 12px 32px;
-      position:relative;
-      color:var(--muted);
-      line-height:1.7;
-    }
-    .bullet-list li:before{
-      content:"▹";
-      position:absolute;left:0;
-      color:#4fd1ff;
-      font-size:1.4rem;
-      font-weight:900;
-    }
-
-    .disclaimer-box{
-      background: rgba(255,215,0,.05);
-      border:1px solid rgba(255,215,0,.2);
-      border-radius:16px;
-      padding:20px;
-      margin:20px 0;
-      font-size:.95rem;
-      line-height:1.7;
-      color:var(--muted);
-    }
-    .disclaimer-box strong{
-      color:#ffd700;
-      font-size:1.05rem;
-      display:block;
-      margin-bottom:12px;
-    }
-
-    /* Divider */
-    .section-divider{
-      height:1px;
-      background: linear-gradient(90deg, transparent, rgba(79,209,255,.3), rgba(124,92,255,.3), transparent);
-      margin:48px 0;
-      border:none;
-    }
-
-    footer{
-      text-align:center;
-      color:var(--muted2);
-      margin-top:50px;
-      font-size:.9rem;
-      padding-bottom:20px;
+    /* ===== FOOTER ===== */
+    .site-footer{
+      padding:48px 48px 32px;
       border-top:1px solid var(--border);
-      padding-top:30px;
+      max-width:1400px;margin:auto;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:32px;
+      margin-bottom:32px;
+    }
+    .footer-col h4{
+      font-size:.75rem;
+      text-transform:uppercase;
+      letter-spacing:1.5px;
+      color:var(--text-muted);
+      margin-bottom:14px;
+    }
+    .footer-col a{
+      display:block;
+      color:var(--text-dim);
+      text-decoration:none;
+      font-size:.85rem;
+      margin-bottom:10px;
+      transition:color .2s;
+    }
+    .footer-col a:hover{color:#fff;}
+    .footer-bottom{
+      display:flex;align-items:center;justify-content:space-between;
+      padding-top:24px;
+      border-top:1px solid var(--border);
+      flex-wrap:wrap;
+      gap:12px;
+    }
+    .footer-bottom p{
+      color:var(--text-dim);font-size:.8rem;
+    }
+    .footer-logo{
+      font-weight:900;font-size:1.1rem;letter-spacing:2px;
+      background:var(--iris-grad);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
-    @media(max-width:768px){
-      .studio-title{font-size:2.8rem;letter-spacing:2px;}
-      .section{padding:24px 20px;}
-      .irl-grid{grid-template-columns:1fr;}
-      .series-card-header{flex-direction:column;text-align:center;}
-      .video-wrapper{padding-bottom:177.78%;}
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:900px){
+      .nav-inner{padding:12px 20px;gap:16px;}
+      .nav-links{display:none;}
+      .hero-content{padding:0 20px 60px;}
+      .hero-title{font-size:2.4rem;}
+      .hero-desc{font-size:.95rem;max-width:100%;}
+      .content-area{padding:0 20px;}
+      .title-card{flex:0 0 320px;}
+      .show-card{flex:0 0 180px;}
+      .about-strip{padding:40px 20px;}
+      .about-inner{grid-template-columns:1fr;}
+      .footer-grid{grid-template-columns:1fr 1fr;}
+      .site-footer{padding:32px 20px;}
+      .hero-billboard{min-height:70vh;}
     }
-
-    @media(min-width:769px){
-      .video-wrapper{padding-bottom:56.25%;}
+    @media(max-width:500px){
+      .title-card{flex:0 0 85vw;}
+      .show-card{flex:0 0 55vw;}
+      .hero-billboard{min-height:65vh;}
+      .about-stats{grid-template-columns:1fr;}
     }
   </style>
 </head>
 <body>
 
-<!-- Sticky top bar -->
-<div class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="index.html">
-      <span class="mark" aria-hidden="true"></span>
+<!-- ===== STREAMING NAV BAR ===== -->
+<nav class="nav-bar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="movie.html">
       <span>
-        <div class="name">LivePay</div>
-        <div class="tag">Own your data • Earn your value</div>
+        <div class="nav-logo-text">I-RIS</div>
+        <div class="nav-logo-sub">Illy Robotic Instruments Studios</div>
       </span>
     </a>
-    <nav class="nav">
-      <a class="chip demo" href="https://illmedicine.github.io/LivePay/" target="_blank" rel="noopener">🚀 LivePay Demo</a>
-      <a class="chip" href="index.html">Home</a>
-      <a class="chip" href="projections.html">Projections</a>
-      <a class="chip active" href="movie.html">I-RIS Studio</a>
-      <a class="chip" href="index.html#goals">Policy Goals</a>
-      <a class="chip" href="index.html#donate">Donate</a>
-      <a class="chip" href="index.html#sign">Sign</a>
-    </nav>
+    <ul class="nav-links">
+      <li><a href="movie.html" class="active">Home</a></li>
+      <li><a href="#originals">Originals</a></li>
+      <li><a href="#irl">IRL Shows</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="index.html">LivePay Petition</a></li>
+      <li><a href="projections.html">Projections</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="btn btn-outline btn-sm" href="index.html">Back to LivePay</a>
+      <a class="btn btn-primary btn-sm" href="index.html#donate">Support I-RIS</a>
+    </div>
   </div>
-</div>
+</nav>
 
-<div class="container">
-
-  <!-- ========== STUDIO HERO ========== -->
-  <section class="studio-hero">
-    <div class="studio-logo">
-      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 8L88 28V72L50 92L12 72V28L50 8Z" stroke="url(#shieldGrad)" stroke-width="3" fill="rgba(79,209,255,.06)"/>
-        <circle cx="50" cy="42" r="14" stroke="#4fd1ff" stroke-width="2.5" fill="rgba(79,209,255,.1)"/>
-        <rect x="43" y="36" width="14" height="10" rx="2" fill="#4fd1ff" opacity=".4"/>
-        <circle cx="50" cy="41" r="4" fill="#4fd1ff"/>
-        <path d="M35 62H65" stroke="#7c5cff" stroke-width="1.5" opacity=".5"/>
-        <path d="M38 67H62" stroke="#7c5cff" stroke-width="1" opacity=".3"/>
-        <path d="M42 72H58" stroke="#7c5cff" stroke-width="1" opacity=".2"/>
-        <defs><linearGradient id="shieldGrad" x1="12" y1="8" x2="88" y2="92"><stop stop-color="#4fd1ff"/><stop offset="1" stop-color="#7c5cff"/></linearGradient></defs>
-      </svg>
+<!-- ===== HERO BILLBOARD ===== -->
+<section class="hero-billboard">
+  <div class="hero-bg"></div>
+  <div class="hero-iframe-bg">
+    <iframe 
+      src="https://www.youtube.com/embed/Jo3ZVujhak0?autoplay=1&mute=1&loop=1&playlist=Jo3ZVujhak0&controls=0&showinfo=0&modestbranding=1" 
+      allow="autoplay;encrypted-media" 
+      loading="lazy"
+      title="The Reclamation Background">
+    </iframe>
+  </div>
+  <div class="hero-content">
+    <div class="hero-studio-tag">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      I-RIS ORIGINAL
     </div>
-    <div class="studio-badge">A Division of Illy Robotics</div>
-    <h1 class="studio-title">I-RIS</h1>
-    <div class="studio-full-name">Illy Robotic Instruments Studios</div>
-    <p class="studio-desc">
-      <strong>I-RIS</strong> is the creative content division of <strong>Illy Robotics</strong>, focused on cultivating original content that can be marketed and distributed to major film and streaming platforms. From scripted mini-series to real-world creator content, I-RIS develops stories that bridge technology, culture, and human experience.
+    <h1 class="hero-title">
+      <span>MINI SERIES</span>
+      THE RECLAMATION
+    </h1>
+    <div class="hero-meta">
+      <span class="hero-badge new">New Episodes</span>
+      <span class="hero-badge series">Sci-Fi</span>
+      <span class="hero-meta-text">Season 1</span>
+      <span class="hero-meta-text">•</span>
+      <span class="hero-meta-text">2025</span>
+      <span class="hero-meta-text">•</span>
+      <span class="hero-meta-text">TV-14</span>
+    </div>
+    <p class="hero-desc">
+      What if humanity acted early to ensure that the rise of artificial intelligence strengthened 
+      human dignity rather than replaced it? An alternate reality where data is treated as labor 
+      and innovation expands opportunity.
     </p>
-    <div class="platforms">
-      <span class="platform-badge">Tubi</span>
-      <span class="platform-badge">Netflix</span>
-      <span class="platform-badge">HBO</span>
-      <span class="platform-badge">Network Television</span>
-      <span class="platform-badge">Streaming Platforms</span>
+    <div class="hero-actions">
+      <a class="btn btn-play" href="#watch-reclamation">▶ Play</a>
+      <a class="btn btn-info" href="#originals">ℹ More Info</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <hr class="section-divider">
+<!-- ===== CONTENT AREA ===== -->
+<div class="content-area">
 
-  <!-- ========== MINI SERIES SECTION ========== -->
-  <section class="section">
-    <h2 class="section-header">Mini Series</h2>
-    <p class="section-subtitle">Original scripted series produced by Illy Robotic Instruments Studios</p>
+  <!-- Category Tabs -->
+  <div class="cat-tabs" style="margin-top:40px;">
+    <span class="cat-tab active">All Content</span>
+    <span class="cat-tab">Originals</span>
+    <span class="cat-tab">IRL Shows</span>
+    <span class="cat-tab">Coming Soon</span>
+    <span class="cat-tab">Sci-Fi</span>
+    <span class="cat-tab">Reality</span>
+    <span class="cat-tab">Entertainment</span>
+  </div>
 
-    <div class="series-grid">
+  <!-- ===== ORIGINALS ROW ===== -->
+  <section class="row" id="originals">
+    <div class="row-header">
+      <h2 class="row-title">I-RIS <span class="accent">Originals</span></h2>
+    </div>
 
-      <!-- The Reclamation -->
-      <div class="series-card">
-        <div class="series-card-header">
-          <div class="series-icon a">A</div>
-          <div class="series-info">
-            <h3>The Reclamation</h3>
-            <div class="series-label">Project A — Sci-Fi Mini Series</div>
+    <div class="card-scroll">
+
+      <!-- The Reclamation Card -->
+      <div class="title-card" id="watch-reclamation">
+        <div class="title-card-video">
+          <iframe 
+            src="https://www.youtube.com/embed/Jo3ZVujhak0?mute=1&loop=1&playlist=Jo3ZVujhak0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen 
+            title="The Reclamation"
+            loading="lazy">
+          </iframe>
+        </div>
+        <div class="title-card-body">
+          <div class="title-card-row">
+            <span class="card-badge live">Streaming</span>
+            <span class="card-match">98% Match</span>
           </div>
-        </div>
-        <div class="series-desc">
-          An alternate reality science-fiction mini-series exploring a future where humanity acted early to ensure 
-          that the rise of artificial intelligence strengthened human dignity rather than replaced it. 
-          Set in a world where data is treated as labor and innovation expands opportunity instead of concentrating power.
-        </div>
-        <div class="series-video">
-          <div class="video-wrapper">
-            <iframe 
-              src="https://www.youtube.com/embed/Jo3ZVujhak0?autoplay=0&mute=1&loop=1&playlist=Jo3ZVujhak0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen
-              title="The Reclamation — Official Trailer"
-              loading="lazy">
-            </iframe>
+          <div class="title-card-name">The Reclamation</div>
+          <div class="title-card-genre">
+            Sci-Fi <span class="dot">•</span> Drama <span class="dot">•</span> Mini-Series
           </div>
-        </div>
-        <div class="series-status">
-          <span class="status-badge streaming">● Now Streaming</span>
+          <p class="title-card-desc">
+            An alternate reality where humanity ensured AI strengthened human dignity. 
+            Set in a world where data is labor and innovation expands opportunity.
+          </p>
         </div>
       </div>
 
-      <!-- The Captains Quarters -->
-      <div class="series-card">
-        <div class="series-card-header">
-          <div class="series-icon b">B</div>
-          <div class="series-info">
-            <h3>The Captains Quarters</h3>
-            <div class="series-label">Series B — Mini Series</div>
+      <!-- The Captains Quarters Card -->
+      <div class="title-card">
+        <div class="title-card-video">
+          <iframe 
+            src="https://www.youtube.com/embed/-nH5V7X5jPY?mute=1" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen 
+            title="The Captains Quarters"
+            loading="lazy">
+          </iframe>
+        </div>
+        <div class="title-card-body">
+          <div class="title-card-row">
+            <span class="card-badge new">New</span>
+            <span class="card-match">95% Match</span>
           </div>
-        </div>
-        <div class="series-desc">
-          A bold new mini-series produced by Illy Robotic Instruments Studios. Step inside The Captains Quarters 
-          for an immersive journey through stories that challenge convention and redefine the boundaries of 
-          independent storytelling.
-        </div>
-        <div class="series-video">
-          <div class="video-wrapper">
-            <iframe 
-              src="https://www.youtube.com/embed/-nH5V7X5jPY?autoplay=0&mute=1" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen
-              title="The Captains Quarters"
-              loading="lazy">
-            </iframe>
+          <div class="title-card-name">The Captains Quarters</div>
+          <div class="title-card-genre">
+            Drama <span class="dot">•</span> Indie <span class="dot">•</span> Mini-Series
           </div>
-        </div>
-        <div class="series-status">
-          <span class="status-badge production">● In Production</span>
+          <p class="title-card-desc">
+            Step inside The Captains Quarters for an immersive journey through stories that 
+            challenge convention and redefine independent storytelling.
+          </p>
         </div>
       </div>
 
     </div>
   </section>
 
-  <hr class="section-divider">
+  <!-- ===== IRL SHOWS ROW ===== -->
+  <section class="row" id="irl">
+    <div class="row-header">
+      <h2 class="row-title">Upcoming <span class="accent">IRL Shows</span></h2>
+    </div>
 
-  <!-- ========== IRL CONTENT SECTION ========== -->
-  <section class="section">
-    <h2 class="section-header">IRL Content</h2>
-    <p class="section-subtitle">Upcoming real-world original content from I-RIS creators</p>
-
-    <div class="irl-grid">
+    <div class="card-scroll">
 
       <!-- Swami Tsunami -->
-      <div class="irl-card">
-        <img class="irl-image" src="images/swami-tsunami.jpg" alt="Swami Tsunami">
-        <div class="irl-body">
-          <div class="creator-row">
-            <span class="irl-number">1</span>
-            <h3>Swami Tsunami</h3>
-          </div>
-          <p class="show-name">Live in Miami</p>
-          <p class="show-desc">
-            An electrifying IRL experience captured live from the heart of Miami. 
-            Swami Tsunami brings raw energy, unfiltered moments, and the pulse of the city to your screen.
-          </p>
+      <div class="show-card">
+        <img class="show-card-img" src="images/swami-tsunami.jpg" alt="Swami Tsunami - Live in Miami">
+        <span class="show-rank">1</span>
+        <div class="show-card-overlay">
+          <div class="show-card-badge irl">IRL Original</div>
+          <div class="show-card-title">Live in Miami</div>
+          <div class="show-card-sub">Swami Tsunami</div>
         </div>
       </div>
 
       <!-- JacobMedia -->
-      <div class="irl-card">
-        <img class="irl-image" src="images/yopoppa-cave.png" alt="JacobMedia - YoPoppas Cave">
-        <div class="irl-body">
-          <div class="creator-row">
-            <span class="irl-number">2</span>
-            <h3>JacobMedia</h3>
-          </div>
-          <p class="show-name">YoPoppas Cave</p>
-          <p class="show-desc">
-            Enter YoPoppas Cave — a high-energy creator hub where JacobMedia brings together gaming, 
-            entertainment, and community in one unpredictable IRL format.
-          </p>
+      <div class="show-card">
+        <img class="show-card-img" src="images/yopoppa-cave.png" alt="JacobMedia - YoPoppas Cave">
+        <span class="show-rank">2</span>
+        <div class="show-card-overlay">
+          <div class="show-card-badge irl">IRL Original</div>
+          <div class="show-card-title">YoPoppas Cave</div>
+          <div class="show-card-sub">JacobMedia</div>
         </div>
       </div>
 
       <!-- MilkyMoMo -->
-      <div class="irl-card">
-        <img class="irl-image" src="images/milky-momo.png" alt="MilkyMoMo - Rizz Rate Dating">
-        <div class="irl-body">
-          <div class="creator-row">
-            <span class="irl-number">3</span>
-            <h3>MilkyMoMo</h3>
-          </div>
-          <p class="show-name">Rizz Rate Dating</p>
-          <p class="show-desc">
-            A bold new dating and social experiment show hosted by MilkyMoMo. 
-            Contestants put their charisma to the test in real-time — comedy, chemistry, and pure entertainment collide.
-          </p>
+      <div class="show-card">
+        <img class="show-card-img" src="images/milky-momo.png" alt="MilkyMoMo - Rizz Rate Dating">
+        <span class="show-rank">3</span>
+        <div class="show-card-overlay">
+          <div class="show-card-badge upcoming">Coming Soon</div>
+          <div class="show-card-title">Rizz Rate Dating</div>
+          <div class="show-card-sub">MilkyMoMo</div>
         </div>
       </div>
 
     </div>
   </section>
 
-  <hr class="section-divider">
-
-  <!-- ========== ABOUT I-RIS ========== -->
-  <section class="section">
-    <h2 class="section-header">About I-RIS</h2>
-
-    <div class="emphasis-box">
-      <p class="quote">
-        Original stories. Independent vision. Built for global audiences.
-      </p>
+  <!-- ===== FEATURED: CAPTAINS QUARTERS ===== -->
+  <section class="row">
+    <div class="row-header">
+      <h2 class="row-title">Now Playing: <span class="accent">The Captains Quarters</span></h2>
     </div>
-
-    <div class="content-block">
-      <p>
-        <strong>Illy Robotic Instruments Studios (I-RIS)</strong> is the creative content arm of Illy Robotics, 
-        established to produce and distribute original entertainment across the most prominent film and streaming 
-        platforms in the world.
-      </p>
-      <p>
-        Our mission is to cultivate stories that resonate — from high-concept science fiction to raw, 
-        unscripted IRL content — and bring them to audiences on <strong>Tubi, Netflix, HBO, Network Television</strong>, 
-        and beyond.
-      </p>
-    </div>
-
-    <div class="content-block">
-      <p><strong>What sets I-RIS apart:</strong></p>
-      <ul class="bullet-list">
-        <li>A technology-first studio backed by the innovation pipeline of Illy Robotics</li>
-        <li>Original IP designed from day one for multi-platform distribution</li>
-        <li>A commitment to independent voices and underrepresented narratives</li>
-        <li>Bridging the gap between tech culture and mainstream entertainment</li>
-      </ul>
-    </div>
-
-    <div class="emphasis-box" style="padding:32px;">
-      <p class="quote" style="margin-bottom:20px;">Progress without equity is extraction.</p>
-      <p class="quote" style="margin-bottom:20px;">Intelligence without dignity is hollow.</p>
-      <p class="quote" style="margin-bottom:0;">The future is only worth building if humanity belongs in it.</p>
+    <div class="featured-player">
+      <div class="featured-video">
+        <iframe 
+          src="https://www.youtube.com/embed/-nH5V7X5jPY" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen 
+          title="The Captains Quarters — Full Episode"
+          loading="lazy">
+        </iframe>
+      </div>
     </div>
   </section>
 
-  <footer>
-    <strong>I-RIS</strong> — Illy Robotic Instruments Studios | A Division of Illy Robotics<br>
-    <span style="font-size:.85rem;color:var(--muted2);">Cultivating original content for the world's biggest platforms.</span><br>
-    <a href="index.html" style="color:#4fd1ff;text-decoration:none;margin-top:10px;display:inline-block;">← Back to Main Petition</a>
-  </footer>
-
 </div>
+
+<!-- ===== ABOUT STRIP ===== -->
+<section class="about-strip" id="about">
+  <div class="about-inner">
+    <div class="about-text">
+      <h2>About <span>I-RIS</span></h2>
+      <p>
+        <strong>Illy Robotic Instruments Studios (I-RIS)</strong> is the film production and content 
+        division of Illy Robotics — built to develop, produce, and distribute original entertainment 
+        to global audiences.
+      </p>
+      <p>
+        Like Zeus Network and Tubi, I-RIS cultivates original programming — from scripted sci-fi 
+        mini-series to raw IRL creator content — designed for the world's biggest streaming platforms 
+        and network television.
+      </p>
+      <p>
+        Our mission: <strong>bring independent, technology-driven stories to mainstream audiences</strong> 
+        and prove that original voices belong on the same stage as major studios.
+      </p>
+      <div class="about-platforms">
+        <span>Tubi</span>
+        <span>Netflix</span>
+        <span>HBO</span>
+        <span>Network TV</span>
+        <span>Prime Video</span>
+      </div>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Original Series</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">IRL Shows</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Platforms Targeted</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Stories to Tell</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>I-RIS</h4>
+      <a href="#originals">Originals</a>
+      <a href="#irl">IRL Shows</a>
+      <a href="#about">About the Studio</a>
+    </div>
+    <div class="footer-col">
+      <h4>Series</h4>
+      <a href="#watch-reclamation">The Reclamation</a>
+      <a href="#">The Captains Quarters</a>
+    </div>
+    <div class="footer-col">
+      <h4>IRL Content</h4>
+      <a href="#">Swami Tsunami — Live in Miami</a>
+      <a href="#">JacobMedia — YoPoppas Cave</a>
+      <a href="#">MilkyMoMo — Rizz Rate Dating</a>
+    </div>
+    <div class="footer-col">
+      <h4>LivePay</h4>
+      <a href="index.html">Petition</a>
+      <a href="projections.html">Projections</a>
+      <a href="index.html#donate">Donate</a>
+      <a href="https://illmedicine.github.io/LivePay/" target="_blank" rel="noopener">Demo</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-logo">I-RIS</span>
+    <p>&copy; 2025 Illy Robotic Instruments Studios. A division of Illy Robotics. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+}, {passive: true});
+</script>
 
 </body>
 </html>
