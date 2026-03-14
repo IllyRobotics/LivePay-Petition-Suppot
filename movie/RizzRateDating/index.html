@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Rizz Rate Dating — Creator's Corner | I-RIS</title>
+  <title>Rizz Rate Dating — MilkyMoMo | Creator's Corner | I-RIS</title>
   <meta name="description" content="MilkyMoMo's Creator Corner on I-RIS. Rizz Rate Dating — a bold dating and social experiment show where contestants put their charisma to the test." />
   <meta name="theme-color" content="#0a0a0a">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%234fd1ff' width='100' height='100'/><text x='50%' y='50%' font-size='60' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>IR</text></svg>">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
-    :root{--bg:#0a0a0a;--surface:#141414;--surface2:#1a1a1a;--surface3:#222;--text:#fff;--text-muted:#a0a0a0;--text-dim:#666;--accent:#4fd1ff;--accent2:#7c5cff;--iris-grad:linear-gradient(135deg,#4fd1ff,#7c5cff);--red:#e50914;--green:#46d369;--gold:#f5c518;--border:rgba(255,255,255,.08);--radius:6px;}
+    :root{--bg:#0a0a0a;--surface:#141414;--surface2:#1a1a1a;--surface3:#222;--text:#fff;--text-muted:#a0a0a0;--text-dim:#666;--accent:#4fd1ff;--accent2:#7c5cff;--iris-grad:linear-gradient(135deg,#4fd1ff,#7c5cff);--red:#e50914;--green:#46d369;--gold:#f5c518;--pink:#e91e8c;--border:rgba(255,255,255,.08);--radius:6px;--creator-grad:linear-gradient(135deg,#e91e8c,#f5c518);}
     html{scroll-behavior:smooth;}
     body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
     .nav-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,.98);box-shadow:0 2px 20px rgba(0,0,0,.5);padding:0;}
@@ -24,18 +24,34 @@
     .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:var(--radius);font-weight:700;font-size:.9rem;text-decoration:none;border:none;cursor:pointer;transition:all .2s;}
     .btn-primary{background:var(--iris-grad);color:#fff;box-shadow:0 4px 15px rgba(79,209,255,.25);}
     .btn-primary:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(79,209,255,.35);}
+    .btn-venmo{background:#008CFF;color:#fff;box-shadow:0 4px 15px rgba(0,140,255,.25);}
+    .btn-venmo:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(0,140,255,.35);}
+    .btn-cashapp{background:#00D632;color:#fff;box-shadow:0 4px 15px rgba(0,214,50,.25);}
+    .btn-cashapp:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(0,214,50,.35);}
     .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3);}
     .btn-outline:hover{background:rgba(255,255,255,.08);}
     .btn-sm{padding:8px 16px;font-size:.8rem;}
-    .creator-hero{padding:120px 48px 60px;position:relative;overflow:hidden;}
-    .creator-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 70% 30%,rgba(229,9,20,.08),transparent 50%),radial-gradient(ellipse 80% 60% at 20% 60%,rgba(245,197,24,.06),transparent 50%),linear-gradient(180deg,#0a0a0a 0%,#0d1117 50%,#0a0a0a 100%);}
+
+    /* Social Badge Bar */
+    .social-badge-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 48px;margin-top:64px;}
+    .badge-bar-inner{max-width:1400px;margin:auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+    .badge-bar-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-right:8px;}
+    .social-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;font-size:.78rem;font-weight:700;text-decoration:none;color:#fff;transition:all .2s;border:1px solid var(--border);}
+    .social-badge:hover{transform:scale(1.05);filter:brightness(1.2);}
+    .social-badge svg{width:16px;height:16px;}
+    .social-badge.x{background:rgba(0,0,0,.6);border-color:rgba(255,255,255,.15);}
+    .social-badge.venmo{background:rgba(0,140,255,.15);border-color:rgba(0,140,255,.3);color:#3396ff;}
+    .social-badge.cashapp{background:rgba(0,214,50,.15);border-color:rgba(0,214,50,.3);color:#00D632;}
+
+    .creator-hero{padding:56px 48px 60px;position:relative;overflow:hidden;}
+    .creator-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 70% 30%,rgba(233,30,140,.1),transparent 50%),radial-gradient(ellipse 80% 60% at 20% 60%,rgba(245,197,24,.08),transparent 50%),linear-gradient(180deg,#0a0a0a 0%,#0d1117 50%,#0a0a0a 100%);}
     .creator-hero-inner{position:relative;z-index:2;max-width:1400px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
     .creator-img-wrap{border-radius:16px;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,.6);aspect-ratio:3/4;position:relative;}
     .creator-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
     .creator-img-badge{position:absolute;top:16px;left:16px;padding:6px 14px;border-radius:6px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
     .creator-img-badge.upcoming{background:var(--gold);color:#000;}
     .creator-info h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;line-height:1.05;margin-bottom:8px;}
-    .creator-info h1 span{display:block;background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:.4em;letter-spacing:3px;margin-bottom:8px;text-transform:uppercase;}
+    .creator-info h1 span{display:block;background:var(--creator-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:.4em;letter-spacing:3px;margin-bottom:8px;text-transform:uppercase;}
     .creator-info .creator-sub{font-size:1.1rem;color:var(--text-muted);margin-bottom:20px;}
     .creator-info .creator-desc{font-size:1rem;line-height:1.7;color:rgba(255,255,255,.8);margin-bottom:28px;max-width:520px;}
     .creator-info .creator-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
@@ -44,39 +60,61 @@
     .creator-studio{max-width:1400px;margin:auto;padding:0 48px 48px;}
     .studio-header{display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:24px 0;border-bottom:1px solid var(--border);}
     .studio-header h2{font-size:1.6rem;font-weight:900;}
-    .studio-header h2 span{background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .studio-badge{padding:4px 12px;border-radius:999px;background:var(--gold);font-size:.7rem;font-weight:700;color:#000;text-transform:uppercase;letter-spacing:1px;}
+    .studio-header h2 span{background:var(--creator-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .studio-badge{padding:4px 12px;border-radius:999px;background:var(--pink);font-size:.7rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px;}
     .platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:48px;}
     .platform-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;transition:all .25s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
-    .platform-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.4);}
+    .platform-card:hover{border-color:var(--pink);transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.4);}
     .platform-card svg{width:36px;height:36px;margin-bottom:10px;}
     .platform-card .plat-name{font-weight:700;font-size:.9rem;margin-bottom:4px;}
     .platform-card .plat-status{font-size:.75rem;color:var(--text-dim);}
     .platform-card .plat-status.live{color:var(--green);}
     .section-title{font-size:1.4rem;font-weight:800;margin-bottom:20px;letter-spacing:-.3px;}
-    .section-title .accent{color:var(--accent);}
+    .section-title .accent{color:var(--pink);}
+
+    /* Video player */
+    .video-feature{margin-bottom:48px;}
+    .video-wrap{border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.5);border:1px solid var(--border);background:#000;}
+    .video-wrap video{display:block;width:100%;max-height:600px;background:#000;}
+    .video-caption{padding:16px 0;font-size:.9rem;color:var(--text-muted);}
+
     .content-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;margin-bottom:48px;}
     .episode-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;}
-    .episode-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.4);}
-    .episode-thumb{width:100%;aspect-ratio:16/9;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;}
+    .episode-card:hover{border-color:var(--pink);transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.4);}
+    .episode-thumb{width:100%;aspect-ratio:16/9;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
     .episode-thumb img{width:100%;height:100%;object-fit:cover;}
     .episode-thumb .coming-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;}
     .episode-body{padding:18px;}
     .episode-body h3{font-size:1.05rem;font-weight:700;margin-bottom:6px;}
     .episode-body p{font-size:.85rem;color:var(--text-muted);line-height:1.5;}
     .episode-body .ep-meta{display:flex;gap:12px;margin-top:10px;font-size:.8rem;color:var(--text-dim);}
+
+    /* Photo Gallery */
+    .photo-gallery{max-width:1400px;margin:0 auto 48px;padding:0 48px;}
+    .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+    .gallery-grid .gallery-item{border-radius:12px;overflow:hidden;aspect-ratio:1;position:relative;cursor:pointer;transition:all .3s;}
+    .gallery-grid .gallery-item:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto;}
+    .gallery-grid .gallery-item:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(233,30,140,.3);}
+    .gallery-grid .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;}
+
+    /* Support Section */
+    .support-section{background:linear-gradient(135deg,rgba(233,30,140,.08),rgba(245,197,24,.05));border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px;}
+    .support-inner{max-width:800px;margin:auto;text-align:center;}
+    .support-inner h2{font-size:1.8rem;font-weight:900;margin-bottom:12px;}
+    .support-inner h2 span{background:var(--creator-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .support-inner p{color:var(--text-muted);margin-bottom:24px;line-height:1.6;}
+    .support-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+    .support-buttons .btn{padding:14px 32px;font-size:1rem;border-radius:12px;}
+
     .community-section{background:var(--surface);border-top:1px solid var(--border);padding:64px 48px;}
     .community-inner{max-width:1400px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
     .community-text h2{font-size:2rem;font-weight:900;margin-bottom:16px;}
-    .community-text h2 span{background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .community-text h2 span{background:var(--creator-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
     .community-text p{color:var(--text-muted);line-height:1.7;font-size:.95rem;margin-bottom:16px;}
     .community-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
     .comm-feat{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;}
     .comm-feat .feat-icon{font-size:1.5rem;margin-bottom:8px;}
     .comm-feat .feat-label{font-size:.85rem;font-weight:600;color:var(--text-muted);}
-    .creators-corner-preview{margin:48px auto;max-width:1400px;padding:0 48px;}
-    .creators-corner-preview img{width:100%;max-width:700px;display:block;margin:0 auto;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.4);}
-    .creators-corner-preview .cc-caption{text-align:center;margin-top:16px;font-size:.9rem;color:var(--text-muted);}
     .site-footer{padding:48px 48px 32px;border-top:1px solid var(--border);max-width:1400px;margin:auto;}
     .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:32px;}
     .footer-col h4{font-size:.75rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:14px;}
@@ -85,8 +123,8 @@
     .footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;gap:12px;}
     .footer-bottom p{color:var(--text-dim);font-size:.8rem;}
     .footer-logo{font-weight:900;font-size:1.1rem;letter-spacing:2px;background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    @media(max-width:900px){.nav-inner{padding:12px 20px;gap:16px;}.nav-links{display:none;}.creator-hero{padding:100px 20px 40px;}.creator-hero-inner{grid-template-columns:1fr;gap:32px;}.creator-studio{padding:0 20px 32px;}.community-section{padding:40px 20px;}.community-inner{grid-template-columns:1fr;}.site-footer{padding:32px 20px;}.footer-grid{grid-template-columns:1fr 1fr;}.creators-corner-preview{padding:0 20px;}}
-    @media(max-width:500px){.content-grid{grid-template-columns:1fr;}.platform-grid{grid-template-columns:repeat(3,1fr);}.community-features{grid-template-columns:1fr;}}
+    @media(max-width:900px){.nav-inner{padding:12px 20px;gap:16px;}.nav-links{display:none;}.social-badge-bar{padding:10px 20px;}.creator-hero{padding:40px 20px;}.creator-hero-inner{grid-template-columns:1fr;gap:32px;}.creator-studio{padding:0 20px 32px;}.photo-gallery{padding:0 20px;}.gallery-grid{grid-template-columns:1fr 1fr;}.gallery-grid .gallery-item:first-child{grid-column:span 2;}.support-section{padding:32px 20px;}.community-section{padding:40px 20px;}.community-inner{grid-template-columns:1fr;}.site-footer{padding:32px 20px;}.footer-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:500px){.content-grid{grid-template-columns:1fr;}.platform-grid{grid-template-columns:repeat(3,1fr);}.community-features{grid-template-columns:1fr;}.gallery-grid{grid-template-columns:1fr 1fr;}.gallery-grid .gallery-item:first-child{grid-column:span 1;grid-row:span 1;}.support-buttons{flex-direction:column;align-items:stretch;}}
   </style>
 </head>
 <body>
@@ -107,6 +145,28 @@
     </div>
   </div>
 </nav>
+
+<!-- Social Platform Badges -->
+<div class="social-badge-bar">
+  <div class="badge-bar-inner">
+    <span class="badge-bar-label">MilkyMoMo On:</span>
+    <a class="social-badge x" href="https://twitter.com/milkyymomo" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      X / Twitter
+    </a>
+    <a class="social-badge venmo" href="https://venmo.com/milkyymomo" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="#3396ff"><path d="M19.56 1c.95 1.56 1.38 3.18 1.38 5.22 0 6.5-5.55 14.98-10.06 20.78H3.38L0 2.2l7.01-.66 1.97 15.8c1.84-3 4.11-7.7 4.11-10.92 0-1.93-.33-3.25-.95-4.32L19.56 1z"/></svg>
+      Venmo
+    </a>
+    <a class="social-badge cashapp" href="https://cash.app/$bigmoosey21" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="#00D632"><path d="M23.59 3.47A5.1 5.1 0 0 0 20.53.41C19.63.14 18.18 0 16.8 0H7.2C5.82 0 4.37.14 3.47.41A5.1 5.1 0 0 0 .41 3.47C.14 4.37 0 5.82 0 7.2v9.6c0 1.38.14 2.83.41 3.73a5.1 5.1 0 0 0 3.06 3.06c.9.27 2.35.41 3.73.41h9.6c1.38 0 2.83-.14 3.73-.41a5.1 5.1 0 0 0 3.06-3.06c.27-.9.41-2.35.41-3.73V7.2c0-1.38-.14-2.83-.41-3.73zM17.42 7.53l-1.47 1.42a.44.44 0 0 1-.32.14.46.46 0 0 1-.32-.14 3.04 3.04 0 0 0-2.15-.89c-1.11 0-1.83.54-1.83 1.23 0 .72.67 1.04 1.85 1.5 1.76.69 3.3 1.48 3.3 3.63 0 2.54-1.94 4.09-4.65 4.38l-.44 1.67a.46.46 0 0 1-.44.34h-2.01a.24.24 0 0 1-.23-.29l.42-1.61c-1.28-.22-2.37-.79-3.23-1.66a.46.46 0 0 1 0-.64l1.57-1.52a.44.44 0 0 1 .64 0 3.58 3.58 0 0 0 2.55 1.06c1.11 0 1.91-.53 1.91-1.35 0-.78-.73-1.13-2.07-1.65-1.67-.65-3.04-1.43-3.04-3.47 0-2.25 1.73-3.86 4.2-4.17l.39-1.49a.46.46 0 0 1 .44-.34h2.01a.24.24 0 0 1 .23.29l-.37 1.42c.98.2 1.84.6 2.56 1.2a.46.46 0 0 1 .04.64z"/></svg>
+      Cash App
+    </a>
+    <a class="social-badge" href="https://allmylinks.com/milkyymomo" target="_blank" rel="noopener noreferrer" style="background:rgba(233,30,140,.15);border-color:rgba(233,30,140,.3);color:var(--pink);">
+      🔗 All Links
+    </a>
+  </div>
+</div>
 
 <section class="creator-hero">
   <div class="creator-hero-bg"></div>
@@ -132,11 +192,13 @@
         <span>Social Experiment</span>
         <span>Comedy</span>
         <span>Entertainment</span>
-        <span>Coming Soon</span>
+        <span>Live Content</span>
       </div>
       <div class="creator-actions">
         <a class="btn btn-primary" href="#content">▶ Preview Content</a>
-        <a class="btn btn-outline" href="#community">Join Community</a>
+        <a class="btn btn-venmo" href="https://venmo.com/milkyymomo" target="_blank" rel="noopener noreferrer">💙 Venmo</a>
+        <a class="btn btn-cashapp" href="https://cash.app/$bigmoosey21" target="_blank" rel="noopener noreferrer">💚 Cash App</a>
+        <a class="btn btn-outline" href="https://twitter.com/milkyymomo" target="_blank" rel="noopener noreferrer">𝕏 Follow</a>
       </div>
     </div>
   </div>
@@ -145,35 +207,31 @@
 <div class="creator-studio">
   <div class="studio-header">
     <h2>I-RIS <span>Creator Studio</span></h2>
-    <span class="studio-badge">Coming Soon</span>
+    <span class="studio-badge">MilkyMoMo</span>
   </div>
 
+  <!-- Platform Links -->
   <div class="platform-grid">
-    <div class="platform-card">
-      <svg viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-      <div class="plat-name">Instagram</div>
-      <div class="plat-status live">Connected</div>
-    </div>
-    <div class="platform-card">
-      <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-      <div class="plat-name">YouTube</div>
-      <div class="plat-status">Pending</div>
-    </div>
-    <div class="platform-card">
-      <svg viewBox="0 0 24 24" fill="#9146FF"><path d="M4.264 3L3 6.654v13.284h4.667V22h2.56l2.5-2.062h3.833L21 15.604V3H4.264zm1.485 1.5h13.5v10.146l-2.833 2.854H12l-2.5 2.063v-2.063H5.75V4.5zM10 7.5v5h1.5v-5H10zm4 0v5h1.5v-5H14z"/></svg>
-      <div class="plat-name">Twitch</div>
-      <div class="plat-status">Pending</div>
-    </div>
-    <div class="platform-card">
-      <svg viewBox="0 0 24 24" fill="#4267B2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-      <div class="plat-name">Facebook</div>
-      <div class="plat-status">Available</div>
-    </div>
-    <div class="platform-card">
-      <svg viewBox="0 0 24 24" fill="#000"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a class="platform-card" href="https://twitter.com/milkyymomo" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       <div class="plat-name">X / Twitter</div>
-      <div class="plat-status live">Connected</div>
-    </div>
+      <div class="plat-status live">@milkyymomo</div>
+    </a>
+    <a class="platform-card" href="https://venmo.com/milkyymomo" target="_blank" rel="noopener noreferrer" style="border-color:rgba(0,140,255,.3);">
+      <svg viewBox="0 0 24 24" fill="#008CFF"><path d="M19.56 1c.95 1.56 1.38 3.18 1.38 5.22 0 6.5-5.55 14.98-10.06 20.78H3.38L0 2.2l7.01-.66 1.97 15.8c1.84-3 4.11-7.7 4.11-10.92 0-1.93-.33-3.25-.95-4.32L19.56 1z"/></svg>
+      <div class="plat-name">Venmo</div>
+      <div class="plat-status live">Send Tip</div>
+    </a>
+    <a class="platform-card" href="https://cash.app/$bigmoosey21" target="_blank" rel="noopener noreferrer" style="border-color:rgba(0,214,50,.3);">
+      <svg viewBox="0 0 24 24" fill="#00D632"><path d="M23.59 3.47A5.1 5.1 0 0 0 20.53.41C19.63.14 18.18 0 16.8 0H7.2C5.82 0 4.37.14 3.47.41A5.1 5.1 0 0 0 .41 3.47C.14 4.37 0 5.82 0 7.2v9.6c0 1.38.14 2.83.41 3.73a5.1 5.1 0 0 0 3.06 3.06c.9.27 2.35.41 3.73.41h9.6c1.38 0 2.83-.14 3.73-.41a5.1 5.1 0 0 0 3.06-3.06c.27-.9.41-2.35.41-3.73V7.2c0-1.38-.14-2.83-.41-3.73zM17.42 7.53l-1.47 1.42a.44.44 0 0 1-.32.14.46.46 0 0 1-.32-.14 3.04 3.04 0 0 0-2.15-.89c-1.11 0-1.83.54-1.83 1.23 0 .72.67 1.04 1.85 1.5 1.76.69 3.3 1.48 3.3 3.63 0 2.54-1.94 4.09-4.65 4.38l-.44 1.67a.46.46 0 0 1-.44.34h-2.01a.24.24 0 0 1-.23-.29l.42-1.61c-1.28-.22-2.37-.79-3.23-1.66a.46.46 0 0 1 0-.64l1.57-1.52a.44.44 0 0 1 .64 0 3.58 3.58 0 0 0 2.55 1.06c1.11 0 1.91-.53 1.91-1.35 0-.78-.73-1.13-2.07-1.65-1.67-.65-3.04-1.43-3.04-3.47 0-2.25 1.73-3.86 4.2-4.17l.39-1.49a.46.46 0 0 1 .44-.34h2.01a.24.24 0 0 1 .23.29l-.37 1.42c.98.2 1.84.6 2.56 1.2a.46.46 0 0 1 .04.64z"/></svg>
+      <div class="plat-name">Cash App</div>
+      <div class="plat-status live">$bigmoosey21</div>
+    </a>
+    <a class="platform-card" href="https://allmylinks.com/milkyymomo" target="_blank" rel="noopener noreferrer" style="border-color:rgba(233,30,140,.3);">
+      <svg viewBox="0 0 24 24" fill="#e91e8c"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+      <div class="plat-name">All Links</div>
+      <div class="plat-status live">allmylinks.com</div>
+    </a>
     <div class="platform-card" style="border-color:rgba(79,209,255,.3);background:rgba(79,209,255,.05);">
       <svg viewBox="0 0 24 24" fill="url(#irisGrad)"><defs><linearGradient id="irisGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4fd1ff"/><stop offset="100%" stop-color="#7c5cff"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       <div class="plat-name">I-RIS Studio</div>
@@ -181,12 +239,23 @@
     </div>
   </div>
 
-  <h2 class="section-title" id="content">Upcoming <span class="accent">Content</span></h2>
+  <!-- Featured Video -->
+  <h2 class="section-title" id="content">Featured <span class="accent">Video</span></h2>
+  <div class="video-feature">
+    <div class="video-wrap">
+      <video controls preload="metadata" poster="../../images/milky-momo.png">
+        <source src="../../images/milky-momovid1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p class="video-caption">🎬 MilkyMoMo — Rizz Rate Dating Preview | Exclusively on I-RIS</p>
+  </div>
+
+  <h2 class="section-title">Upcoming <span class="accent">Episodes</span></h2>
   <div class="content-grid">
     <div class="episode-card">
       <div class="episode-thumb">
-        <img src="../../images/milky-momo.png" alt="Rizz Rate Dating Pilot">
-        <div class="coming-overlay">Coming Soon</div>
+        <img src="../../images/milky-momo2.jpeg" alt="Rizz Rate Dating — Episode 1">
       </div>
       <div class="episode-body">
         <h3>Rizz Rate Dating — Pilot</h3>
@@ -195,7 +264,10 @@
       </div>
     </div>
     <div class="episode-card">
-      <div class="episode-thumb"><div class="coming-overlay">Coming Soon</div></div>
+      <div class="episode-thumb">
+        <img src="../../images/milky-momo3.jpeg" alt="Rizz Rate Dating — Episode 2">
+        <div class="coming-overlay">Coming Soon</div>
+      </div>
       <div class="episode-body">
         <h3>Rizz Rate Dating — Episode 2</h3>
         <p>The competition heats up. New contestants, new chemistry, new chaos.</p>
@@ -203,10 +275,13 @@
       </div>
     </div>
     <div class="episode-card">
-      <div class="episode-thumb"><div class="coming-overlay">Coming Soon</div></div>
+      <div class="episode-thumb">
+        <img src="../../images/milky-momo4.jpeg" alt="Rizz Rate Dating — Episode 3">
+        <div class="coming-overlay">Coming Soon</div>
+      </div>
       <div class="episode-body">
         <h3>Rizz Rate Dating — Episode 3</h3>
-        <p>Subscribe for notifications when new episodes drop.</p>
+        <p>The ultimate test. Who's got the rizz to make it to the finale?</p>
         <div class="ep-meta"><span>Season 1</span><span>Episode 3</span><span>TBA</span></div>
       </div>
     </div>
@@ -214,15 +289,41 @@
 
 </div>
 
+<!-- MilkyMoMo Photo Gallery -->
+<div class="photo-gallery">
+  <h2 class="section-title">📸 <span class="accent">MilkyMoMo</span> Gallery</h2>
+  <div class="gallery-grid">
+    <div class="gallery-item"><img src="../../images/milky-momo.png" alt="MilkyMoMo"></div>
+    <div class="gallery-item"><img src="../../images/milky-momo2.jpeg" alt="MilkyMoMo"></div>
+    <div class="gallery-item"><img src="../../images/milky-momo3.jpeg" alt="MilkyMoMo"></div>
+    <div class="gallery-item"><img src="../../images/milky-momo4.jpeg" alt="MilkyMoMo"></div>
+    <div class="gallery-item"><img src="../../images/milky-momo5.jpeg" alt="MilkyMoMo"></div>
+  </div>
+</div>
+
+<!-- Support MilkyMoMo -->
+<section class="support-section" id="support">
+  <div class="support-inner">
+    <h2>Support <span>MilkyMoMo</span></h2>
+    <p>Love the content? Show your support directly — every tip helps fund new episodes of Rizz Rate Dating and keeps the vibes going.</p>
+    <div class="support-buttons">
+      <a class="btn btn-venmo" href="https://venmo.com/milkyymomo" target="_blank" rel="noopener noreferrer">💙 Tip on Venmo</a>
+      <a class="btn btn-cashapp" href="https://cash.app/$bigmoosey21" target="_blank" rel="noopener noreferrer">💚 Send via Cash App</a>
+      <a class="btn btn-outline" href="https://allmylinks.com/milkyymomo" target="_blank" rel="noopener noreferrer">🔗 All Links</a>
+    </div>
+  </div>
+</section>
+
 <section class="community-section" id="community">
   <div class="community-inner">
     <div class="community-text">
       <h2>Join the <span>Community</span></h2>
-      <p>Get in early on Rizz Rate Dating. Connect with MilkyMoMo and be the first to know when this social experiment launches on I-RIS.</p>
+      <p>Get in on Rizz Rate Dating. Connect with MilkyMoMo and be part of the social experiment when it launches on I-RIS.</p>
       <p>As part of the I-RIS ecosystem, creators maintain <strong>non-exclusionary contracts</strong> — meaning their content stays available across all platforms while you get the best curated experience right here.</p>
       <div style="margin-top:20px;">
-        <a class="btn btn-primary" href="../../petition.html#donate">Support This Creator</a>
-        <a class="btn btn-outline" href="../../index.html#iris-vision" style="margin-left:8px;">Learn About I-RIS</a>
+        <a class="btn btn-venmo" href="https://venmo.com/milkyymomo" target="_blank" rel="noopener noreferrer">💙 Venmo</a>
+        <a class="btn btn-cashapp" href="https://cash.app/$bigmoosey21" target="_blank" rel="noopener noreferrer" style="margin-left:8px;">💚 Cash App</a>
+        <a class="btn btn-outline" href="https://twitter.com/milkyymomo" target="_blank" rel="noopener noreferrer" style="margin-left:8px;">𝕏 Follow on X</a>
       </div>
     </div>
     <div class="community-features">
@@ -238,7 +339,7 @@
   <div class="footer-grid">
     <div class="footer-col"><h4>I-RIS</h4><a href="../../index.html">Home</a><a href="../../index.html#originals">Originals</a><a href="../../index.html#irl">IRL Shows</a><a href="../../index.html#about">About</a></div>
     <div class="footer-col"><h4>Creator Corners</h4><a href="../HouseOfYoung">House of Young</a><a href="../SwamiTsunami">Swami Tsunami</a><a href="../YoPoppaCave">YoPoppas Cave</a><a href="../RizzRateDating">Rizz Rate Dating</a></div>
-    <div class="footer-col"><h4>Platform</h4><a href="../../index.html#iris-vision">For Creators</a><a href="../../index.html#networks">For Networks</a></div>
+    <div class="footer-col"><h4>MilkyMoMo</h4><a href="https://twitter.com/milkyymomo" target="_blank" rel="noopener noreferrer">X / Twitter</a><a href="https://venmo.com/milkyymomo" target="_blank" rel="noopener noreferrer">Venmo</a><a href="https://cash.app/$bigmoosey21" target="_blank" rel="noopener noreferrer">Cash App</a><a href="https://allmylinks.com/milkyymomo" target="_blank" rel="noopener noreferrer">All Links</a></div>
     <div class="footer-col"><h4>Support</h4><a href="../../petition.html">LivePay Petition</a><a href="../../petition.html#donate">Support I-RIS</a></div>
   </div>
   <div class="footer-bottom"><span class="footer-logo">I-RIS</span><p>&copy; 2026 Illy Robotic Instruments Studios. A division of Illy Robotics.</p></div>
