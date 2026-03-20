@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>YASHHH — Creator's Corner | I-RIS</title>
+  <meta name="description" content="YASHHH — India's rising pop star. The John Mayer meets Alan Thicke of India. Follow him behind the scenes on his IRL show on I-RIS." />
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%234fd1ff' width='100' height='100'/><text x='50%' y='50%' font-size='60' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>IR</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#0a0a0a;--surface:#141414;--surface2:#1a1a1a;--surface3:#222;
+      --text:#fff;--text-muted:#a0a0a0;--text-dim:#666;
+      --accent:#4fd1ff;--accent2:#7c5cff;
+      --iris-grad:linear-gradient(135deg,#4fd1ff,#7c5cff);
+      --red:#e50914;--green:#46d369;--gold:#f5c518;
+      --border:rgba(255,255,255,.08);--radius:6px;
+      --yashhh-grad:linear-gradient(135deg,#ff6b35,#f7c948,#e5397d);
+      --yashhh-warm:linear-gradient(135deg,#ff6b35,#e5397d);
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+    /* ===== NAV ===== */
+    .nav-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,.98);box-shadow:0 2px 20px rgba(0,0,0,.5);padding:0;}
+    .nav-inner{max-width:1400px;margin:auto;display:flex;align-items:center;padding:16px 48px;gap:32px;}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);flex-shrink:0;}
+    .nav-logo-text{font-size:1.6rem;font-weight:900;letter-spacing:3px;background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .nav-logo-sub{font-size:.6rem;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-top:-2px;}
+    .nav-links{display:flex;gap:24px;align-items:center;list-style:none;flex:1;}
+    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s;white-space:nowrap;}
+    .nav-links a:hover,.nav-links a.active{color:#fff;}
+    .nav-right{display:flex;gap:12px;align-items:center;margin-left:auto;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:var(--radius);font-weight:700;font-size:.9rem;text-decoration:none;border:none;cursor:pointer;transition:all .2s;}
+    .btn-primary{background:var(--iris-grad);color:#fff;box-shadow:0 4px 15px rgba(79,209,255,.25);}
+    .btn-primary:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(79,209,255,.35);}
+    .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3);}
+    .btn-outline:hover{background:rgba(255,255,255,.08);}
+    .btn-sm{padding:8px 16px;font-size:.8rem;}
+    .btn-yashhh{background:var(--yashhh-warm);color:#fff;box-shadow:0 4px 15px rgba(255,107,53,.3);}
+    .btn-yashhh:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(229,57,125,.4);}
+
+    /* ===== CAROUSEL HERO ===== */
+    .carousel-hero{position:relative;width:100%;height:90vh;min-height:600px;overflow:hidden;background:#000;}
+    .carousel-track{display:flex;width:100%;height:100%;transition:transform .8s cubic-bezier(.77,0,.175,1);}
+    .carousel-slide{min-width:100%;height:100%;position:relative;overflow:hidden;}
+    .carousel-slide-bg{position:absolute;inset:0;}
+    .carousel-slide-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.4) contrast(1.1) saturate(1.2);animation:slowZoom 20s ease-in-out infinite alternate;}
+    @keyframes slowZoom{from{transform:scale(1);}to{transform:scale(1.12);}}
+    .carousel-slide-bg .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,rgba(0,0,0,.1) 40%,rgba(10,10,10,.95) 100%),radial-gradient(ellipse at 30% 50%,rgba(255,107,53,.15),transparent 70%);}
+    .carousel-slide-content{position:absolute;bottom:0;left:0;right:0;padding:0 48px 100px;z-index:2;max-width:1400px;margin:auto;}
+    .carousel-tag{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#ff6b35;margin-bottom:16px;}
+    .carousel-tag svg{width:16px;height:16px;}
+    .carousel-title{font-size:clamp(2.5rem,6vw,5rem);font-weight:900;line-height:.95;margin-bottom:12px;text-shadow:0 4px 30px rgba(0,0,0,.6);}
+    .carousel-title .highlight{background:var(--yashhh-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .carousel-subtitle{font-size:1.15rem;color:rgba(255,255,255,.85);max-width:550px;line-height:1.5;margin-bottom:24px;text-shadow:0 2px 10px rgba(0,0,0,.5);}
+    .carousel-actions{display:flex;gap:12px;flex-wrap:wrap;}
+
+    /* Carousel Controls */
+    .carousel-controls{position:absolute;bottom:40px;right:48px;z-index:10;display:flex;gap:12px;align-items:center;}
+    .carousel-btn{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .carousel-btn:hover{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.4);}
+    .carousel-dots{display:flex;gap:8px;align-items:center;}
+    .carousel-dot{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);border:none;cursor:pointer;padding:0;position:relative;overflow:hidden;transition:background .3s;}
+    .carousel-dot.active{background:rgba(255,255,255,.4);}
+    .carousel-dot-fill{position:absolute;top:0;left:0;bottom:0;width:100%;background:#ff6b35;transform:scaleX(0);transform-origin:left;}
+    .carousel-dot.active .carousel-dot-fill{animation:dotFill 6s linear forwards;}
+    @keyframes dotFill{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+
+    /* Story Highlights Row */
+    .story-highlights{padding:32px 48px;max-width:1400px;margin:auto;}
+    .story-hl-title{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:20px;}
+    .story-hl-row{display:flex;gap:20px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px;}
+    .story-hl-row::-webkit-scrollbar{display:none;}
+    .story-hl-item{flex:0 0 auto;text-align:center;cursor:pointer;text-decoration:none;color:inherit;}
+    .story-hl-ring{width:82px;height:82px;border-radius:50%;padding:3px;background:var(--yashhh-grad);margin-bottom:8px;}
+    .story-hl-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--bg);}
+    .story-hl-label{font-size:.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
+
+    /* ===== CREATOR HERO INFO ===== */
+    .creator-info-section{padding:0 48px 48px;max-width:1400px;margin:auto;}
+    .creator-info-grid{display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start;}
+    .creator-avatar-wrap{position:relative;}
+    .creator-avatar{width:280px;height:280px;border-radius:20px;object-fit:cover;box-shadow:0 16px 50px rgba(0,0,0,.6);border:2px solid rgba(255,107,53,.3);}
+    .creator-verified{position:absolute;bottom:12px;right:12px;background:var(--yashhh-warm);color:#fff;padding:6px 14px;border-radius:8px;font-size:.75rem;font-weight:700;letter-spacing:.5px;display:flex;align-items:center;gap:6px;}
+    .creator-details h1{font-size:2.8rem;font-weight:900;line-height:1.05;margin-bottom:8px;}
+    .creator-details h1 .sub{display:block;font-size:.35em;letter-spacing:3px;text-transform:uppercase;background:var(--yashhh-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+    .creator-details .tagline{font-size:1.15rem;color:var(--text-muted);margin-bottom:16px;font-style:italic;}
+    .creator-details .bio{font-size:1rem;line-height:1.7;color:rgba(255,255,255,.8);margin-bottom:24px;max-width:600px;}
+    .creator-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+    .creator-tags span{padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--border);font-size:.8rem;font-weight:600;color:var(--text-muted);}
+    .creator-tags span.hot{background:rgba(255,107,53,.15);border-color:rgba(255,107,53,.3);color:#ff6b35;}
+    .creator-stats-row{display:flex;gap:24px;margin-bottom:24px;}
+    .creator-stat{text-align:center;}
+    .creator-stat .num{font-size:1.6rem;font-weight:900;background:var(--yashhh-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .creator-stat .label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);font-weight:600;}
+
+    /* ===== RECORD LABEL BADGES ===== */
+    .labels-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 48px;}
+    .labels-inner{max-width:1400px;margin:auto;}
+    .labels-header{text-align:center;margin-bottom:48px;}
+    .labels-header h2{font-size:2rem;font-weight:900;margin-bottom:8px;}
+    .labels-header h2 span{background:var(--yashhh-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .labels-header p{color:var(--text-muted);font-size:1rem;max-width:700px;margin:auto;}
+    .labels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:32px;}
+    .label-badge{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;border-radius:16px;background:var(--surface2);border:1px solid var(--border);text-align:center;transition:all .25s;cursor:default;}
+    .label-badge:hover{border-color:rgba(255,107,53,.4);transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.4);}
+    .label-badge .label-icon{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:900;color:#fff;}
+    .label-badge .label-name{font-weight:700;font-size:.9rem;}
+    .label-badge .label-type{font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;}
+    .label-badge .label-interest{display:inline-block;margin-top:6px;padding:3px 10px;border-radius:999px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+    .label-interest.bidding{background:rgba(229,9,20,.15);color:#e50914;border:1px solid rgba(229,9,20,.3);}
+    .label-interest.interested{background:rgba(79,209,255,.1);color:var(--accent);border:1px solid rgba(79,209,255,.2);}
+    .label-interest.scouting{background:rgba(245,197,24,.1);color:var(--gold);border:1px solid rgba(245,197,24,.2);}
+
+    .labels-divider{text-align:center;margin:32px 0;position:relative;}
+    .labels-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);}
+    .labels-divider span{position:relative;background:var(--surface);padding:0 20px;font-size:.8rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;}
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials-section{padding:80px 48px;max-width:1400px;margin:auto;}
+    .testimonials-header{text-align:center;margin-bottom:48px;}
+    .testimonials-header h2{font-size:2rem;font-weight:900;margin-bottom:8px;}
+    .testimonials-header h2 span{background:var(--yashhh-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .testimonials-header p{color:var(--text-muted);font-size:1rem;}
+    .testimonials-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:24px;}
+    .testimonial-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;position:relative;transition:all .25s;overflow:hidden;}
+    .testimonial-card:hover{border-color:rgba(255,107,53,.3);transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.4);}
+    .testimonial-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+    .testimonial-card .tc-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+    .testimonial-card .tc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;color:#fff;flex-shrink:0;}
+    .testimonial-card .tc-label-name{font-weight:800;font-size:1rem;}
+    .testimonial-card .tc-label-title{font-size:.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;}
+    .testimonial-card .tc-quote{font-size:.95rem;line-height:1.7;color:rgba(255,255,255,.8);font-style:italic;margin-bottom:16px;}
+    .testimonial-card .tc-quote::before{content:'\201C';font-size:2rem;font-weight:900;line-height:0;vertical-align:-0.4em;margin-right:4px;background:var(--yashhh-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .testimonial-card .tc-offer{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.3px;}
+    .tc-offer.deal{background:rgba(229,9,20,.12);color:#e50914;border:1px solid rgba(229,9,20,.25);}
+    .tc-offer.interest{background:rgba(79,209,255,.1);color:var(--accent);border:1px solid rgba(79,209,255,.2);}
+    .tc-offer.scout{background:rgba(245,197,24,.1);color:var(--gold);border:1px solid rgba(245,197,24,.2);}
+
+    /* ===== CONTENT SECTION ===== */
+    .creator-studio{max-width:1400px;margin:auto;padding:0 48px 48px;}
+    .studio-header{display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:24px 0;border-bottom:1px solid var(--border);}
+    .studio-header h2{font-size:1.6rem;font-weight:900;}
+    .studio-header h2 span{background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .studio-badge{padding:4px 12px;border-radius:999px;font-size:.7rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px;}
+    .platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:48px;}
+    .platform-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;transition:all .25s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
+    .platform-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.4);}
+    .platform-card svg{width:36px;height:36px;margin-bottom:10px;}
+    .platform-card .plat-name{font-weight:700;font-size:.9rem;margin-bottom:4px;}
+    .platform-card .plat-status{font-size:.75rem;color:var(--text-dim);}
+    .platform-card .plat-status.live{color:var(--green);}
+    .section-title{font-size:1.4rem;font-weight:800;margin-bottom:20px;letter-spacing:-.3px;}
+    .section-title .accent{color:var(--accent);}
+    .content-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;margin-bottom:48px;}
+    .episode-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;}
+    .episode-card:hover{border-color:rgba(255,107,53,.4);transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.4);}
+    .episode-thumb{width:100%;aspect-ratio:16/9;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .episode-thumb img{width:100%;height:100%;object-fit:cover;}
+    .episode-thumb .coming-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;}
+    .episode-thumb .highlight-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,107,53,.3),rgba(229,57,125,.3));display:flex;align-items:center;justify-content:center;}
+    .episode-thumb .highlight-overlay span{font-size:2.5rem;}
+    .episode-body{padding:18px;}
+    .episode-body h3{font-size:1.05rem;font-weight:700;margin-bottom:6px;}
+    .episode-body p{font-size:.85rem;color:var(--text-muted);line-height:1.5;}
+    .episode-body .ep-meta{display:flex;gap:12px;margin-top:10px;font-size:.8rem;color:var(--text-dim);}
+
+    /* ===== COMMUNITY ===== */
+    .community-section{background:var(--surface);border-top:1px solid var(--border);padding:64px 48px;}
+    .community-inner{max-width:1400px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+    .community-text h2{font-size:2rem;font-weight:900;margin-bottom:16px;}
+    .community-text h2 span{background:var(--yashhh-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .community-text p{color:var(--text-muted);line-height:1.7;font-size:.95rem;margin-bottom:16px;}
+    .community-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .comm-feat{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;}
+    .comm-feat .feat-icon{font-size:1.5rem;margin-bottom:8px;}
+    .comm-feat .feat-label{font-size:.85rem;font-weight:600;color:var(--text-muted);}
+
+    /* ===== PPL INDIA SECTION ===== */
+    .ppl-section{padding:48px;max-width:1400px;margin:auto;}
+    .ppl-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;text-align:center;}
+    .ppl-card h3{font-size:1.3rem;font-weight:800;margin-bottom:12px;}
+    .ppl-card h3 span{background:var(--yashhh-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .ppl-card p{color:var(--text-muted);font-size:.95rem;line-height:1.7;max-width:700px;margin:0 auto 20px;}
+    .ppl-members{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+    .ppl-members span{padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--border);font-size:.8rem;font-weight:600;color:var(--text-muted);}
+
+    /* ===== FOOTER ===== */
+    .site-footer{padding:48px 48px 32px;border-top:1px solid var(--border);max-width:1400px;margin:auto;}
+    .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:32px;}
+    .footer-col h4{font-size:.75rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:14px;}
+    .footer-col a{display:block;color:var(--text-dim);text-decoration:none;font-size:.85rem;margin-bottom:10px;transition:color .2s;}
+    .footer-col a:hover{color:#fff;}
+    .footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;gap:12px;}
+    .footer-bottom p{color:var(--text-dim);font-size:.8rem;}
+    .footer-logo{font-weight:900;font-size:1.1rem;letter-spacing:2px;background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+    @media(max-width:900px){
+      .nav-inner{padding:12px 20px;gap:16px;}.nav-links{display:none;}
+      .carousel-hero{height:75vh;min-height:500px;}
+      .carousel-slide-content{padding:0 20px 80px;}
+      .carousel-controls{right:20px;bottom:20px;}
+      .story-highlights{padding:24px 20px;}
+      .creator-info-section{padding:0 20px 32px;}
+      .creator-info-grid{grid-template-columns:1fr;gap:24px;}
+      .creator-avatar{width:200px;height:200px;}
+      .labels-section{padding:48px 20px;}
+      .labels-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+      .testimonials-section{padding:48px 20px;}
+      .testimonials-grid{grid-template-columns:1fr;}
+      .creator-studio{padding:0 20px 32px;}
+      .community-section{padding:40px 20px;}
+      .community-inner{grid-template-columns:1fr;}
+      .ppl-section{padding:32px 20px;}
+      .site-footer{padding:32px 20px;}
+      .footer-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:500px){
+      .content-grid{grid-template-columns:1fr;}
+      .platform-grid{grid-template-columns:repeat(3,1fr);}
+      .community-features{grid-template-columns:1fr;}
+      .labels-grid{grid-template-columns:repeat(2,1fr);}
+      .creator-stats-row{flex-wrap:wrap;gap:16px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <span>
+        <div class="nav-logo-text">I-RIS</div>
+        <div class="nav-logo-sub">Creator's Corner</div>
+      </span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../movie.html#irl">IRL Shows</a></li>
+      <li><a href="../../movie.html#iris-vision">For Creators</a></li>
+      <li><a href="../../movie.html#networks">For Networks</a></li>
+      <li><a href="../../movie.html#about">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="btn btn-outline btn-sm" href="../../movie.html#irl">&larr; All Shows</a>
+      <a class="btn btn-primary btn-sm" href="../../petition.html#donate">Support I-RIS</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== CAROUSEL HERO ===== -->
+<section class="carousel-hero" id="carousel">
+  <div class="carousel-track" id="carouselTrack">
+
+    <!-- Slide 1: The Star -->
+    <div class="carousel-slide">
+      <div class="carousel-slide-bg">
+        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1920&q=80" alt="YASHHH performing on stage">
+        <div class="overlay"></div>
+      </div>
+      <div class="carousel-slide-content">
+        <div class="carousel-tag">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          I-RIS IRL ORIGINAL
+        </div>
+        <h1 class="carousel-title">
+          <span class="highlight">YASHHH</span>
+        </h1>
+        <p class="carousel-subtitle">The John Mayer meets Alan Thicke of India &mdash; an aspiring pop star navigating the biggest stage of his life while record labels fight over his future.</p>
+        <div class="carousel-actions">
+          <a class="btn btn-yashhh" href="#content">&#9654; Watch Content</a>
+          <a class="btn btn-outline" href="#labels">View Record Labels</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Behind the Scenes -->
+    <div class="carousel-slide">
+      <div class="carousel-slide-bg">
+        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1920&q=80" alt="YASHHH in the recording studio">
+        <div class="overlay"></div>
+      </div>
+      <div class="carousel-slide-content">
+        <div class="carousel-tag">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          BEHIND THE SCENES
+        </div>
+        <h1 class="carousel-title">
+          Studio <span class="highlight">Sessions</span>
+        </h1>
+        <p class="carousel-subtitle">Go behind the velvet curtain as YASHHH crafts his signature sound &mdash; blending soulful melodies with laid-back pop vibes that have India's top labels calling.</p>
+        <div class="carousel-actions">
+          <a class="btn btn-yashhh" href="#content">&#9654; Explore</a>
+          <a class="btn btn-outline" href="#testimonials">Label Reactions</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Concert Life -->
+    <div class="carousel-slide">
+      <div class="carousel-slide-bg">
+        <img src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=1920&q=80" alt="YASHHH performing live at a concert venue">
+        <div class="overlay"></div>
+      </div>
+      <div class="carousel-slide-content">
+        <div class="carousel-tag">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          LIVE PERFORMANCES
+        </div>
+        <h1 class="carousel-title">
+          The <span class="highlight">Concert</span> Trail
+        </h1>
+        <p class="carousel-subtitle">From intimate venues to massive festival stages, follow YASHHH as he electrifies audiences across India and beyond. Every show is a battlefield of raw talent.</p>
+        <div class="carousel-actions">
+          <a class="btn btn-yashhh" href="#content">&#9654; Watch</a>
+          <a class="btn btn-outline" href="#community">Join Community</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: The Bidding War -->
+    <div class="carousel-slide">
+      <div class="carousel-slide-bg">
+        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1920&q=80" alt="Record label bidding war drama">
+        <div class="overlay"></div>
+      </div>
+      <div class="carousel-slide-content">
+        <div class="carousel-tag">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          THE BIDDING WAR
+        </div>
+        <h1 class="carousel-title">
+          Labels <span class="highlight">Want Him</span>
+        </h1>
+        <p class="carousel-subtitle">T-Series. Saregama. Sony Music India. Universal. They all want YASHHH. Watch the most dramatic record label bidding war in Indian music history unfold in real-time.</p>
+        <div class="carousel-actions">
+          <a class="btn btn-yashhh" href="#labels">&#9654; See the Labels</a>
+          <a class="btn btn-outline" href="#testimonials">Read Offers</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Carousel Controls -->
+  <div class="carousel-controls">
+    <button class="carousel-btn" id="prevSlide" aria-label="Previous slide">&larr;</button>
+    <div class="carousel-dots" id="carouselDots">
+      <button class="carousel-dot active" data-slide="0"><span class="carousel-dot-fill"></span></button>
+      <button class="carousel-dot" data-slide="1"><span class="carousel-dot-fill"></span></button>
+      <button class="carousel-dot" data-slide="2"><span class="carousel-dot-fill"></span></button>
+      <button class="carousel-dot" data-slide="3"><span class="carousel-dot-fill"></span></button>
+    </div>
+    <button class="carousel-btn" id="nextSlide" aria-label="Next slide">&rarr;</button>
+  </div>
+</section>
+
+<!-- ===== STORY HIGHLIGHTS (from Instagram) ===== -->
+<div class="story-highlights">
+  <div class="story-hl-title">&#x1F4F8; Story Highlights &mdash; @yashhh.11.11</div>
+  <div class="story-hl-row">
+    <a class="story-hl-item" href="https://www.instagram.com/yashhh.11.11/" target="_blank" rel="noopener noreferrer">
+      <div class="story-hl-ring">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=164&q=80" alt="WHO - Story Highlight">
+      </div>
+      <div class="story-hl-label">WHO</div>
+    </a>
+    <a class="story-hl-item" href="https://www.instagram.com/yashhh.11.11/" target="_blank" rel="noopener noreferrer">
+      <div class="story-hl-ring">
+        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=164&q=80" alt="CHILLIN - Story Highlight">
+      </div>
+      <div class="story-hl-label">CHILLIN</div>
+    </a>
+    <a class="story-hl-item" href="https://www.instagram.com/yashhh.11.11/" target="_blank" rel="noopener noreferrer">
+      <div class="story-hl-ring">
+        <img src="https://images.unsplash.com/photo-1485579149621-3123dd979885?w=164&q=80" alt="cooked - Story Highlight">
+      </div>
+      <div class="story-hl-label">cooked</div>
+    </a>
+    <a class="story-hl-item" href="https://www.instagram.com/yashhh.11.11/" target="_blank" rel="noopener noreferrer">
+      <div class="story-hl-ring">
+        <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=164&q=80" alt="STRINGs - Story Highlight">
+      </div>
+      <div class="story-hl-label">STRINGs &#x1F3A7;&#x1F49C;</div>
+    </a>
+  </div>
+</div>
+
+<!-- ===== CREATOR INFO ===== -->
+<section class="creator-info-section">
+  <div class="creator-info-grid">
+    <div class="creator-avatar-wrap">
+      <img class="creator-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=560&q=80" alt="YASHHH - Yashmeeth">
+      <div class="creator-verified">&#x2714; I-RIS Creator</div>
+    </div>
+    <div class="creator-details">
+      <h1>
+        <span class="sub">I-RIS IRL Show</span>
+        YASHHH
+      </h1>
+      <p class="tagline">"The John Mayer meets Alan Thicke of India"</p>
+      <p class="bio">
+        YASHMEETH &mdash; known as YASHHH &mdash; is an aspiring Indian pop star whose soulful musical style 
+        and cool, laid-back appearance have drawn comparisons to John Mayer's guitar-driven artistry 
+        and Alan Thicke's effortless charisma. His IRL show follows him behind the scenes as he navigates 
+        his personal life, performs at concerts and venues across India, and manages the intense pressure 
+        of bidding wars between multiple record labels &mdash; all vying for the rights to sign the next 
+        big thing in Indian pop music.
+      </p>
+      <div class="creator-tags">
+        <span class="hot">&#x1F525; Bidding War</span>
+        <span>Pop Music</span>
+        <span>IRL Show</span>
+        <span>India</span>
+        <span>Singer-Songwriter</span>
+        <span>Concerts</span>
+        <span>Behind the Scenes</span>
+      </div>
+      <div class="creator-stats-row">
+        <div class="creator-stat">
+          <div class="num">671</div>
+          <div class="label">Followers</div>
+        </div>
+        <div class="creator-stat">
+          <div class="num">3</div>
+          <div class="label">Posts</div>
+        </div>
+        <div class="creator-stat">
+          <div class="num">561</div>
+          <div class="label">Following</div>
+        </div>
+        <div class="creator-stat">
+          <div class="num">11+</div>
+          <div class="label">Labels Watching</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a class="btn btn-yashhh" href="https://www.instagram.com/yashhh.11.11/" target="_blank" rel="noopener noreferrer">&#x1F4F8; Follow on Instagram</a>
+        <a class="btn btn-outline" href="#content">&#x25B6; Watch Content</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RECORD LABEL BADGES ===== -->
+<section class="labels-section" id="labels">
+  <div class="labels-inner">
+    <div class="labels-header">
+      <h2>Record Labels <span>Watching YASHHH</span></h2>
+      <p>India's top record labels and independent powerhouses are all paying attention. Some are scouting. Some are bidding. All of them see the next big thing.</p>
+    </div>
+
+    <!-- Major Labels -->
+    <h3 style="font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:20px;">&#x1F3B5; Major Labels</h3>
+    <div class="labels-grid">
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#e50914,#b71c1c);">T</div>
+        <div class="label-name">T-Series</div>
+        <div class="label-type">~35% Market Share</div>
+        <span class="label-interest bidding">&#x1F525; Active Bidding</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#8b4513,#d4a574);">S</div>
+        <div class="label-name">Saregama India</div>
+        <div class="label-type">India's Oldest Label</div>
+        <span class="label-interest bidding">&#x1F525; Active Bidding</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#000,#333);">SM</div>
+        <div class="label-name">Sony Music India</div>
+        <div class="label-type">Major International</div>
+        <span class="label-interest bidding">&#x1F525; Active Bidding</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#1a237e,#5c6bc0);">Z</div>
+        <div class="label-name">Zee Music Company</div>
+        <div class="label-type">Bollywood Major</div>
+        <span class="label-interest interested">&#x1F4A1; Interested</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#ff5722,#ff9800);">U</div>
+        <div class="label-name">Universal Music India</div>
+        <div class="label-type">International Backing</div>
+        <span class="label-interest bidding">&#x1F525; Active Bidding</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#0d47a1,#42a5f5);">MA</div>
+        <div class="label-name">Mass Appeal India</div>
+        <div class="label-type">Hip-Hop &amp; Pop</div>
+        <span class="label-interest interested">&#x1F4A1; Interested</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#880e4f,#e91e63);">TM</div>
+        <div class="label-name">Times Music</div>
+        <div class="label-type">Times Group</div>
+        <span class="label-interest interested">&#x1F4A1;  Interested</span>
+      </div>
+    </div>
+
+    <div class="labels-divider"><span>Regional &amp; Independent Labels</span></div>
+
+    <!-- Regional & Independent -->
+    <div class="labels-grid">
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#f57f17,#ffeb3b);">A</div>
+        <div class="label-name">Aditya Music</div>
+        <div class="label-type">South Indian Major</div>
+        <span class="label-interest scouting">&#x1F50D; Scouting</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#4a148c,#9c27b0);">L</div>
+        <div class="label-name">Lahari Music</div>
+        <div class="label-type">South Indian Force</div>
+        <span class="label-interest scouting">&#x1F50D; Scouting</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#e65100,#ff6d00);">SR</div>
+        <div class="label-name">Speed Records</div>
+        <div class="label-type">Punjabi Major</div>
+        <span class="label-interest interested">&#x1F4A1; Interested</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#263238,#546e7a);">GG</div>
+        <div class="label-name">Gully Gang Records</div>
+        <div class="label-type">Underground Hip-Hop</div>
+        <span class="label-interest scouting">&#x1F50D; Scouting</span>
+      </div>
+      <div class="label-badge">
+        <div class="label-icon" style="background:linear-gradient(135deg,#00695c,#26a69a);">D</div>
+        <div class="label-name">Divo</div>
+        <div class="label-type">Chennai-Based</div>
+        <span class="label-interest scouting">&#x1F50D; Scouting</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section" id="testimonials">
+  <div class="testimonials-header">
+    <h2>What the Labels Are <span>Saying</span></h2>
+    <p>Exclusive quotes from label executives who've been watching YASHHH's meteoric rise</p>
+  </div>
+  <div class="testimonials-grid">
+
+    <div class="testimonial-card" style="border-top:3px solid #e50914;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#e50914,#b71c1c);">T</div>
+        <div>
+          <div class="tc-label-name">T-Series</div>
+          <div class="tc-label-title">A&amp;R Division</div>
+        </div>
+      </div>
+      <p class="tc-quote">YASHHH has the kind of raw, soulful talent that comes along once in a generation. His ability to blend Western pop sensibilities with Indian melodic tradition is exactly what the market is craving. We want him on our roster &mdash; and we're prepared to make it happen.</p>
+      <span class="tc-offer deal">&#x1F4DD; Record Deal Offered</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #d4a574;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#8b4513,#d4a574);">S</div>
+        <div>
+          <div class="tc-label-name">Saregama India</div>
+          <div class="tc-label-title">Artist Relations</div>
+        </div>
+      </div>
+      <p class="tc-quote">In our 120+ years of Indian music, we've seen trends come and go. But YASHHH isn't a trend &mdash; he's a movement. His laid-back stage presence combined with undeniable vocal range reminds us of the greats. We are in active discussions to bring him into the Saregama family.</p>
+      <span class="tc-offer deal">&#x1F4DD; Record Deal Offered</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #333;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#000,#333);">SM</div>
+        <div>
+          <div class="tc-label-name">Sony Music India</div>
+          <div class="tc-label-title">Creative Director</div>
+        </div>
+      </div>
+      <p class="tc-quote">When we first heard YASHHH, we knew he was special. The John Mayer comparison is apt, but he's forging something entirely new &mdash; a crossover sound that could break internationally. Sony Music India is ready to invest in his global potential.</p>
+      <span class="tc-offer deal">&#x1F4DD; Record Deal Offered</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #5c6bc0;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#1a237e,#5c6bc0);">Z</div>
+        <div>
+          <div class="tc-label-name">Zee Music Company</div>
+          <div class="tc-label-title">Talent Acquisition</div>
+        </div>
+      </div>
+      <p class="tc-quote">YASHHH represents the future of Indian pop. His cool, effortless vibe resonates with Gen Z while his musical depth appeals to a much wider audience. We've been following his journey closely and see massive potential for Bollywood crossover projects.</p>
+      <span class="tc-offer interest">&#x1F4AC; In Discussions</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #ff5722;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#ff5722,#ff9800);">U</div>
+        <div>
+          <div class="tc-label-name">Universal Music India</div>
+          <div class="tc-label-title">VP of A&amp;R</div>
+        </div>
+      </div>
+      <p class="tc-quote">With Universal's global reach and YASHHH's unique artistry, we could make him India's first true pop export since A.R. Rahman. He has the charisma of Alan Thicke, the guitar soul of Mayer, and an authentic voice that's entirely his own. We've submitted our bid.</p>
+      <span class="tc-offer deal">&#x1F4DD; Record Deal Offered</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #42a5f5;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#0d47a1,#42a5f5);">MA</div>
+        <div>
+          <div class="tc-label-name">Mass Appeal India</div>
+          <div class="tc-label-title">Head of Operations</div>
+        </div>
+      </div>
+      <p class="tc-quote">YASHHH is exactly the kind of artist Mass Appeal was created for &mdash; authentic, independent-minded, and impossible to put in a box. His music bridges hip-hop, pop, and soul in a way that feels completely natural. We want to be part of his story.</p>
+      <span class="tc-offer interest">&#x1F4AC; In Discussions</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #e91e63;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#880e4f,#e91e63);">TM</div>
+        <div>
+          <div class="tc-label-name">Times Music</div>
+          <div class="tc-label-title">A&amp;R Scout</div>
+        </div>
+      </div>
+      <p class="tc-quote">From the moment we saw YASHHH perform live, we knew the industry was about to shift. His stage presence is magnetic &mdash; the kind of cool confidence you can't teach. Times Music has been in exploratory conversations about a multi-album partnership.</p>
+      <span class="tc-offer interest">&#x1F4AC; In Discussions</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #ffeb3b;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#f57f17,#ffeb3b);">A</div>
+        <div>
+          <div class="tc-label-name">Aditya Music</div>
+          <div class="tc-label-title">Regional Director</div>
+        </div>
+      </div>
+      <p class="tc-quote">YASHHH's sound has universal appeal that transcends language barriers. Even in South Indian markets, his melodic sensibilities resonate deeply. We're keeping a very close eye on his trajectory &mdash; the talent scouts haven't stopped talking about him.</p>
+      <span class="tc-offer scout">&#x1F50D; Actively Scouting</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #9c27b0;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#4a148c,#9c27b0);">L</div>
+        <div>
+          <div class="tc-label-name">Lahari Music</div>
+          <div class="tc-label-title">Head of New Artists</div>
+        </div>
+      </div>
+      <p class="tc-quote">What makes YASHHH special isn't just his voice &mdash; it's his entire aesthetic. The way he carries himself, the visuals, the storytelling. He's not just a musician; he's a brand waiting to explode. Lahari is watching very closely.</p>
+      <span class="tc-offer scout">&#x1F50D; Actively Scouting</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #ff6d00;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#e65100,#ff6d00);">SR</div>
+        <div>
+          <div class="tc-label-name">Speed Records</div>
+          <div class="tc-label-title">Creative Lead</div>
+        </div>
+      </div>
+      <p class="tc-quote">The Punjabi market has its own sound, but great music transcends genre. YASHHH's crossover potential is undeniable. We've been having internal conversations about how a collaboration could work &mdash; his pop sensibility with our Punjabi distribution muscle.</p>
+      <span class="tc-offer interest">&#x1F4AC; In Discussions</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #546e7a;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#263238,#546e7a);">GG</div>
+        <div>
+          <div class="tc-label-name">Gully Gang Records</div>
+          <div class="tc-label-title">Founder's Circle</div>
+        </div>
+      </div>
+      <p class="tc-quote">Gully Gang was built for artists who don't fit the mold. YASHHH is exactly that &mdash; he moves between genres like water. His underground credibility combined with mainstream appeal is rare. We see a kindred spirit in his independence.</p>
+      <span class="tc-offer scout">&#x1F50D; Actively Scouting</span>
+    </div>
+
+    <div class="testimonial-card" style="border-top:3px solid #26a69a;">
+      <div class="tc-header">
+        <div class="tc-icon" style="background:linear-gradient(135deg,#00695c,#26a69a);">D</div>
+        <div>
+          <div class="tc-label-name">Divo</div>
+          <div class="tc-label-title">Artist Development</div>
+        </div>
+      </div>
+      <p class="tc-quote">Chennai's music scene is deeply rooted in tradition, but forward-thinking artists like YASHHH are bridging generations. His songwriter ability &mdash; the way he constructs melodies &mdash; is on par with the best in the film music industry. We're paying attention.</p>
+      <span class="tc-offer scout">&#x1F50D; Actively Scouting</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== CREATOR STUDIO ===== -->
+<div class="creator-studio">
+  <div class="studio-header">
+    <h2>I-RIS <span>Creator Studio</span></h2>
+    <span class="studio-badge" style="background:var(--yashhh-warm);">IRL Original</span>
+  </div>
+
+  <div class="platform-grid">
+    <div class="platform-card">
+      <svg viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      <div class="plat-name">Instagram</div>
+      <div class="plat-status live">@yashhh.11.11</div>
+    </div>
+    <div class="platform-card">
+      <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      <div class="plat-name">YouTube</div>
+      <div class="plat-status">Coming Soon</div>
+    </div>
+    <div class="platform-card">
+      <svg viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+      <div class="plat-name">Spotify</div>
+      <div class="plat-status">Coming Soon</div>
+    </div>
+    <div class="platform-card">
+      <svg viewBox="0 0 24 24" fill="#9146FF"><path d="M4.264 3L3 6.654v13.284h4.667V22h2.56l2.5-2.062h3.833L21 15.604V3H4.264zm1.485 1.5h13.5v10.146l-2.833 2.854H12l-2.5 2.063v-2.063H5.75V4.5zM10 7.5v5h1.5v-5H10zm4 0v5h1.5v-5H14z"/></svg>
+      <div class="plat-name">Twitch</div>
+      <div class="plat-status">Coming Soon</div>
+    </div>
+    <div class="platform-card" style="border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.05);">
+      <svg viewBox="0 0 24 24" fill="url(#irisGrad2)"><defs><linearGradient id="irisGrad2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4fd1ff"/><stop offset="100%" stop-color="#7c5cff"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <div class="plat-name">I-RIS Studio</div>
+      <div class="plat-status live">Active</div>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="content">Latest <span class="accent">Content</span></h2>
+  <div class="content-grid">
+    <div class="episode-card">
+      <div class="episode-thumb">
+        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=680&q=80" alt="YASHHH - Pilot Episode">
+      </div>
+      <div class="episode-body">
+        <h3>YASHHH &mdash; Meet the Artist</h3>
+        <p>The premiere episode. Meet YASHMEETH &mdash; an aspiring Indian pop star with the soul of John Mayer and the cool of Alan Thicke. Discover his world, his music, and the labels already circling.</p>
+        <div class="ep-meta">
+          <span>Season 1</span>
+          <span>Episode 1</span>
+          <span>2026</span>
+        </div>
+      </div>
+    </div>
+    <div class="episode-card">
+      <div class="episode-thumb">
+        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=680&q=80" alt="YASHHH - Studio Sessions">
+      </div>
+      <div class="episode-body">
+        <h3>YASHHH &mdash; Studio Sessions</h3>
+        <p>Go behind the mixing board as YASHHH crafts his breakout single. Raw studio footage, creative decisions, and the pressure of knowing the industry is watching your every move.</p>
+        <div class="ep-meta">
+          <span>Season 1</span>
+          <span>Episode 2</span>
+          <span>2026</span>
+        </div>
+      </div>
+    </div>
+    <div class="episode-card">
+      <div class="episode-thumb">
+        <img src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=680&q=80" alt="YASHHH - The Concert">
+      </div>
+      <div class="episode-body">
+        <h3>YASHHH &mdash; The Concert</h3>
+        <p>YASHHH takes the stage for a pivotal live performance. With label scouts in the audience and everything on the line, one night could change the trajectory of his entire career.</p>
+        <div class="ep-meta">
+          <span>Season 1</span>
+          <span>Episode 3</span>
+          <span>2026</span>
+        </div>
+      </div>
+    </div>
+    <div class="episode-card">
+      <div class="episode-thumb">
+        <div class="coming-overlay">Coming Soon</div>
+      </div>
+      <div class="episode-body">
+        <h3>YASHHH &mdash; The Bidding War</h3>
+        <p>Multiple labels make their offers. YASHHH must navigate the most consequential decision of his career &mdash; who to trust with his art and his future.</p>
+        <div class="ep-meta">
+          <span>Season 1</span>
+          <span>Episode 4</span>
+          <span>TBA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PPL INDIA + INDUSTRY ===== -->
+<div class="ppl-section">
+  <div class="ppl-card">
+    <h3>Industry Recognized by <span>PPL India</span></h3>
+    <p>
+      All labels vying for YASHHH work with PPL India (Phonographic Performance Limited) for licensing 
+      and copyright management &mdash; ensuring that his music rights are protected as the bidding war 
+      intensifies. PPL India's member roster includes:
+    </p>
+    <div class="ppl-members">
+      <span>Sony Music</span>
+      <span>Times Music</span>
+      <span>T-Series</span>
+      <span>Universal Music</span>
+      <span>Venus Music</span>
+      <span>Warner Music</span>
+      <span>Aditya Music</span>
+      <span>Saregama</span>
+      <span>Zee Music</span>
+      <span>Speed Records</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMMUNITY ===== -->
+<section class="community-section" id="community">
+  <div class="community-inner">
+    <div class="community-text">
+      <h2>Join the <span>YASHHH Fam</span></h2>
+      <p>
+        Connect directly with YASHHH and fellow fans. As an IRL creator on I-RIS, 
+        YASHHH's content flows across all connected platforms &mdash; giving you a single destination 
+        for everything from studio sessions to live concerts to the ongoing bidding war drama.
+      </p>
+      <p>
+        I-RIS's <strong>non-exclusionary model</strong> means YASHHH keeps full creative control 
+        while reaching audiences everywhere &mdash; from social media to major streaming networks. 
+        No matter which label signs him, his I-RIS Creator's Corner stays his own.
+      </p>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a class="btn btn-yashhh" href="https://www.instagram.com/yashhh.11.11/" target="_blank" rel="noopener noreferrer">Follow @yashhh.11.11</a>
+        <a class="btn btn-primary" href="../../petition.html#donate">Support I-RIS</a>
+        <a class="btn btn-outline" href="../../movie.html#iris-vision">Learn About I-RIS</a>
+      </div>
+    </div>
+    <div class="community-features">
+      <div class="comm-feat"><div class="feat-icon">&#x1F3B5;</div><div class="feat-label">Music Updates</div></div>
+      <div class="comm-feat"><div class="feat-icon">&#x1F4F1;</div><div class="feat-label">Unified Content Feed</div></div>
+      <div class="comm-feat"><div class="feat-icon">&#x1F3A4;</div><div class="feat-label">Concert Access</div></div>
+      <div class="comm-feat"><div class="feat-icon">&#x1F525;</div><div class="feat-label">Label War Updates</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col"><h4>I-RIS</h4><a href="../../movie.html">Home</a><a href="../../movie.html#originals">Originals</a><a href="../../movie.html#irl">IRL Shows</a><a href="../../movie.html#about">About</a></div>
+    <div class="footer-col"><h4>Creator Corners</h4><a href="../HouseOfYoung">House of Young</a><a href="../SwamiTsunami">Swami Tsunami</a><a href="https://illmedicine.github.io/blissfulyogamiami/index.html" target="_blank" rel="noopener">Blissful Yoga Miami</a><a href="../RizzRateDating">Rizz Rate Dating</a><a href="./" style="color:var(--text-muted);font-weight:700;">YASHHH</a></div>
+    <div class="footer-col"><h4>Platform</h4><a href="../../movie.html#iris-vision">For Creators</a><a href="../../movie.html#networks">For Networks</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="../../petition.html">LivePay Petition</a><a href="../../petition.html#donate">Support I-RIS</a></div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-logo">I-RIS</span>
+    <p>&copy; 2026 Illy Robotic Instruments Studios. A division of Illy Robotics.</p>
+  </div>
+</footer>
+
+<script>
+// ===== CAROUSEL =====
+(function() {
+  const track = document.getElementById('carouselTrack');
+  const dots = document.querySelectorAll('.carousel-dot');
+  const prevBtn = document.getElementById('prevSlide');
+  const nextBtn = document.getElementById('nextSlide');
+  const totalSlides = dots.length;
+  const INTERVAL = 6000;
+  let current = 0;
+  let timer = null;
+
+  function goTo(idx) {
+    current = ((idx % totalSlides) + totalSlides) % totalSlides;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+      const fill = d.querySelector('.carousel-dot-fill');
+      if (fill) { fill.style.animation = 'none'; fill.offsetHeight; fill.style.animation = ''; }
+    });
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(next, INTERVAL);
+  }
+
+  nextBtn.addEventListener('click', () => { next(); startTimer(); });
+  prevBtn.addEventListener('click', () => { prev(); startTimer(); });
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => { goTo(i); startTimer(); });
+  });
+
+  // Swipe support
+  let touchStartX = 0;
+  track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+  track.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); startTimer(); }
+  }, {passive: true});
+
+  startTimer();
+})();
+</script>
+
+</body>
+</html>
