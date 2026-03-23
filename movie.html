@@ -700,6 +700,65 @@
     /* Clickable show cards */
     a.show-card{text-decoration:none;color:inherit;display:block;}
 
+    /* ===== NEWLY RELEASED BADGE ===== */
+    .newly-released-banner{
+      display:inline-flex;align-items:center;gap:10px;
+      background:linear-gradient(135deg,#e50914,#ff6b35);
+      color:#fff;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:.85rem;
+      font-weight:800;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      animation:newPulse 2s ease-in-out infinite;
+      box-shadow:0 4px 20px rgba(229,9,20,.4);
+      margin-bottom:4px;
+    }
+    .newly-released-banner .pulse-dot{
+      width:10px;height:10px;
+      background:#fff;
+      border-radius:50%;
+      animation:dotPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes newPulse{
+      0%,100%{box-shadow:0 4px 20px rgba(229,9,20,.4);}
+      50%{box-shadow:0 4px 30px rgba(229,9,20,.7),0 0 40px rgba(255,107,53,.3);}
+    }
+    @keyframes dotPulse{
+      0%,100%{opacity:1;transform:scale(1);}
+      50%{opacity:.5;transform:scale(.7);}
+    }
+    .now-playing-header{
+      display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    }
+    .featured-player-shorts{
+      margin:16px 0 56px;
+      border-radius:12px;
+      overflow:hidden;
+      background:#000;
+      position:relative;
+      max-width:400px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .featured-video-shorts{
+      width:100%;
+      aspect-ratio:9/16;
+      max-height:80vh;
+    }
+    .featured-video-shorts iframe{
+      width:100%;height:100%;border:none;
+    }
+    .release-date-tag{
+      text-align:center;
+      color:var(--text-muted);
+      font-size:.85rem;
+      margin-top:12px;
+      padding-bottom:4px;
+    }
+    .release-date-tag strong{color:var(--accent);}
+
     /* ===== IRIS VISION SECTION ===== */
     .iris-vision{
       background:linear-gradient(180deg,var(--surface) 0%,var(--bg) 100%);
@@ -901,7 +960,7 @@
     <div class="hero-bg"></div>
     <div class="hero-iframe-bg">
       <iframe 
-        src="https://www.youtube.com/embed/Jo3ZVujhak0?autoplay=1&mute=1&loop=1&playlist=Jo3ZVujhak0&controls=0&showinfo=0&modestbranding=1" 
+        src="https://www.youtube.com/embed/iJOXfm3BdwY?autoplay=1&mute=1&loop=1&playlist=iJOXfm3BdwY&controls=0&showinfo=0&modestbranding=1" 
         allow="autoplay;encrypted-media" 
         loading="lazy"
         title="The Reclamation Background">
@@ -917,11 +976,11 @@
         THE RECLAMATION
       </h1>
       <div class="hero-meta">
-        <span class="hero-badge new">New Episodes</span>
+        <span class="hero-badge new">🔥 Newly Released</span>
         <span class="hero-badge series">Sci-Fi</span>
         <span class="hero-meta-text">Season 1</span>
         <span class="hero-meta-text">•</span>
-        <span class="hero-meta-text">2025</span>
+        <span class="hero-meta-text">2026</span>
         <span class="hero-meta-text">•</span>
         <span class="hero-meta-text">TV-14</span>
       </div>
@@ -931,7 +990,7 @@
         and innovation expands opportunity.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-play" href="#watch-reclamation">▶ Play</a>
+        <a class="btn btn-play" href="#now-playing-reclamation">▶ Play New Episode</a>
         <a class="btn btn-info" href="#originals">ℹ More Info</a>
       </div>
     </div>
@@ -1195,21 +1254,25 @@
     </div>
   </section>
 
-  <!-- ===== FEATURED: CAPTAINS QUARTERS ===== -->
-  <section class="row">
+  <!-- ===== FEATURED: THE RECLAMATION — NEW EPISODE ===== -->
+  <section class="row" id="now-playing-reclamation">
     <div class="row-header">
-      <h2 class="row-title">Now Playing: <span class="accent">The Captains Quarters</span></h2>
+      <div class="now-playing-header">
+        <h2 class="row-title">Now Playing: <span class="accent">The Reclamation</span></h2>
+        <span class="newly-released-banner"><span class="pulse-dot"></span> Newly Released — March 23, 2026</span>
+      </div>
     </div>
-    <div class="featured-player">
-      <div class="featured-video">
+    <div class="featured-player-shorts">
+      <div class="featured-video-shorts">
         <iframe 
-          src="https://www.youtube.com/embed/-nH5V7X5jPY" 
+          src="https://www.youtube.com/embed/iJOXfm3BdwY" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen 
-          title="The Captains Quarters — Full Episode"
+          title="The Reclamation — Latest Episode"
           loading="lazy">
         </iframe>
       </div>
+      <p class="release-date-tag">🎬 New episode dropped <strong>today</strong> — watch it right here!</p>
     </div>
   </section>
 
