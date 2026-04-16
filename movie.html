@@ -923,9 +923,25 @@
       .hero-billboard{min-height:65vh;}
       .about-stats{grid-template-columns:1fr;}
     }
+
+    /* ===== WATERMARK LOGO ===== */
+    .watermark-logo{
+      position:fixed;
+      top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      width:55vmin;
+      height:55vmin;
+      background:url('images/i-rislogo.png') no-repeat center/contain;
+      opacity:.06;
+      pointer-events:none;
+      z-index:0;
+    }
   </style>
 </head>
 <body>
+
+<!-- ===== WATERMARK LOGO ===== -->
+<div class="watermark-logo" aria-hidden="true"></div>
 
 <!-- ===== STREAMING NAV BAR ===== -->
 <nav class="nav-bar" id="navbar">
