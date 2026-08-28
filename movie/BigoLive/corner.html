@@ -184,6 +184,26 @@
     .error-state h2{font-size:1.5rem;font-weight:800;margin-bottom:8px;}
     .error-state p{color:var(--text-muted);margin-bottom:24px;}
   </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,700;1,900&display=swap">
+  <style>
+    /* Miami Vibes overrides for Creator's Corner */
+    :root{--bg:#05000A;--surface:#0D0015;--surface2:#150020;--accent:#FF006E;--accent2:#00F5FF;--bigo:#FF006E;--bigo2:#FF6B00;--bigo-grad:linear-gradient(135deg,#FF006E,#FF6B00);--bigo-glow:rgba(255,0,110,.28);--iris-grad:linear-gradient(135deg,#FF006E,#FF6B00,#7B2FFF);--border:rgba(255,0,110,.14);--green:#00FF88;--gold:#FFE600;--text:#f0eaff;--text-muted:#b8a8d8;--text-dim:#8a7ab0;}
+    body{background:var(--bg)!important;color:#f0eaff!important;}
+    /* CONTRAST — all text stays white on Miami black */
+    body *{color:inherit;}
+    p,span,a,li,label,h1,h2,h3,h4,h5,h6,strong,em,td{color:#f0eaff;}
+    [class*="muted"],[class*="dim"],small{color:#b8a8d8!important;}
+    input,textarea{color:#f0eaff!important;background:rgba(13,0,21,.95)!important;}
+    input::placeholder,textarea::placeholder{color:rgba(176,160,216,.6)!important;}
+    .nav-logo-text{font-family:'Bebas Neue',Impact,sans-serif!important;background:none!important;-webkit-text-fill-color:unset!important;letter-spacing:4px!important;}
+    .corner-hero{background:#05000A!important;}
+    /* Animated IRIS letters */
+    @keyframes irisLetterColor{0%{color:#FF006E;text-shadow:0 0 8px #FF006E,0 0 18px rgba(255,0,110,.5);}16%{color:#FF6B00;text-shadow:0 0 8px #FF6B00,0 0 18px rgba(255,107,0,.5);}33%{color:#FFE600;text-shadow:0 0 8px #FFE600,0 0 18px rgba(255,230,0,.5);}50%{color:#00FF88;text-shadow:0 0 8px #00FF88,0 0 18px rgba(0,255,136,.5);}66%{color:#00F5FF;text-shadow:0 0 8px #00F5FF,0 0 18px rgba(0,245,255,.5);}83%{color:#7B2FFF;text-shadow:0 0 8px #7B2FFF,0 0 18px rgba(123,47,255,.5);}100%{color:#FF006E;text-shadow:0 0 8px #FF006E,0 0 18px rgba(255,0,110,.5);}}
+    .il{display:inline-block;animation:irisLetterColor 6s ease-in-out infinite;font-family:'Bebas Neue',Impact,sans-serif!important;font-weight:900!important;}
+    .il:nth-child(1){animation-delay:0s;}.il:nth-child(2){animation-delay:-1.2s;}.il:nth-child(3){animation-delay:-2.4s;}.il:nth-child(4){animation-delay:-3.6s;}.il:nth-child(5){animation-delay:-4.8s;}
+  </style>
 </head>
 <body>
 
@@ -191,7 +211,7 @@
 <nav class="nav-bar">
   <div class="nav-inner">
     <a class="nav-logo" href="../../movie.html">
-      <span class="nav-logo-text">I-RIS</span>
+      <span class="nav-logo-text" style="background:none;-webkit-text-fill-color:unset;"><span class="il">I</span><span class="il">-</span><span class="il">R</span><span class="il">I</span><span class="il">S</span></span>
     </a>
     <a class="nav-back" href="./index.html">← Bigo Live Hub</a>
     <div class="nav-right">
@@ -410,79 +430,140 @@ function timeSince(date) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-// ===== FACTORY FLOOR SVG (seeded, unique per creator) =====
-function factoryFloorSVG(seed, W, H) {
+// ===== MIAMI VICE × NYC GRAFFITI BANNER — seeded, unique per creator =====
+function factoryFloorSVG(seed, W, H) { return miamiViceBannerSVG(seed, W, H); }
+function miamiViceBannerSVG(seed, W, H) {
   W = W || 1400; H = H || 300;
   let st = 0;
   for (let i = 0; i < seed.length; i++) st = (Math.imul(31, st) + seed.charCodeAt(i)) | 0;
   const r = () => { st ^= st << 13; st ^= st >> 17; st ^= st << 5; return (st >>> 0) / 4294967296; };
+  // 90s Miami Vice / NYC graffiti palettes
   const pals = [
-    ['#060d1c','#4fd1ff','#7c5cff','#0a2060'],
-    ['#1c0600','#FF6B35','#FF0080','#6b2200'],
-    ['#001c06','#46d369','#4fd1ff','#003318'],
-    ['#1c1800','#f5c518','#FF6B35','#4a3b00'],
-    ['#0c061c','#a78bfa','#4fd1ff','#250a6b'],
-    ['#1c0010','#FF0080','#7c5cff','#5a0030'],
+    { s1:'#FF6B00', s2:'#FF006E', s3:'#7B2FFF', gnd:'#05000A', a1:'#00F5FF', a2:'#FF006E', neon:'#00F5FF' },
+    { s1:'#FFE600', s2:'#FF69B4', s3:'#4B0082', gnd:'#03001F', a1:'#FFE600', a2:'#FF006E', neon:'#FFE600' },
+    { s1:'#FF4500', s2:'#FF006E', s3:'#2D1B69', gnd:'#070007', a1:'#00FF88', a2:'#FF4500', neon:'#00FF88' },
+    { s1:'#FF00FF', s2:'#8B00FF', s3:'#00008B', gnd:'#000000', a1:'#00FFFF', a2:'#FF00FF', neon:'#00FFFF' },
+    { s1:'#FF7F50', s2:'#E91E8C', s3:'#4B0070', gnd:'#0D0221', a1:'#40E0D0', a2:'#FF7F50', neon:'#40E0D0' },
+    { s1:'#FF1493', s2:'#9400D3', s3:'#000080', gnd:'#000005', a1:'#00BFFF', a2:'#FF1493', neon:'#00BFFF' },
   ];
-  const [bg, ac, bm, gl] = pals[Math.floor(r() * pals.length)];
+  const p = pals[Math.floor(r() * pals.length)];
+  const uid = (Math.abs(st) % 9999).toString();
   const els = [];
-  els.push(`<rect width="${W}" height="${H}" fill="${bg}"/>`);
-  const gs = Math.max(28, Math.min(80, W / 22));
-  for (let x = 0; x <= W; x += gs) els.push(`<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${ac}" stroke-width="0.4" opacity="0.1"/>`);
-  for (let y = 0; y <= H; y += gs) els.push(`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${ac}" stroke-width="0.4" opacity="0.1"/>`);
-  // Perspective floor
-  const hz = H * 0.52;
-  for (let i = 0; i <= 16; i++) {
-    const t = i / 16, bx = W * t, tx = W * 0.5 + (bx - W * 0.5) * 0.06;
-    els.push(`<line x1="${bx.toFixed(1)}" y1="${H}" x2="${tx.toFixed(1)}" y2="${hz.toFixed(1)}" stroke="${ac}" stroke-width="0.5" opacity="0.2"/>`);
+  // 1. Defs
+  els.push(`<defs>
+    <linearGradient id="sky${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${p.s1}"/>
+      <stop offset="38%" stop-color="${p.s2}"/>
+      <stop offset="72%" stop-color="${p.s3}"/>
+      <stop offset="100%" stop-color="${p.gnd}"/>
+    </linearGradient>
+    <linearGradient id="fade${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="55%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="${p.gnd}"/>
+    </linearGradient>
+    <filter id="glow${uid}"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>`);
+  // 2. Sky gradient
+  els.push(`<rect width="${W}" height="${H}" fill="url(#sky${uid})"/>`);
+  // 3. Halftone dot comic overlay
+  const ds = 16, dr = 2.2 + r() * 1.4;
+  for (let dx = ds/2; dx < W; dx += ds) for (let dy = ds/2; dy < H; dy += ds) {
+    const op = (dy/H*0.16).toFixed(3);
+    els.push(`<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="${dr.toFixed(1)}" fill="${p.a1}" opacity="${op}"/>`);
   }
-  for (let i = 0; i <= 7; i++) {
-    const t = i / 7, yp = hz + (H - hz) * t, sc = 0.06 + 0.94 * t;
-    els.push(`<line x1="${(W*0.5-W*0.5*sc).toFixed(1)}" y1="${yp.toFixed(1)}" x2="${(W*0.5+W*0.5*sc).toFixed(1)}" y2="${yp.toFixed(1)}" stroke="${ac}" stroke-width="0.5" opacity="${(0.06+0.2*t).toFixed(2)}"/>`);
+  // 4. Retrowave perspective grid floor
+  const hz = H * 0.54;
+  const vp = W / 2;
+  for (let i = 0; i <= 22; i++) {
+    const bx = (i/22) * W;
+    els.push(`<line x1="${vp.toFixed(1)}" y1="${hz.toFixed(1)}" x2="${bx.toFixed(1)}" y2="${H}" stroke="${p.a1}" stroke-width="0.8" opacity="0.32"/>`);
   }
-  // Multiple robot arms
-  for (let arm = 0; arm < 3; arm++) {
-    const rax = W * (0.12 + r() * 0.76), seg1 = H * (0.28 + r() * 0.32), a1 = -Math.PI / 2 + (r() - 0.5) * 1.0;
-    const elx = rax + Math.cos(a1) * seg1, ely = H + Math.sin(a1) * seg1;
-    const seg2 = seg1 * (0.45 + r() * 0.5), a2 = a1 + (r() - 0.5) * 1.6;
-    const ex = elx + Math.cos(a2) * seg2, ey = ely + Math.sin(a2) * seg2, aw = 6 + r() * 12;
-    els.push(`<line x1="${rax.toFixed(1)}" y1="${H}" x2="${elx.toFixed(1)}" y2="${ely.toFixed(1)}" stroke="${ac}" stroke-width="${aw.toFixed(1)}" stroke-linecap="round" opacity="0.16"/>`);
-    els.push(`<line x1="${rax.toFixed(1)}" y1="${H}" x2="${elx.toFixed(1)}" y2="${ely.toFixed(1)}" stroke="${bm}" stroke-width="${(aw*0.28).toFixed(1)}" stroke-linecap="round" opacity="0.5"/>`);
-    els.push(`<line x1="${elx.toFixed(1)}" y1="${ely.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="${ac}" stroke-width="${(aw*0.75).toFixed(1)}" stroke-linecap="round" opacity="0.16"/>`);
-    els.push(`<line x1="${elx.toFixed(1)}" y1="${ely.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="${bm}" stroke-width="${(aw*0.22).toFixed(1)}" stroke-linecap="round" opacity="0.5"/>`);
-    els.push(`<circle cx="${elx.toFixed(1)}" cy="${ely.toFixed(1)}" r="${(aw*0.85).toFixed(1)}" fill="${bg}" stroke="${ac}" stroke-width="2" opacity="0.6"/>`);
-    els.push(`<circle cx="${elx.toFixed(1)}" cy="${ely.toFixed(1)}" r="${(aw*0.35).toFixed(1)}" fill="${bm}" opacity="0.55"/>`);
-    els.push(`<circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="${(aw*0.6).toFixed(1)}" fill="${bg}" stroke="${bm}" stroke-width="2" opacity="0.6"/>`);
+  for (let i = 1; i <= 9; i++) {
+    const t = i/9, gy = hz + (H-hz)*t;
+    els.push(`<line x1="0" y1="${gy.toFixed(1)}" x2="${W}" y2="${gy.toFixed(1)}" stroke="${p.a1}" stroke-width="${(0.5+t*1.8).toFixed(1)}" opacity="${(0.08+t*0.28).toFixed(2)}"/>`);
   }
-  // Pipes
-  for (let i = 0, np = 3 + Math.floor(r() * 3); i < np; i++) {
-    const py = H * (0.06 + r() * 0.55), px1 = -10 + r() * W * 0.3, px2 = W * 0.35 + r() * (W * 0.75), th = 5 + r() * 14;
-    els.push(`<line x1="${px1.toFixed(1)}" y1="${py.toFixed(1)}" x2="${px2.toFixed(1)}" y2="${py.toFixed(1)}" stroke="${ac}" stroke-width="${th.toFixed(1)}" stroke-linecap="round" opacity="0.1"/>`);
-    els.push(`<line x1="${px1.toFixed(1)}" y1="${(py-th*0.2).toFixed(1)}" x2="${px2.toFixed(1)}" y2="${(py-th*0.2).toFixed(1)}" stroke="${ac}" stroke-width="1" opacity="0.32"/>`);
-    const fx = px1 + (px2 - px1) * (0.15 + r() * 0.7);
-    els.push(`<rect x="${(fx-th*1.1).toFixed(1)}" y="${(py-th*1.6).toFixed(1)}" width="${(th*2.2).toFixed(1)}" height="${(th*3.2).toFixed(1)}" rx="3" fill="${bg}" stroke="${ac}" stroke-width="1" opacity="0.4"/>`);
+  // 5. Sun with Miami Vice scan lines
+  const sx = W*(0.28 + r()*0.44), sr = 22 + r()*45, sy = hz - sr*0.6;
+  els.push(`<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${(sr*2.2).toFixed(1)}" fill="${p.s1}" opacity="0.22"/>`);
+  els.push(`<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${sr.toFixed(1)}" fill="${p.s1}" opacity="0.88"/>`);
+  const lines = 5 + Math.floor(r()*4);
+  for (let l = 0; l < lines; l++) {
+    const ly = sy - sr + (l+0.5)*(sr*2/lines);
+    const lhalf = Math.sqrt(Math.max(0, sr*sr - (ly-sy)*(ly-sy)));
+    els.push(`<line x1="${(sx-lhalf).toFixed(1)}" y1="${ly.toFixed(1)}" x2="${(sx+lhalf).toFixed(1)}" y2="${ly.toFixed(1)}" stroke="${p.gnd}" stroke-width="${(sr*2/lines*0.38).toFixed(1)}" opacity="0.75"/>`);
   }
-  // Gears
-  for (let g = 0, ng = 3 + Math.floor(r() * 4); g < ng; g++) {
-    const gx = W * (0.03 + r() * 0.94), gy = H * (0.05 + r() * 0.75), gr = 8 + r() * 36, teeth = 7 + Math.floor(r() * 7);
-    let gp = '';
-    for (let t = 0; t < teeth * 2; t++) { const a = (t / (teeth * 2)) * Math.PI * 2, rad = t % 2 === 0 ? gr : gr * 0.72; gp += (t ? 'L' : 'M') + `${(gx + Math.cos(a) * rad).toFixed(1)},${(gy + Math.sin(a) * rad).toFixed(1)} `; }
-    const op = (0.07 + r() * 0.18).toFixed(2);
-    els.push(`<path d="${gp}Z" fill="none" stroke="${ac}" stroke-width="1.5" opacity="${op}"/>`);
-    els.push(`<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="${(gr*0.28).toFixed(1)}" fill="none" stroke="${ac}" stroke-width="1" opacity="${op}"/>`);
+  // 6. City skyline silhouette
+  let sky = `M 0 ${hz} `;
+  let cx = 0;
+  while (cx < W + 60) {
+    const bw = 28 + r()*110, bh = 25 + r()*(hz*0.9);
+    const style = Math.floor(r()*3);
+    const bx = cx, by = hz - bh;
+    if (style === 0) {
+      sky += `L ${bx.toFixed(1)} ${hz.toFixed(1)} L ${bx.toFixed(1)} ${by.toFixed(1)} L ${(bx+bw).toFixed(1)} ${by.toFixed(1)} `;
+    } else if (style === 1) {
+      const st2 = bw*0.18;
+      sky += `L ${bx.toFixed(1)} ${hz.toFixed(1)} L ${bx.toFixed(1)} ${(by+14).toFixed(1)} L ${(bx+st2).toFixed(1)} ${(by+14).toFixed(1)} L ${(bx+st2).toFixed(1)} ${(by+4).toFixed(1)} L ${(bx+bw-st2).toFixed(1)} ${(by+4).toFixed(1)} L ${(bx+bw-st2).toFixed(1)} ${(by+14).toFixed(1)} L ${(bx+bw).toFixed(1)} ${(by+14).toFixed(1)} `;
+    } else {
+      sky += `L ${bx.toFixed(1)} ${hz.toFixed(1)} L ${bx.toFixed(1)} ${by.toFixed(1)} L ${(bx+bw/2).toFixed(1)} ${(by-22).toFixed(1)} L ${(bx+bw).toFixed(1)} ${by.toFixed(1)} `;
+    }
+    // Random neon window
+    if (r() > 0.55) {
+      const wx = bx + bw*0.2 + r()*bw*0.4, wy = by + bh*0.15 + r()*bh*0.5;
+      els.push(`<rect x="${wx.toFixed(1)}" y="${wy.toFixed(1)}" width="${(3+r()*8).toFixed(1)}" height="${(4+r()*10).toFixed(1)}" fill="${p.neon}" opacity="${(0.4+r()*0.5).toFixed(2)}" rx="1"/>`);
+    }
+    cx += bw + (r() < 0.25 ? 0 : 4 + r()*16);
   }
-  // Glow blobs
-  for (let i = 0; i < 5; i++) { const gx = W * r(), gy = H * r(), gr = H * (0.3 + r() * 0.6); els.push(`<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="${gr.toFixed(1)}" fill="${i%2?ac:gl}" opacity="0.045"/>`); }
-  // Pillars
-  for (let i = 0; i < 4; i++) {
-    const px = W * (0.08 + r() * 0.84), pw = 6 + r() * 14, ph = H * (0.4 + r() * 0.55);
-    els.push(`<rect x="${(px-pw/2).toFixed(1)}" y="${(H-ph).toFixed(1)}" width="${pw.toFixed(1)}" height="${ph.toFixed(1)}" fill="${bg}" stroke="${ac}" stroke-width="1" opacity="0.25" rx="2"/>`);
+  sky += `L ${W} ${hz.toFixed(1)} Z`;
+  els.push(`<path d="${sky}" fill="${p.gnd}" opacity="0.92"/>`);
+  // 7. Palm trees
+  const palms = 1 + Math.floor(r()*3);
+  for (let pm = 0; pm < palms; pm++) {
+    const px = W*(0.04 + r()*0.92), ph2 = H*(0.38 + r()*0.42), tw = 3+r()*5;
+    els.push(`<path d="M ${px} ${hz} C ${(px-8).toFixed(1)} ${(hz-ph2*0.4).toFixed(1)},${(px+10).toFixed(1)} ${(hz-ph2*0.72).toFixed(1)},${px.toFixed(1)} ${(hz-ph2).toFixed(1)}" fill="none" stroke="${p.gnd}" stroke-width="${(tw*1.2).toFixed(1)}" stroke-linecap="round"/>`);
+    const fronds = 5 + Math.floor(r()*5);
+    for (let f = 0; f < fronds; f++) {
+      const fa = (f/fronds)*Math.PI*2, fl = ph2*(0.22+r()*0.18);
+      const fex = px + Math.cos(fa)*fl, fey = hz - ph2 + Math.sin(fa)*fl*0.55;
+      els.push(`<path d="M ${px.toFixed(1)} ${(hz-ph2).toFixed(1)} Q ${(px+Math.cos(fa)*fl*0.5).toFixed(1)} ${(hz-ph2+Math.sin(fa)*fl*0.3).toFixed(1)},${fex.toFixed(1)} ${fey.toFixed(1)}" fill="none" stroke="${p.gnd}" stroke-width="${(1+r()*2).toFixed(1)}" stroke-linecap="round"/>`);
+    }
   }
-  // Top accent line
-  els.push(`<line x1="0" y1="2" x2="${W}" y2="2" stroke="${ac}" stroke-width="3" opacity="0.7"/>`);
-  // Bottom fade
-  els.push(`<defs><linearGradient id="bfade${W}" x1="0" y1="0" x2="0" y2="1"><stop offset="60%" stop-color="transparent"/><stop offset="100%" stop-color="${bg}"/></linearGradient></defs>`);
-  els.push(`<rect width="${W}" height="${H}" fill="url(#bfade${W})"/>`);
+  // 8. Graffiti tag text
+  const tags = ['IRIS','LIVE','BIGO','HEAT','FRESH','VIBE','SQUAD','NYC','BLOCK','WAVE'];
+  const tag = tags[Math.floor(r()*tags.length)];
+  const tx = W*(0.06 + r()*0.44), ty = H*(0.18 + r()*0.38);
+  const tsz = 62 + r()*90, tang = -18 + r()*36;
+  els.push(`<text x="${tx}" y="${ty}" font-family="Impact,'Arial Black',sans-serif" font-size="${tsz.toFixed(0)}" font-weight="900" fill="${p.gnd}" opacity="0.55" transform="rotate(${tang.toFixed(1)},${tx},${ty})" letter-spacing="3">${tag}</text>`);
+  els.push(`<text x="${(tx-3).toFixed(1)}" y="${(ty-3).toFixed(1)}" font-family="Impact,'Arial Black',sans-serif" font-size="${tsz.toFixed(0)}" font-weight="900" fill="${p.a1}" opacity="0.40" transform="rotate(${tang.toFixed(1)},${tx},${ty})" letter-spacing="3">${tag}</text>`);
+  els.push(`<text x="${(tx+3).toFixed(1)}" y="${(ty+3).toFixed(1)}" font-family="Impact,'Arial Black',sans-serif" font-size="${tsz.toFixed(0)}" font-weight="900" fill="${p.a2}" opacity="0.30" transform="rotate(${tang.toFixed(1)},${tx},${ty})" letter-spacing="3">${tag}</text>`);
+  // 9. Spray drips under tag
+  const drips = 3 + Math.floor(r()*5);
+  for (let d = 0; d < drips; d++) {
+    const dpx = tx + (r()-0.5)*tsz*tag.length*0.22;
+    const dlen = 12 + r()*55, dw = 1.2 + r()*3.5;
+    els.push(`<path d="M ${dpx.toFixed(1)} ${ty.toFixed(1)} Q ${(dpx+r()*10-5).toFixed(1)} ${(ty+dlen*0.5).toFixed(1)},${(dpx+r()*8-4).toFixed(1)} ${(ty+dlen).toFixed(1)}" fill="none" stroke="${p.a1}" stroke-width="${dw.toFixed(1)}" stroke-linecap="round" opacity="${(0.35+r()*0.45).toFixed(2)}"/>`);
+    els.push(`<circle cx="${(dpx+r()*5-2.5).toFixed(1)}" cy="${(ty+dlen).toFixed(1)}" r="${(dw*1.6).toFixed(1)}" fill="${p.a1}" opacity="0.45"/>`);
+  }
+  // 10. Speed lines (comic book action)
+  if (r() > 0.3) {
+    const slx = W*(0.05+r()*0.85), sly = H*(0.05+r()*0.7), lc = 18+Math.floor(r()*20);
+    for (let l = 0; l < lc; l++) {
+      const la = (l/lc)*Math.PI*2, ll = 50+r()*220;
+      els.push(`<line x1="${slx.toFixed(1)}" y1="${sly.toFixed(1)}" x2="${(slx+Math.cos(la)*ll).toFixed(1)}" y2="${(sly+Math.sin(la)*ll).toFixed(1)}" stroke="${p.neon}" stroke-width="${(0.4+r()).toFixed(1)}" opacity="${(0.08+r()*0.18).toFixed(2)}"/>`);
+    }
+  }
+  // 11. Comic book corner blocks
+  const cs = 16 + r()*28;
+  els.push(`<rect x="0" y="0" width="${cs.toFixed(0)}" height="${cs.toFixed(0)}" fill="${p.a1}" opacity="0.78"/>`);
+  els.push(`<rect x="${(W-cs).toFixed(0)}" y="0" width="${cs.toFixed(0)}" height="${cs.toFixed(0)}" fill="${p.a2}" opacity="0.78"/>`);
+  els.push(`<rect x="0" y="${(H-cs).toFixed(0)}" width="${cs.toFixed(0)}" height="${cs.toFixed(0)}" fill="${p.a2}" opacity="0.78"/>`);
+  els.push(`<rect x="${(W-cs).toFixed(0)}" y="${(H-cs).toFixed(0)}" width="${cs.toFixed(0)}" height="${cs.toFixed(0)}" fill="${p.a1}" opacity="0.78"/>`);
+  // 12. Neon horizon line
+  els.push(`<line x1="0" y1="${hz.toFixed(1)}" x2="${W}" y2="${hz.toFixed(1)}" stroke="${p.neon}" stroke-width="2" opacity="0.65" filter="url(#glow${uid})"/>`);
+  // 13. Bottom vignette
+  els.push(`<rect width="${W}" height="${H}" fill="url(#fade${uid})"/>`);
+  // 14. Top neon bar
+  els.push(`<rect x="0" y="0" width="${W}" height="3" fill="${p.a1}" opacity="0.9"/>`);
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;">${els.join('')}</svg>`;
 }
 
