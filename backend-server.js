@@ -16,6 +16,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const bigoScraper = require('./bigo-scraper');
 
 // Load .env without requiring dotenv package
 try {
@@ -296,60 +297,60 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
-// ===== STREAMSCHARTS / BIGO LIVE API PROXY =====
+// ===== BIGO LIVE SCRAPER ROUTES =====
 
-// GET /api/bigo/trending?limit=10 — top trending Bigo Live creators
+// GET /api/bigo/trending?limit=10 — top trending Bigo Live creators (scraper-backed, 24h cache)
 app.get('/api/bigo/trending', async (req, res) => {
-  if (!SC_CLIENT_ID) return res.status(503).json({ error: 'StreamsCharts credentials not configured' });
   try {
     const limit = Math.min(parseInt(req.query.limit) || 10, 50);
-    const result = await scFetch(`/channels?platform=bigo&limit=${limit}`);
-    res.status(result.status).json(result.data);
+    const result = await bigoScraper.getTrending(limit);
+    res.json(result);
   } catch (err) {
-    console.error('StreamsCharts trending error:', err.message);
-    res.status(502).json({ error: 'StreamsCharts API unavailable', detail: err.message });
+    console.error('Bigo trending error:', err.message);
+    res.status(502).json({ error: 'Bigo scraper unavailable', detail: err.message });
   }
 });
 
-// GET /api/bigo/creator/:username — stats for a specific Bigo creator
+// GET /api/bigo/creator/:username — live stats for a specific Bigo creator
 app.get('/api/bigo/creator/:username', async (req, res) => {
-  if (!SC_CLIENT_ID) return res.status(503).json({ error: 'StreamsCharts credentials not configured' });
-  const username = encodeURIComponent(req.params.username.slice(0, 64));
+  const username = req.params.username.slice(0, 64);
   try {
-    const result = await scFetch(`/channels/${username}?platform=bigo`);
-    res.status(result.status).json(result.data);
+    const data = await bigoScraper.getCreator(username);
+    res.json(data);
   } catch (err) {
-    console.error('StreamsCharts creator error:', err.message);
-    res.status(502).json({ error: 'StreamsCharts API unavailable', detail: err.message });
+    console.error('Bigo creator error:', err.message);
+    res.status(502).json({ error: 'Could not fetch creator', detail: err.message });
   }
 });
 
-// GET /api/bigo/live?users=alice,bob,charlie — bulk live-status check (max 20)
+// GET /api/bigo/live?users=alice,bob — bulk live-status from cached trending list
 app.get('/api/bigo/live', async (req, res) => {
-  if (!SC_CLIENT_ID) return res.status(503).json({ error: 'StreamsCharts credentials not configured' });
   const usernames = (req.query.users || '').split(',').map(u => u.trim()).filter(Boolean).slice(0, 20);
   if (!usernames.length) return res.json({ creators: [] });
   try {
-    const results = await Promise.allSettled(
-      usernames.map(u => scFetch(`/channels/${encodeURIComponent(u)}?platform=bigo`))
-    );
-    const creators = results.map((r, i) => {
-      const d = r.status === 'fulfilled' ? r.value.data : {};
-      return {
-        username: usernames[i],
-        live: d.is_live || false,
-        viewers: d.current_viewers || 0,
-        peak_viewers: d.peak_viewers || 0,
-        avg_viewers: d.avg_viewers || 0,
-        followers: d.followers_count || 0,
-        title: d.stream_title || '',
-        thumbnail: d.thumbnail_url || '',
-      };
+    const { data } = await bigoScraper.getTrending(50);
+    const index = Object.fromEntries(data.map(c => [c.username, c]));
+    const creators = usernames.map(u => {
+      const c = index[u];
+      return c
+        ? { username: u, live: c.is_live, viewers: c.current_viewers, peak_viewers: c.peak_viewers, followers: c.followers_count, title: c.room_topic }
+        : { username: u, live: false, viewers: 0, peak_viewers: 0, followers: 0, title: '' };
     });
     res.json({ creators });
   } catch (err) {
-    console.error('StreamsCharts live-check error:', err.message);
-    res.status(502).json({ error: 'StreamsCharts API unavailable', detail: err.message });
+    console.error('Bigo live-check error:', err.message);
+    res.status(502).json({ error: 'Bigo scraper unavailable', detail: err.message });
+  }
+});
+
+// POST /api/bigo/refresh — force an immediate cache refresh (no body required)
+app.post('/api/bigo/refresh', async (req, res) => {
+  try {
+    const result = await bigoScraper.getTrending(50, true);
+    res.json({ refreshed: true, count: result.data.length, fetched_at: result.fetched_at });
+  } catch (err) {
+    console.error('Bigo refresh error:', err.message);
+    res.status(502).json({ error: 'Refresh failed', detail: err.message });
   }
 });
 
@@ -368,6 +369,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
+bigoScraper.scheduleDailyRefresh();
 app.listen(PORT, () => {
   console.log(`🚀 LivePay Backend Server running on http://localhost:${PORT}`);
   console.log(`📊 Signatures endpoint: GET http://localhost:${PORT}/api/petition/signatures/count`);
