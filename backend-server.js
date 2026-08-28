@@ -78,22 +78,28 @@ app.get('/api/debug/env', (req, res) => {
   });
 });
 
-// Data storage (production: use a database like MongoDB)
-const dataDir = path.join(__dirname, 'data');
-const signaturesFile = path.join(dataDir, 'signatures.json');
-const donationsFile = path.join(dataDir, 'donations.json');
+// Data storage
+const dataDir          = path.join(__dirname, 'data');
+const signaturesFile   = path.join(dataDir, 'signatures.json');
+const donationsFile    = path.join(dataDir, 'donations.json');
+const creatorsFile     = path.join(dataDir, 'featured-creators.json');
+const applicationsFile = path.join(dataDir, 'creator-applications.json');
 
-// Initialize data directory and files
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir);
-}
+if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+[signaturesFile, donationsFile, creatorsFile, applicationsFile].forEach(f => {
+  if (!fs.existsSync(f)) fs.writeFileSync(f, '[]', 'utf8');
+});
 
-if (!fs.existsSync(signaturesFile)) {
-  fs.writeFileSync(signaturesFile, JSON.stringify([]), 'utf8');
-}
+const readCreators     = () => { try { return JSON.parse(fs.readFileSync(creatorsFile, 'utf8')); }     catch { return []; } };
+const writeCreators    = d  => fs.writeFileSync(creatorsFile, JSON.stringify(d, null, 2), 'utf8');
+const readApplications = () => { try { return JSON.parse(fs.readFileSync(applicationsFile, 'utf8')); } catch { return []; } };
+const writeApplications= d  => fs.writeFileSync(applicationsFile, JSON.stringify(d, null, 2), 'utf8');
 
-if (!fs.existsSync(donationsFile)) {
-  fs.writeFileSync(donationsFile, JSON.stringify([]), 'utf8');
+function adminAuth(req, res, next) {
+  const pw = process.env.ADMIN_PASSWORD || 'iris-admin-2026';
+  const token = req.headers['x-admin-token'] || req.query.token;
+  if (token !== pw) return res.status(401).json({ error: 'Unauthorized' });
+  next();
 }
 
 // Helper functions
@@ -353,6 +359,98 @@ app.post('/api/bigo/refresh', async (req, res) => {
     console.error('Bigo refresh error:', err.message);
     res.status(502).json({ error: 'Refresh failed', detail: err.message });
   }
+});
+
+// ===== CREATOR MANAGEMENT =====
+
+// GET /api/bigo/creators/featured — public: featured creators merged with live Bigo stats
+app.get('/api/bigo/creators/featured', async (req, res) => {
+  try {
+    const creators = readCreators();
+    if (creators.length > 0) {
+      try {
+        const { data: trending } = await bigoScraper.getTrending(50);
+        const index = Object.fromEntries(trending.map(t => [t.username, t]));
+        creators.forEach(c => {
+          const live = index[c.bigo_username];
+          if (live) {
+            c.is_live         = live.is_live;
+            c.current_viewers = live.current_viewers;
+            c.peak_viewers    = live.peak_viewers || c.peak_viewers;
+            c.followers_count = live.followers_count || c.followers_count;
+            c.room_topic      = live.room_topic;
+            if (live.avatar) c.avatar = live.avatar;
+          }
+        });
+      } catch (_) {}
+    }
+    res.json({ creators });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/bigo/creators/apply — public: creator self-applies
+app.post('/api/bigo/creators/apply', (req, res) => {
+  const { display_name, bigo_username, bio, bigo_url } = req.body;
+  if (!display_name || !bigo_username)
+    return res.status(400).json({ error: 'display_name and bigo_username are required' });
+
+  const apps = readApplications();
+  if (apps.some(a => a.bigo_username === bigo_username && a.status === 'pending'))
+    return res.status(409).json({ error: 'An application for this Bigo ID is already pending review.' });
+
+  const application = {
+    id           : Date.now().toString(),
+    display_name : display_name.slice(0, 80),
+    bigo_username: bigo_username.trim().replace(/^@/, '').slice(0, 64),
+    bio          : (bio || '').slice(0, 300),
+    bigo_url     : bigo_url || `https://www.bigo.tv/${bigo_username}`,
+    avatar       : '',
+    peak_viewers : 0,
+    followers_count: 0,
+    status       : 'pending',
+    submitted_at : new Date().toISOString(),
+  };
+  apps.push(application);
+  writeApplications(apps);
+  res.status(201).json({ success: true, message: "Application received! We'll review it and be in touch.", id: application.id });
+});
+
+// GET /api/bigo/creators/applications — admin: list all applications
+app.get('/api/bigo/creators/applications', adminAuth, (req, res) => {
+  res.json({ applications: readApplications() });
+});
+
+// POST /api/bigo/creators/approve/:id — admin: approve → feature the creator
+app.post('/api/bigo/creators/approve/:id', adminAuth, (req, res) => {
+  const apps = readApplications();
+  const idx = apps.findIndex(a => a.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Application not found' });
+  apps[idx].status = 'approved';
+  writeApplications(apps);
+  const creators = readCreators();
+  if (!creators.some(c => c.bigo_username === apps[idx].bigo_username)) {
+    creators.push({ ...apps[idx], featured_at: new Date().toISOString() });
+    writeCreators(creators);
+  }
+  res.json({ success: true });
+});
+
+// POST /api/bigo/creators/reject/:id — admin: reject an application
+app.post('/api/bigo/creators/reject/:id', adminAuth, (req, res) => {
+  const apps = readApplications();
+  const idx = apps.findIndex(a => a.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Not found' });
+  apps[idx].status = 'rejected';
+  writeApplications(apps);
+  res.json({ success: true });
+});
+
+// DELETE /api/bigo/creators/featured/:id — admin: remove a featured creator
+app.delete('/api/bigo/creators/featured/:id', adminAuth, (req, res) => {
+  writeCreators(readCreators().filter(c => c.id !== req.params.id));
+  res.json({ success: true });
 });
 
 // Serve static files from project root for the IRIS pages

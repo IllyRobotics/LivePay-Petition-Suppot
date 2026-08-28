@@ -134,13 +134,63 @@
     .cc-platform-icons{display:flex;gap:6px;margin-bottom:10px;}
     .cc-plat{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;}
 
-    /* Coming soon creator card */
+    /* Coming soon / apply card */
     .creator-card.coming-soon{border-style:dashed;border-color:rgba(255,255,255,.12);}
     .creator-card.coming-soon .cc-banner{background:linear-gradient(135deg,#111,#1a1a1a);}
     .coming-soon-body{padding:40px 20px 24px;text-align:center;}
     .cs-icon{font-size:2.5rem;margin-bottom:12px;display:block;}
     .cs-title{font-size:1rem;font-weight:700;margin-bottom:6px;}
     .cs-sub{font-size:.82rem;color:var(--text-muted);line-height:1.5;margin-bottom:16px;}
+
+    /* ===== APPLY MODAL ===== */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal-box{background:#1a1a1a;border:1px solid rgba(255,0,128,.25);border-radius:20px;max-width:520px;width:100%;padding:36px;position:relative;transform:translateY(20px);transition:transform .25s;}
+    .modal-overlay.open .modal-box{transform:translateY(0);}
+    .modal-close{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-muted);font-size:1rem;line-height:1;transition:all .2s;}
+    .modal-close:hover{color:#fff;border-color:rgba(255,255,255,.3);}
+    .modal-title{font-size:1.4rem;font-weight:900;margin-bottom:4px;}
+    .modal-sub{font-size:.85rem;color:var(--text-muted);margin-bottom:24px;line-height:1.5;}
+    .form-row{margin-bottom:16px;}
+    .form-row label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;}
+    .form-row input,.form-row textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;font-family:inherit;outline:none;transition:border-color .2s;resize:none;}
+    .form-row input:focus,.form-row textarea:focus{border-color:rgba(255,0,128,.5);}
+    .form-row .hint{font-size:.72rem;color:var(--text-dim);margin-top:4px;}
+    .modal-submit{width:100%;margin-top:8px;}
+    .modal-success{text-align:center;display:none;padding:20px 0;}
+    .modal-success .s-icon{font-size:3rem;margin-bottom:12px;}
+    .modal-success .s-title{font-size:1.2rem;font-weight:800;margin-bottom:6px;}
+    .modal-success .s-sub{font-size:.85rem;color:var(--text-muted);line-height:1.6;}
+    .modal-error{background:rgba(229,9,20,.1);border:1px solid rgba(229,9,20,.3);border-radius:8px;padding:10px 14px;font-size:.82rem;color:#ff6b6b;margin-bottom:12px;display:none;}
+
+    /* ===== ADMIN PANEL ===== */
+    .admin-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:#0d0d0d;border-top:2px solid var(--bigo);padding:0;}
+    .admin-bar-header{display:flex;align-items:center;gap:12px;padding:12px 24px;cursor:pointer;user-select:none;}
+    .admin-bar-header h3{font-size:.9rem;font-weight:800;background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;flex:1;}
+    .admin-badge{background:var(--bigo-grad);color:#fff;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:999px;}
+    .admin-toggle{color:var(--text-dim);font-size:.85rem;transition:transform .2s;}
+    .admin-body{display:none;padding:0 24px 20px;max-height:50vh;overflow-y:auto;}
+    .admin-bar.expanded .admin-body{display:block;}
+    .admin-bar.expanded .admin-toggle{transform:rotate(180deg);}
+    .admin-section{margin-bottom:20px;}
+    .admin-section h4{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;font-weight:700;}
+    .admin-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;}
+    .admin-row .ar-name{font-weight:700;font-size:.9rem;flex:1;}
+    .admin-row .ar-id{font-size:.75rem;color:var(--text-dim);}
+    .admin-row .ar-time{font-size:.7rem;color:var(--text-dim);margin-left:auto;}
+    .admin-row .ar-status{font-size:.7rem;padding:2px 8px;border-radius:999px;font-weight:700;}
+    .ar-status.pending{background:rgba(245,197,24,.1);color:var(--gold);}
+    .ar-status.approved{background:rgba(70,211,105,.1);color:var(--green);}
+    .ar-status.rejected{background:rgba(229,9,20,.1);color:var(--red);}
+    .admin-btn{padding:5px 12px;border-radius:6px;font-size:.75rem;font-weight:700;border:none;cursor:pointer;transition:all .15s;}
+    .admin-btn.approve{background:rgba(70,211,105,.15);color:var(--green);border:1px solid rgba(70,211,105,.3);}
+    .admin-btn.approve:hover{background:rgba(70,211,105,.3);}
+    .admin-btn.reject{background:rgba(229,9,20,.1);color:var(--red);border:1px solid rgba(229,9,20,.2);}
+    .admin-btn.reject:hover{background:rgba(229,9,20,.2);}
+    .admin-btn.remove{background:rgba(229,9,20,.1);color:var(--red);border:1px solid rgba(229,9,20,.2);}
+    .admin-btn.remove:hover{background:rgba(229,9,20,.25);}
+    .admin-empty{font-size:.82rem;color:var(--text-dim);padding:10px 0;}
+    body.has-admin{padding-bottom:56px;}
 
     /* ===== FANS ENGAGEMENT ===== */
     .fans-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 48px;margin:0;}
@@ -326,112 +376,46 @@
     <span class="section-badge badge-iris">Creator's Corner</span>
   </div>
 
+  <!-- Dynamic creator cards rendered by JS -->
   <div class="creators-grid" id="creatorsGrid">
+    <div class="lb-card skeleton" style="min-height:280px;border-radius:20px;"></div>
+    <div class="lb-card skeleton" style="min-height:280px;border-radius:20px;"></div>
+    <div class="lb-card skeleton" style="min-height:280px;border-radius:20px;"></div>
+  </div>
+</div>
 
-    <!-- ==========================================
-         FEATURED CREATOR SLOTS
-         To add a creator: copy a .creator-card block,
-         update the bigo-username data attr, name, handle,
-         description, and set the Creator's Corner href.
-         ========================================== -->
-
-    <!-- SLOT 1: Featured Bigo Creator -->
-    <div class="creator-card" id="cc-slot-1" data-bigo-username="">
-      <div class="cc-banner">
-        <div class="cc-live-overlay">
-          <div class="cc-live-pill" style="display:none;" id="cc1-live">
-            <span class="dot"></span> Live
-          </div>
-        </div>
-        <div class="cc-avatar-wrap">
-          <img class="cc-avatar" src="" alt="" id="cc1-avatar">
-        </div>
+<!-- ===== APPLY MODAL ===== -->
+<div class="modal-overlay" id="applyModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    <div id="applyForm">
+      <div class="modal-title">Apply for Creator's Corner</div>
+      <div class="modal-sub">Get your own hub on I-RIS — live stats, fan engagement, and a page your audience can always find you at. We'll review and feature you within 24 hours.</div>
+      <div class="modal-error" id="applyError"></div>
+      <div class="form-row">
+        <label>Your Display Name <span style="color:var(--bigo)">*</span></label>
+        <input type="text" id="f-name" placeholder="e.g. Swami Tsunami" maxlength="80">
       </div>
-      <div class="cc-body">
-        <div class="cc-name" id="cc1-name">Coming Soon</div>
-        <div class="cc-handle" id="cc1-handle">@bigo-creator</div>
-        <div class="cc-desc" id="cc1-desc">The first featured Bigo Live creator on I-RIS is coming soon. Check back for their full Creator's Corner launch.</div>
-        <div class="cc-stats">
-          <div class="cc-stat"><span class="n" id="cc1-followers">—</span><span class="l">Followers</span></div>
-          <div class="cc-stat"><span class="n" id="cc1-peak">—</span><span class="l">Peak</span></div>
-          <div class="cc-stat"><span class="n" id="cc1-avg">—</span><span class="l">Avg Viewers</span></div>
-        </div>
-        <div class="cc-actions">
-          <a href="#" class="cc-btn-primary" id="cc1-corner" style="pointer-events:none;opacity:.5;">Creator's Corner</a>
-          <a href="https://www.bigo.tv" target="_blank" rel="noopener" class="cc-btn-secondary">Watch on Bigo</a>
-        </div>
+      <div class="form-row">
+        <label>Bigo Username / ID <span style="color:var(--bigo)">*</span></label>
+        <input type="text" id="f-bigo" placeholder="e.g. swamitsunami (no @)" maxlength="64">
+        <div class="hint">Find your Bigo ID in your Bigo Live profile settings.</div>
       </div>
+      <div class="form-row">
+        <label>Short Bio <span style="color:var(--text-dim)">(optional)</span></label>
+        <textarea id="f-bio" rows="3" placeholder="Tell fans a bit about you and what you stream…" maxlength="300"></textarea>
+      </div>
+      <div class="form-row">
+        <label>Bigo Profile URL <span style="color:var(--text-dim)">(optional)</span></label>
+        <input type="url" id="f-url" placeholder="https://www.bigo.tv/yourname">
+      </div>
+      <button class="btn btn-bigo modal-submit" id="applySubmit">Submit Application</button>
     </div>
-
-    <!-- SLOT 2 -->
-    <div class="creator-card" id="cc-slot-2" data-bigo-username="">
-      <div class="cc-banner">
-        <div class="cc-live-overlay">
-          <div class="cc-live-pill" style="display:none;" id="cc2-live">
-            <span class="dot"></span> Live
-          </div>
-        </div>
-        <div class="cc-avatar-wrap">
-          <img class="cc-avatar" src="" alt="" id="cc2-avatar">
-        </div>
-      </div>
-      <div class="cc-body">
-        <div class="cc-name" id="cc2-name">Coming Soon</div>
-        <div class="cc-handle" id="cc2-handle">@bigo-creator</div>
-        <div class="cc-desc" id="cc2-desc">The second featured Bigo Live creator on I-RIS is on deck. Their Creator's Corner is being built now.</div>
-        <div class="cc-stats">
-          <div class="cc-stat"><span class="n" id="cc2-followers">—</span><span class="l">Followers</span></div>
-          <div class="cc-stat"><span class="n" id="cc2-peak">—</span><span class="l">Peak</span></div>
-          <div class="cc-stat"><span class="n" id="cc2-avg">—</span><span class="l">Avg Viewers</span></div>
-        </div>
-        <div class="cc-actions">
-          <a href="#" class="cc-btn-primary" id="cc2-corner" style="pointer-events:none;opacity:.5;">Creator's Corner</a>
-          <a href="https://www.bigo.tv" target="_blank" rel="noopener" class="cc-btn-secondary">Watch on Bigo</a>
-        </div>
-      </div>
+    <div class="modal-success" id="applySuccess">
+      <div class="s-icon">🎉</div>
+      <div class="s-title">Application Received!</div>
+      <div class="s-sub">We'll review your application and feature you on I-RIS within 24 hours. Keep streaming!</div>
     </div>
-
-    <!-- SLOT 3 -->
-    <div class="creator-card" id="cc-slot-3" data-bigo-username="">
-      <div class="cc-banner">
-        <div class="cc-live-overlay">
-          <div class="cc-live-pill" style="display:none;" id="cc3-live">
-            <span class="dot"></span> Live
-          </div>
-        </div>
-        <div class="cc-avatar-wrap">
-          <img class="cc-avatar" src="" alt="" id="cc3-avatar">
-        </div>
-      </div>
-      <div class="cc-body">
-        <div class="cc-name" id="cc3-name">Coming Soon</div>
-        <div class="cc-handle" id="cc3-handle">@bigo-creator</div>
-        <div class="cc-desc" id="cc3-desc">A rising Bigo Live talent joining the I-RIS Creator Network. Stay tuned for their debut Creator's Corner.</div>
-        <div class="cc-stats">
-          <div class="cc-stat"><span class="n" id="cc3-followers">—</span><span class="l">Followers</span></div>
-          <div class="cc-stat"><span class="n" id="cc3-peak">—</span><span class="l">Peak</span></div>
-          <div class="cc-stat"><span class="n" id="cc3-avg">—</span><span class="l">Avg Viewers</span></div>
-        </div>
-        <div class="cc-actions">
-          <a href="#" class="cc-btn-primary" id="cc3-corner" style="pointer-events:none;opacity:.5;">Creator's Corner</a>
-          <a href="https://www.bigo.tv" target="_blank" rel="noopener" class="cc-btn-secondary">Watch on Bigo</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- "Apply" card — encourages new creators -->
-    <div class="creator-card coming-soon">
-      <div class="cc-banner" style="display:flex;align-items:center;justify-content:center;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,0,128,.4)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-      </div>
-      <div class="coming-soon-body">
-        <span class="cs-icon">📡</span>
-        <div class="cs-title">Are You a Bigo Creator?</div>
-        <div class="cs-sub">Get your own Creator's Corner on I-RIS — live stats, fan engagement, and a dedicated hub your audience can always find you at.</div>
-        <a class="btn btn-bigo" href="../../movie.html#iris-vision" style="display:inline-flex;font-size:.85rem;">Apply for a Creator's Corner</a>
-      </div>
-    </div>
-
   </div>
 </div>
 
@@ -528,154 +512,267 @@
   </div>
   <div class="footer-bottom">
     <span class="footer-logo">I-RIS</span>
-    <p>&copy; 2026 Illy Robotic Instruments Studios. Powered by StreamsCharts.</p>
+    <p>&copy; 2026 Illy Robotic Instruments Studios. Powered by Bigo Live.</p>
   </div>
 </footer>
 
+<!-- ===== ADMIN PANEL (rendered only in admin mode) ===== -->
+<div class="admin-bar" id="adminBar" style="display:none;">
+  <div class="admin-bar-header" id="adminBarHeader">
+    <h3>I-RIS Admin</h3>
+    <span class="admin-badge" id="adminPendingBadge">0 pending</span>
+    <span class="admin-toggle">▲</span>
+  </div>
+  <div class="admin-body" id="adminBody">
+    <div class="admin-section">
+      <h4>Pending Applications</h4>
+      <div id="adminApplications"><div class="admin-empty">Loading…</div></div>
+    </div>
+    <div class="admin-section">
+      <h4>Featured Creators</h4>
+      <div id="adminFeatured"><div class="admin-empty">Loading…</div></div>
+    </div>
+  </div>
+</div>
+
 <script>
+// ===== CONFIG =====
+const API_BASE   = 'https://vivacious-forgiveness-production-dc09.up.railway.app/api/bigo';
+const ADMIN_TOKEN = new URLSearchParams(location.search).get('admin');
+const BLANK_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23222' width='40' height='40'/%3E%3C/svg%3E";
+
 // ===== UTILITIES =====
 function fmt(n) {
   if (n == null || n === '') return '—';
   n = parseInt(n);
   if (isNaN(n)) return '—';
   if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  if (n >= 1000)    return (n / 1000).toFixed(1) + 'K';
   return n.toLocaleString();
 }
 
-const API_BASE = 'https://vivacious-forgiveness-production-dc09.up.railway.app/api/bigo';
-let apiOk = true;
-
-async function apiFetch(path) {
+async function apiFetch(path, opts = {}) {
   try {
-    const r = await fetch(API_BASE + path, { signal: AbortSignal.timeout(6000) });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return await r.json();
+    const headers = { 'Content-Type': 'application/json', ...(ADMIN_TOKEN ? { 'x-admin-token': ADMIN_TOKEN } : {}), ...opts.headers };
+    const r = await fetch(API_BASE + path, { signal: AbortSignal.timeout(8000), ...opts, headers });
+    return { ok: r.ok, status: r.status, data: await r.json() };
   } catch (e) {
-    apiOk = false;
-    return null;
+    return { ok: false, status: 0, data: null };
   }
 }
 
 // ===== HERO PARTICLES =====
 (function() {
-  const container = document.getElementById('heroParticles');
-  const colors = ['rgba(255,0,128,', 'rgba(255,107,53,', 'rgba(79,209,255,'];
+  const c = document.getElementById('heroParticles');
+  const cols = ['rgba(255,0,128,','rgba(255,107,53,','rgba(79,209,255,'];
   for (let i = 0; i < 20; i++) {
     const s = document.createElement('span');
-    const size = Math.random() * 6 + 3;
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    s.style.cssText = `
-      left:${Math.random() * 100}%;
-      width:${size}px;height:${size}px;
-      background:${color + (Math.random() * 0.4 + 0.1) + ')'};
-      animation-duration:${Math.random() * 20 + 15}s;
-      animation-delay:${Math.random() * -20}s;
-    `;
-    container.appendChild(s);
+    const sz = Math.random() * 6 + 3;
+    s.style.cssText = `left:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:${cols[i%3]+(Math.random()*.4+.1)+')'};animation-duration:${Math.random()*20+15}s;animation-delay:${Math.random()*-20}s;`;
+    c.appendChild(s);
   }
 })();
 
-// ===== LOAD TRENDING LEADERBOARD =====
+// ===== TRENDING LEADERBOARD =====
 async function loadTrending() {
-  const data = await apiFetch('/trending?limit=10');
+  const { data } = await apiFetch('/trending?limit=10');
   const grid = document.getElementById('leaderboardGrid');
-
-  if (!data || !data.data || !Array.isArray(data.data)) {
-    // Show API offline state
+  if (!data || !data.data || !Array.isArray(data.data) || !data.data.length) {
     document.getElementById('apiStatus').classList.add('show');
-    grid.innerHTML = `
-      <div class="lb-card" style="grid-column:1/-1;justify-content:center;text-align:center;padding:40px;gap:0;flex-direction:column;">
-        <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">Live data unavailable</div>
-        <div style="font-size:.85rem;color:var(--text-muted);">Run <code style="background:var(--surface3);padding:2px 8px;border-radius:4px;">node backend-server.js</code> locally to load real trending data from StreamsCharts.</div>
-      </div>`;
+    grid.innerHTML = `<div class="lb-card" style="grid-column:1/-1;justify-content:center;text-align:center;padding:40px;flex-direction:column;gap:0;"><div style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">Live data loading…</div><div style="font-size:.85rem;color:var(--text-muted);">Bigo stats update once per day. Check back soon.</div></div>`;
     return;
   }
-
   const channels = data.data.slice(0, 10);
   let totalViewers = 0;
   grid.innerHTML = channels.map((ch, i) => {
-    const isLive = ch.is_live;
-    const viewers = ch.current_viewers || 0;
-    if (isLive) totalViewers += viewers;
-    const rank = i + 1;
-    const top3 = rank <= 3;
-    return `
-      <div class="lb-card ${isLive ? 'is-live' : ''}">
-        <div class="lb-rank ${top3 ? 'top3' : ''}">${rank}</div>
-        <img class="lb-avatar ${isLive ? 'is-live' : ''}"
-             src="${ch.avatar || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect fill=%22%23222%22 width=%2240%22 height=%2240%22/></svg>'}"
-             alt="${ch.channel_name || ch.username || 'Creator'}"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect fill=%22%23222%22 width=%2240%22 height=%2240%22/></svg>'">
-        <div class="lb-info">
-          <div class="lb-name">${ch.channel_name || ch.username || 'Unknown'}</div>
-          <div class="lb-title">${ch.stream_title || (isLive ? 'Streaming now' : 'Not live')}</div>
-          <div class="lb-stats">
-            <span class="lb-stat"><strong>${fmt(ch.peak_viewers)}</strong> peak</span>
-            <span class="lb-stat"><strong>${fmt(ch.avg_viewers)}</strong> avg</span>
-            <span class="lb-stat"><strong>${fmt(ch.followers_count)}</strong> followers</span>
-          </div>
+    const live = ch.is_live, v = ch.current_viewers || 0, rank = i + 1;
+    if (live) totalViewers += v;
+    return `<div class="lb-card ${live ? 'is-live' : ''}">
+      <div class="lb-rank ${rank<=3?'top3':''}">${rank}</div>
+      <img class="lb-avatar ${live?'is-live':''}" src="${ch.avatar||BLANK_AVATAR}" alt="${ch.channel_name||''}" onerror="this.src='${BLANK_AVATAR}'">
+      <div class="lb-info">
+        <div class="lb-name">${ch.channel_name||ch.username||'Unknown'}</div>
+        <div class="lb-title">${ch.room_topic||(live?'Streaming now':'Offline')}</div>
+        <div class="lb-stats">
+          <span class="lb-stat"><strong>${fmt(ch.peak_viewers)}</strong> peak</span>
+          <span class="lb-stat"><strong>${fmt(ch.followers_count)}</strong> followers</span>
         </div>
-        ${isLive ? `<div class="lb-live-badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--bigo);display:inline-block;"></span> Live</div>` : ''}
-        <div class="lb-viewers">
-          <span class="v-num">${isLive ? fmt(viewers) : '—'}</span>
-          <span class="v-label">${isLive ? 'viewers' : 'offline'}</span>
-        </div>
-      </div>`;
+      </div>
+      ${live?`<div class="lb-live-badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--bigo);display:inline-block;"></span> Live</div>`:''}
+      <div class="lb-viewers"><span class="v-num">${live?fmt(v):'—'}</span><span class="v-label">${live?'viewers':'offline'}</span></div>
+    </div>`;
   }).join('');
-
   document.getElementById('liveCount').textContent = fmt(totalViewers);
   document.getElementById('totalViewers').textContent = fmt(totalViewers);
-  const liveCount = channels.filter(c => c.is_live).length;
-  document.getElementById('totalLiveCreators').textContent = liveCount;
+  const liveN = channels.filter(c => c.is_live).length;
+  document.getElementById('totalLiveCreators').textContent = liveN;
   document.getElementById('statCreators').textContent = channels.length;
-  const maxPeak = Math.max(...channels.map(c => c.peak_viewers || 0));
-  document.getElementById('statPeak').textContent = fmt(maxPeak);
-  const totalFollowers = channels.reduce((s, c) => s + (c.followers_count || 0), 0);
-  document.getElementById('statFollowers').textContent = fmt(totalFollowers);
+  document.getElementById('statPeak').textContent = fmt(Math.max(...channels.map(c=>c.peak_viewers||0)));
+  document.getElementById('statFollowers').textContent = fmt(channels.reduce((s,c)=>s+(c.followers_count||0),0));
 }
 
-// ===== LOAD FEATURED CREATORS =====
-// Add Bigo usernames below to activate live stats for featured creator slots.
-// Set the data-bigo-username attribute on each .creator-card or configure here:
-const FEATURED_CREATORS = [
-  // { slot: 1, username: 'bigoUsername1', cornerHref: '../HouseOfYoung' },
-  // { slot: 2, username: 'bigoUsername2', cornerHref: '../SwamiTsunami' },
-  // { slot: 3, username: 'bigoUsername3', cornerHref: '#' },
-];
+// ===== FEATURED CREATORS (dynamic from backend) =====
+function creatorCardHTML(cr) {
+  const live = cr.is_live;
+  const avatar = cr.avatar || BLANK_AVATAR;
+  const bigoUrl = cr.bigo_url || `https://www.bigo.tv/${cr.bigo_username}`;
+  const hasCorner = cr.corner_href && cr.corner_href !== '#';
+  return `
+    <div class="creator-card ${live?'live-now':''}" data-id="${cr.id}">
+      <div class="cc-banner" style="background:linear-gradient(135deg,#1a0010,#1a0800);">
+        <div class="cc-live-overlay">
+          <div class="cc-live-pill" ${live?'':'style="display:none;"'}>
+            <span class="dot"></span> Live
+          </div>
+        </div>
+        <div class="cc-avatar-wrap">
+          <img class="cc-avatar ${live?'':''}" src="${avatar}" alt="${cr.display_name}" onerror="this.src='${BLANK_AVATAR}'">
+        </div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-name">${cr.display_name}</div>
+        <div class="cc-handle">@${cr.bigo_username}</div>
+        <div class="cc-desc">${cr.bio || 'Bigo Live creator featured on I-RIS.'}</div>
+        <div class="cc-stats">
+          <div class="cc-stat"><span class="n">${fmt(cr.followers_count)}</span><span class="l">Followers</span></div>
+          <div class="cc-stat"><span class="n">${fmt(cr.peak_viewers)}</span><span class="l">Peak</span></div>
+          <div class="cc-stat"><span class="n">${live?fmt(cr.current_viewers):'—'}</span><span class="l">${live?'Live Now':'Viewers'}</span></div>
+        </div>
+        <div class="cc-actions">
+          <a href="${hasCorner?cr.corner_href:'#'}" class="cc-btn-primary" ${hasCorner?'':'style="pointer-events:none;opacity:.5;"'}>Creator's Corner</a>
+          <a href="${bigoUrl}" target="_blank" rel="noopener" class="cc-btn-secondary">Watch on Bigo</a>
+        </div>
+      </div>
+    </div>`;
+}
+
+const APPLY_CARD_HTML = `
+  <div class="creator-card coming-soon">
+    <div class="cc-banner" style="display:flex;align-items:center;justify-content:center;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,0,128,.4)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+    </div>
+    <div class="coming-soon-body">
+      <span class="cs-icon">📡</span>
+      <div class="cs-title">Are You a Bigo Creator?</div>
+      <div class="cs-sub">Get your own Creator's Corner on I-RIS — live stats, fan engagement, and a dedicated hub your audience can always find you at.</div>
+      <button class="btn btn-bigo" id="openApplyBtn" style="font-size:.85rem;">Apply for Creator's Corner</button>
+    </div>
+  </div>`;
 
 async function loadFeaturedCreators() {
-  if (!FEATURED_CREATORS.length) return;
-  const usernames = FEATURED_CREATORS.map(c => c.username).join(',');
-  const data = await apiFetch('/live?users=' + encodeURIComponent(usernames));
-  if (!data || !data.creators) return;
+  const grid = document.getElementById('creatorsGrid');
+  const { data } = await apiFetch('/creators/featured');
+  const creators = data?.creators || [];
+  grid.innerHTML = creators.map(creatorCardHTML).join('') + APPLY_CARD_HTML;
+  document.getElementById('openApplyBtn')?.addEventListener('click', openApplyModal);
+  if (!creators.length) {
+    document.getElementById('statCreators').textContent = '0';
+  }
+}
 
-  data.creators.forEach((cr, i) => {
-    const cfg = FEATURED_CREATORS[i];
-    if (!cfg) return;
-    const s = cfg.slot;
-    const liveEl = document.getElementById(`cc${s}-live`);
-    if (cr.live && liveEl) { liveEl.style.display = 'flex'; }
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    set(`cc${s}-followers`, fmt(cr.followers));
-    set(`cc${s}-peak`, fmt(cr.peak_viewers));
-    set(`cc${s}-avg`, fmt(cr.avg_viewers));
-    const card = document.getElementById(`cc-slot-${s}`);
-    if (card && cr.live) card.classList.add('live-now');
-    const cornerBtn = document.getElementById(`cc${s}-corner`);
-    if (cornerBtn && cfg.cornerHref !== '#') {
-      cornerBtn.href = cfg.cornerHref;
-      cornerBtn.style.pointerEvents = '';
-      cornerBtn.style.opacity = '';
-    }
+// ===== APPLY MODAL =====
+function openApplyModal() {
+  document.getElementById('applyModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeApplyModal() {
+  document.getElementById('applyModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('modalClose').addEventListener('click', closeApplyModal);
+document.getElementById('applyModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeApplyModal(); });
+
+document.getElementById('applySubmit').addEventListener('click', async () => {
+  const name = document.getElementById('f-name').value.trim();
+  const bigo = document.getElementById('f-bigo').value.trim().replace(/^@/,'');
+  const bio  = document.getElementById('f-bio').value.trim();
+  const url  = document.getElementById('f-url').value.trim();
+  const errEl = document.getElementById('applyError');
+  errEl.style.display = 'none';
+  if (!name || !bigo) { errEl.textContent = 'Display name and Bigo username are required.'; errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('applySubmit');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  const { ok, data } = await apiFetch('/creators/apply', {
+    method: 'POST',
+    body: JSON.stringify({ display_name: name, bigo_username: bigo, bio, bigo_url: url }),
   });
+  btn.disabled = false; btn.textContent = 'Submit Application';
+  if (ok) {
+    document.getElementById('applyForm').style.display = 'none';
+    document.getElementById('applySuccess').style.display = 'block';
+  } else {
+    errEl.textContent = data?.error || 'Something went wrong. Please try again.';
+    errEl.style.display = 'block';
+  }
+});
+
+// ===== ADMIN PANEL =====
+async function initAdmin() {
+  if (!ADMIN_TOKEN) return;
+  document.body.classList.add('has-admin');
+  const bar = document.getElementById('adminBar');
+  bar.style.display = 'block';
+  document.getElementById('adminBarHeader').addEventListener('click', () => bar.classList.toggle('expanded'));
+
+  const render = async () => {
+    const [appsRes, featRes] = await Promise.all([
+      apiFetch('/creators/applications'),
+      apiFetch('/creators/featured'),
+    ]);
+    const apps     = appsRes.data?.applications || [];
+    const featured = featRes.data?.creators     || [];
+    const pending  = apps.filter(a => a.status === 'pending');
+    document.getElementById('adminPendingBadge').textContent = `${pending.length} pending`;
+
+    const appsEl = document.getElementById('adminApplications');
+    appsEl.innerHTML = apps.length ? apps.map(a => `
+      <div class="admin-row" data-id="${a.id}">
+        <div>
+          <div class="ar-name">${a.display_name}</div>
+          <div class="ar-id">@${a.bigo_username}</div>
+        </div>
+        <span class="ar-status ${a.status}">${a.status}</span>
+        <span class="ar-time">${new Date(a.submitted_at).toLocaleDateString()}</span>
+        ${a.status==='pending'?`
+          <button class="admin-btn approve" data-id="${a.id}">Approve</button>
+          <button class="admin-btn reject"  data-id="${a.id}">Reject</button>
+        `:''}
+      </div>`).join('') : '<div class="admin-empty">No applications yet.</div>';
+
+    const featEl = document.getElementById('adminFeatured');
+    featEl.innerHTML = featured.length ? featured.map(c => `
+      <div class="admin-row" data-id="${c.id}">
+        <div>
+          <div class="ar-name">${c.display_name}</div>
+          <div class="ar-id">@${c.bigo_username}</div>
+        </div>
+        <span class="ar-status approved">featured</span>
+        <button class="admin-btn remove" data-id="${c.id}">Remove</button>
+      </div>`).join('') : '<div class="admin-empty">No featured creators yet.</div>';
+
+    appsEl.querySelectorAll('.admin-btn.approve').forEach(btn => btn.addEventListener('click', async () => {
+      await apiFetch(`/creators/approve/${btn.dataset.id}`, { method: 'POST' });
+      await render(); await loadFeaturedCreators();
+    }));
+    appsEl.querySelectorAll('.admin-btn.reject').forEach(btn => btn.addEventListener('click', async () => {
+      await apiFetch(`/creators/reject/${btn.dataset.id}`, { method: 'POST' });
+      await render();
+    }));
+    featEl.querySelectorAll('.admin-btn.remove').forEach(btn => btn.addEventListener('click', async () => {
+      await apiFetch(`/creators/featured/${btn.dataset.id}`, { method: 'DELETE' });
+      await render(); await loadFeaturedCreators();
+    }));
+  };
+
+  bar.classList.add('expanded');
+  render();
+  setInterval(render, 30000);
 }
 
 // ===== INIT =====
 loadTrending();
 loadFeaturedCreators();
-
-// Refresh live data every 3 minutes
+initAdmin();
 setInterval(loadTrending, 3 * 60 * 1000);
 setInterval(loadFeaturedCreators, 3 * 60 * 1000);
 </script>
