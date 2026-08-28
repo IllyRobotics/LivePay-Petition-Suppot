@@ -176,20 +176,34 @@ function writeCache(data) {
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 async function getTrending(limit = 10, forceRefresh = false) {
-  if (!forceRefresh) {
-    const cache = readCache();
-    if (cache && (Date.now() - cache.timestamp) < CACHE_TTL) {
+  const cache = readCache();
+
+  if (!forceRefresh && cache && (Date.now() - cache.timestamp) < CACHE_TTL) {
+    return {
+      data      : cache.data.slice(0, limit),
+      cached    : true,
+      cached_at : new Date(cache.timestamp).toISOString(),
+    };
+  }
+
+  try {
+    const data = await fetchLive(Math.max(limit, 20));
+    writeCache(data);
+    return { data: data.slice(0, limit), cached: false, fetched_at: new Date().toISOString() };
+  } catch (e) {
+    // Serve stale cache rather than erroring — datacenter IPs often get blocked by Bigo
+    if (cache) {
+      console.warn('[bigo-scraper] live fetch failed, serving stale cache:', e.message);
       return {
         data      : cache.data.slice(0, limit),
         cached    : true,
+        stale     : true,
         cached_at : new Date(cache.timestamp).toISOString(),
+        fetch_error: e.message,
       };
     }
+    throw e; // no cache at all — let caller handle it
   }
-
-  const data = await fetchLive(Math.max(limit, 20)); // always fetch at least 20 to warm cache
-  writeCache(data);
-  return { data: data.slice(0, limit), cached: false, fetched_at: new Date().toISOString() };
 }
 
 async function getCreator(username) {

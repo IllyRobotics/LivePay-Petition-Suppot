@@ -306,8 +306,9 @@ app.get('/api/bigo/trending', async (req, res) => {
     const result = await bigoScraper.getTrending(limit);
     res.json(result);
   } catch (err) {
+    // No cache yet and live fetch failed — return empty rather than 502 so the page still loads
     console.error('Bigo trending error:', err.message);
-    res.status(502).json({ error: 'Bigo scraper unavailable', detail: err.message });
+    res.json({ data: [], cached: false, error: err.message });
   }
 });
 
