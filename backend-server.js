@@ -42,7 +42,7 @@ function scFetch(apiPath) {
       path: url.pathname + url.search,
       headers: {
         'Client-ID': SC_CLIENT_ID,
-        'Authorization': `Bearer ${SC_TOKEN}`,
+        'Token': SC_TOKEN,
         'Accept': 'application/json',
         'User-Agent': 'IRIS-Studio/1.0',
       },
