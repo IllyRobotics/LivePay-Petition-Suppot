@@ -546,6 +546,74 @@ const API_BASE   = 'https://vivacious-forgiveness-production-dc09.up.railway.app
 const ADMIN_TOKEN = new URLSearchParams(location.search).get('admin');
 const BLANK_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23222' width='40' height='40'/%3E%3C/svg%3E";
 
+// ===== FACTORY FLOOR SVG GENERATOR =====
+function factoryFloorSVG(seed, W, H) {
+  W = W || 400; H = H || 120;
+  let st = 0;
+  for (let i = 0; i < seed.length; i++) st = (Math.imul(31, st) + seed.charCodeAt(i)) | 0;
+  const r = () => { st ^= st << 13; st ^= st >> 17; st ^= st << 5; return (st >>> 0) / 4294967296; };
+  const pals = [
+    ['#060d1c','#4fd1ff','#7c5cff','#0a2060'],
+    ['#1c0600','#FF6B35','#FF0080','#6b2200'],
+    ['#001c06','#46d369','#4fd1ff','#003318'],
+    ['#1c1800','#f5c518','#FF6B35','#4a3b00'],
+    ['#0c061c','#a78bfa','#4fd1ff','#250a6b'],
+    ['#1c0010','#FF0080','#7c5cff','#5a0030'],
+  ];
+  const [bg, ac, bm, gl] = pals[Math.floor(r() * pals.length)];
+  const els = [];
+  // Background
+  els.push(`<rect width="${W}" height="${H}" fill="${bg}"/>`);
+  // Grid
+  const gs = Math.max(18, Math.min(48, W / 14));
+  for (let x = 0; x <= W; x += gs) els.push(`<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${ac}" stroke-width="0.3" opacity="0.12"/>`);
+  for (let y = 0; y <= H; y += gs) els.push(`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${ac}" stroke-width="0.3" opacity="0.12"/>`);
+  // Perspective floor
+  const hz = H * 0.55;
+  for (let i = 0; i <= 10; i++) {
+    const t = i / 10, bx = W * t, tx = W * 0.5 + (bx - W * 0.5) * 0.07;
+    els.push(`<line x1="${bx.toFixed(1)}" y1="${H}" x2="${tx.toFixed(1)}" y2="${hz.toFixed(1)}" stroke="${ac}" stroke-width="0.4" opacity="0.18"/>`);
+  }
+  for (let i = 0; i <= 5; i++) {
+    const t = i / 5, yp = hz + (H - hz) * t, sc = 0.07 + 0.93 * t;
+    els.push(`<line x1="${(W*0.5-W*0.5*sc).toFixed(1)}" y1="${yp.toFixed(1)}" x2="${(W*0.5+W*0.5*sc).toFixed(1)}" y2="${yp.toFixed(1)}" stroke="${ac}" stroke-width="0.4" opacity="${(0.06+0.22*t).toFixed(2)}"/>`);
+  }
+  // Pipes
+  for (let i = 0, np = 2 + Math.floor(r() * 2); i < np; i++) {
+    const py = H * (0.08 + r() * 0.52), px1 = -5 + r() * W * 0.3, px2 = W * 0.4 + r() * (W * 0.65), th = 3 + r() * 7;
+    els.push(`<line x1="${px1.toFixed(1)}" y1="${py.toFixed(1)}" x2="${px2.toFixed(1)}" y2="${py.toFixed(1)}" stroke="${ac}" stroke-width="${th.toFixed(1)}" stroke-linecap="round" opacity="0.12"/>`);
+    els.push(`<line x1="${px1.toFixed(1)}" y1="${(py-th*0.2).toFixed(1)}" x2="${px2.toFixed(1)}" y2="${(py-th*0.2).toFixed(1)}" stroke="${ac}" stroke-width="0.7" opacity="0.33"/>`);
+    const fx = px1 + (px2 - px1) * (0.2 + r() * 0.6);
+    els.push(`<rect x="${(fx-th).toFixed(1)}" y="${(py-th*1.4).toFixed(1)}" width="${(th*2).toFixed(1)}" height="${(th*2.8).toFixed(1)}" rx="2" fill="${bg}" stroke="${ac}" stroke-width="0.8" opacity="0.4"/>`);
+  }
+  // Robot arm
+  const rax = W * (0.15 + r() * 0.7), seg1 = H * (0.28 + r() * 0.3), a1 = -Math.PI / 2 + (r() - 0.5) * 0.9;
+  const elx = rax + Math.cos(a1) * seg1, ely = H + Math.sin(a1) * seg1;
+  const seg2 = seg1 * (0.45 + r() * 0.45), a2 = a1 + (r() - 0.5) * 1.4;
+  const ex = elx + Math.cos(a2) * seg2, ey = ely + Math.sin(a2) * seg2, aw = 5 + r() * 8;
+  els.push(`<line x1="${rax.toFixed(1)}" y1="${H}" x2="${elx.toFixed(1)}" y2="${ely.toFixed(1)}" stroke="${ac}" stroke-width="${aw.toFixed(1)}" stroke-linecap="round" opacity="0.18"/>`);
+  els.push(`<line x1="${rax.toFixed(1)}" y1="${H}" x2="${elx.toFixed(1)}" y2="${ely.toFixed(1)}" stroke="${bm}" stroke-width="${(aw*0.28).toFixed(1)}" stroke-linecap="round" opacity="0.5"/>`);
+  els.push(`<line x1="${elx.toFixed(1)}" y1="${ely.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="${ac}" stroke-width="${(aw*0.75).toFixed(1)}" stroke-linecap="round" opacity="0.18"/>`);
+  els.push(`<line x1="${elx.toFixed(1)}" y1="${ely.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="${bm}" stroke-width="${(aw*0.22).toFixed(1)}" stroke-linecap="round" opacity="0.5"/>`);
+  els.push(`<circle cx="${elx.toFixed(1)}" cy="${ely.toFixed(1)}" r="${(aw*0.85).toFixed(1)}" fill="${bg}" stroke="${ac}" stroke-width="1.5" opacity="0.6"/>`);
+  els.push(`<circle cx="${elx.toFixed(1)}" cy="${ely.toFixed(1)}" r="${(aw*0.35).toFixed(1)}" fill="${bm}" opacity="0.55"/>`);
+  els.push(`<circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="${(aw*0.6).toFixed(1)}" fill="${bg}" stroke="${bm}" stroke-width="1.5" opacity="0.6"/>`);
+  // Gears
+  for (let g = 0, ng = 1 + Math.floor(r() * 3); g < ng; g++) {
+    const gx = W * (0.05 + r() * 0.9), gy = H * (0.05 + r() * 0.7), gr = 5 + r() * (W > 600 ? 22 : 13), teeth = 6 + Math.floor(r() * 6);
+    let gp = '';
+    for (let t = 0; t < teeth * 2; t++) { const a = (t / (teeth * 2)) * Math.PI * 2, rad = t % 2 === 0 ? gr : gr * 0.72; gp += (t ? 'L' : 'M') + `${(gx + Math.cos(a) * rad).toFixed(1)},${(gy + Math.sin(a) * rad).toFixed(1)} `; }
+    const op = (0.09 + r() * 0.17).toFixed(2);
+    els.push(`<path d="${gp}Z" fill="none" stroke="${ac}" stroke-width="1.2" opacity="${op}"/>`);
+    els.push(`<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="${(gr*0.27).toFixed(1)}" fill="none" stroke="${ac}" stroke-width="0.8" opacity="${op}"/>`);
+  }
+  // Ambient glows
+  for (let i = 0; i < 3; i++) { const gx = W * r(), gy = H * r(), gr = H * (0.25 + r() * 0.55); els.push(`<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="${gr.toFixed(1)}" fill="${i%2?ac:gl}" opacity="0.055"/>`); }
+  // Top accent line
+  els.push(`<line x1="0" y1="1.5" x2="${W}" y2="1.5" stroke="${ac}" stroke-width="2.5" opacity="0.65"/>`);
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="position:absolute;top:0;left:0;width:100%;height:100%;">${els.join('')}</svg>`;
+}
+
 // ===== UTILITIES =====
 function fmt(n) {
   if (n == null || n === '') return '—';
@@ -620,17 +688,19 @@ function creatorCardHTML(cr) {
   const live = cr.is_live;
   const avatar = cr.avatar || BLANK_AVATAR;
   const bigoUrl = cr.bigo_url || `https://www.bigo.tv/${cr.bigo_username}`;
-  const hasCorner = cr.corner_href && cr.corner_href !== '#';
+  const cornerHref = `corner.html?id=${cr.id}`;
+  const bannerSVG = factoryFloorSVG(cr.bigo_username || cr.id || 'creator', 400, 120);
   return `
     <div class="creator-card ${live?'live-now':''}" data-id="${cr.id}">
-      <div class="cc-banner" style="background:linear-gradient(135deg,#1a0010,#1a0800);">
+      <div class="cc-banner" style="background:#060d1c;position:relative;overflow:hidden;">
+        ${bannerSVG}
         <div class="cc-live-overlay">
           <div class="cc-live-pill" ${live?'':'style="display:none;"'}>
             <span class="dot"></span> Live
           </div>
         </div>
         <div class="cc-avatar-wrap">
-          <img class="cc-avatar ${live?'':''}" src="${avatar}" alt="${cr.display_name}" onerror="this.src='${BLANK_AVATAR}'">
+          <img class="cc-avatar" src="${avatar}" alt="${cr.display_name}" onerror="this.src='${BLANK_AVATAR}'">
         </div>
       </div>
       <div class="cc-body">
@@ -643,7 +713,7 @@ function creatorCardHTML(cr) {
           <div class="cc-stat"><span class="n">${live?fmt(cr.current_viewers):'—'}</span><span class="l">${live?'Live Now':'Viewers'}</span></div>
         </div>
         <div class="cc-actions">
-          <a href="${hasCorner?cr.corner_href:'#'}" class="cc-btn-primary" ${hasCorner?'':'style="pointer-events:none;opacity:.5;"'}>Creator's Corner</a>
+          <a href="${cornerHref}" class="cc-btn-primary">Creator's Corner</a>
           <a href="${bigoUrl}" target="_blank" rel="noopener" class="cc-btn-secondary">Watch on Bigo</a>
         </div>
       </div>

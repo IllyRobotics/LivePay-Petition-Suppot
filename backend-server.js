@@ -451,6 +451,28 @@ app.post('/api/bigo/creators/reject/:id', adminAuth, (req, res) => {
   res.json({ success: true });
 });
 
+// GET /api/bigo/creators/featured/:id — public: single featured creator by id or username
+app.get('/api/bigo/creators/featured/:id', async (req, res) => {
+  try {
+    const param = req.params.id;
+    const creators = readCreators();
+    const creator = creators.find(c => c.id === param || c.bigo_username === param);
+    if (!creator) return res.status(404).json({ error: 'Creator not found' });
+    try {
+      const profile = await bigoScraper.getCreator(creator.bigo_username);
+      creator.is_live = profile.is_live;
+      creator.current_viewers = profile.current_viewers;
+      if (profile.peak_viewers) creator.peak_viewers = profile.peak_viewers;
+      if (profile.followers_count) creator.followers_count = profile.followers_count;
+      if (profile.avatar && !creator.avatar) creator.avatar = profile.avatar;
+      if (profile.channel_name && profile.channel_name !== creator.bigo_username) creator.channel_name = profile.channel_name;
+    } catch (_) {}
+    res.json({ creator });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // DELETE /api/bigo/creators/featured/:id — admin: remove a featured creator
 app.delete('/api/bigo/creators/featured/:id', adminAuth, (req, res) => {
   writeCreators(readCreators().filter(c => c.id !== req.params.id));
