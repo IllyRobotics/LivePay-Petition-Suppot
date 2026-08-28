@@ -451,6 +451,20 @@ app.post('/api/bigo/creators/reject/:id', adminAuth, (req, res) => {
   res.json({ success: true });
 });
 
+// POST /api/bigo/creators/featured/:id/status — admin: manually set live status & viewer count
+app.post('/api/bigo/creators/featured/:id/status', adminAuth, (req, res) => {
+  const creators = readCreators();
+  const idx = creators.findIndex(c => c.id === req.params.id || c.bigo_username === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Creator not found' });
+  const { is_live, current_viewers } = req.body;
+  if (typeof is_live === 'boolean') creators[idx].is_live = is_live;
+  if (current_viewers != null) creators[idx].current_viewers = parseInt(current_viewers) || 0;
+  creators[idx].status_override = true;
+  creators[idx].status_set_at = new Date().toISOString();
+  writeCreators(creators);
+  res.json({ success: true, creator: creators[idx] });
+});
+
 // GET /api/bigo/creators/featured/:id — public: single featured creator by id or username
 app.get('/api/bigo/creators/featured/:id', async (req, res) => {
   try {

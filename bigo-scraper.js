@@ -206,9 +206,37 @@ async function getTrending(limit = 10, forceRefresh = false) {
   }
 }
 
+// Scrape live status from the public Bigo profile HTML page
+// (fallback when JSON API endpoints are blocked by Railway IPs)
+async function tryPageScrape(username) {
+  const r = await request(`https://www.bigo.tv/${encodeURIComponent(username)}`);
+  if (r.status !== 200) throw new Error(`Page HTTP ${r.status}`);
+  const html = r.body;
+
+  // Extract any first JSON-like blob that has a recognisable nick/display name field
+  const nickMatch   = html.match(/"nick"\s*:\s*"([^"]{1,80})"/);
+  const nick        = nickMatch ? nickMatch[1] : null;
+  if (!nick || nick === username) throw new Error('No real nick in page — blocked or wrong page');
+
+  const isLive = /["'](?:isLive|liveStatus|status)["']\s*:\s*(?:true|1)[,}\s]/.test(html);
+  const num    = key => parseInt((html.match(new RegExp(`["']${key}["']\\s*:\\s*(\\d+)`)) || [])[1]) || 0;
+  const str    = key => ((html.match(new RegExp(`["']${key}["']\\s*:\\s*["']([^"']+)["']`)) || [])[1] || '').replace(/\\u002F/g, '/').replace(/\\\//g, '/');
+
+  return {
+    channel_name    : nick,
+    username,
+    is_live         : isLive,
+    current_viewers : num('userCount') || num('audienceCount') || num('clickCount'),
+    peak_viewers    : num('peakViewers') || num('clickCount'),
+    followers_count : num('fanCount') || num('followers'),
+    room_topic      : str('roomTopic'),
+    avatar          : str('snapshot') || str('headPicture') || str('avatarUrl'),
+  };
+}
+
 async function getCreator(username) {
   const uid = encodeURIComponent(username);
-  // Try multiple Bigo endpoints in sequence
+  // Try multiple Bigo endpoints in sequence (JSON API, then public page HTML)
   const attempts = [
     () => request(`https://www.bigo.tv/api/getRoomInfo?siteId=${uid}`),
     () => request(`https://www.bigo.tv/OB.WEB.WEBSITE/api/bigo/userinfo?siteId=${uid}`),
@@ -238,6 +266,12 @@ async function getCreator(username) {
         avatar          : d.snapshot || d.headPicture || d.coverUrl || d.avatarUrl || '',
       };
     } catch (_) {}
+  }
+  // Last resort: scrape the public profile HTML page
+  try {
+    return await tryPageScrape(username);
+  } catch (e) {
+    console.warn(`[bigo-scraper] page scrape failed for ${username}: ${e.message}`);
   }
   throw new Error(`Could not fetch creator ${username}: all endpoints blocked or returned no data`);
 }

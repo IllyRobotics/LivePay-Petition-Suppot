@@ -815,12 +815,14 @@ async function initAdmin() {
 
     const featEl = document.getElementById('adminFeatured');
     featEl.innerHTML = featured.length ? featured.map(c => `
-      <div class="admin-row" data-id="${c.id}">
-        <div>
-          <div class="ar-name">${c.display_name}</div>
-          <div class="ar-id">@${c.bigo_username}</div>
+      <div class="admin-row" data-id="${c.id}" style="flex-wrap:wrap;gap:8px;">
+        <div style="flex:1;min-width:0;">
+          <div class="ar-name">${c.display_name} <span class="ar-status ${c.is_live?'approved':'pending'}" style="font-size:.65rem;">${c.is_live?'● LIVE':'○ offline'}</span></div>
+          <div class="ar-id">@${c.bigo_username}${c.current_viewers?' · '+c.current_viewers+' viewers':''}</div>
         </div>
-        <span class="ar-status approved">featured</span>
+        <input type="number" class="admin-viewers-input" data-id="${c.id}" placeholder="Viewers" value="${c.current_viewers||0}" min="0" style="width:80px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:#fff;font-size:.75rem;">
+        <button class="admin-btn approve admin-mark-live" data-id="${c.id}">Mark Live</button>
+        <button class="admin-btn reject admin-mark-offline" data-id="${c.id}">Mark Offline</button>
         <button class="admin-btn remove" data-id="${c.id}">Remove</button>
       </div>`).join('') : '<div class="admin-empty">No featured creators yet.</div>';
 
@@ -833,6 +835,15 @@ async function initAdmin() {
     appsEl.querySelectorAll('.admin-btn.reject').forEach(btn => btn.addEventListener('click', async () => {
       await apiFetch(`/creators/reject/${btn.dataset.id}`, { method: 'POST' });
       await render();
+    }));
+    featEl.querySelectorAll('.admin-mark-live').forEach(btn => btn.addEventListener('click', async () => {
+      const viewers = parseInt(featEl.querySelector(`.admin-viewers-input[data-id="${btn.dataset.id}"]`)?.value) || 0;
+      await apiFetch(`/creators/featured/${btn.dataset.id}/status`, { method: 'POST', body: JSON.stringify({ is_live: true, current_viewers: viewers }) });
+      await render(); await loadFeaturedCreators();
+    }));
+    featEl.querySelectorAll('.admin-mark-offline').forEach(btn => btn.addEventListener('click', async () => {
+      await apiFetch(`/creators/featured/${btn.dataset.id}/status`, { method: 'POST', body: JSON.stringify({ is_live: false, current_viewers: 0 }) });
+      await render(); await loadFeaturedCreators();
     }));
     featEl.querySelectorAll('.admin-btn.remove').forEach(btn => btn.addEventListener('click', async () => {
       await apiFetch(`/creators/featured/${btn.dataset.id}`, { method: 'DELETE' });
