@@ -67,6 +67,16 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Debug endpoint — confirms env vars are loaded (values never exposed)
+app.get('/api/debug/env', (req, res) => {
+  res.json({
+    STREAMSCHARTS_CLIENT_ID: SC_CLIENT_ID ? `set (${SC_CLIENT_ID.length} chars)` : 'MISSING',
+    STREAMSCHARTS_TOKEN: SC_TOKEN ? `set (${SC_TOKEN.length} chars)` : 'MISSING',
+    NODE_ENV: process.env.NODE_ENV || 'not set',
+    deploy_ts: new Date().toISOString(),
+  });
+});
+
 // Data storage (production: use a database like MongoDB)
 const dataDir = path.join(__dirname, 'data');
 const signaturesFile = path.join(dataDir, 'signatures.json');
