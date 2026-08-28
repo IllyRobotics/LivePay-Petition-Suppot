@@ -611,7 +611,6 @@ async function loadTrending() {
   document.getElementById('totalViewers').textContent = fmt(totalViewers);
   const liveN = channels.filter(c => c.is_live).length;
   document.getElementById('totalLiveCreators').textContent = liveN;
-  document.getElementById('statCreators').textContent = channels.length;
   document.getElementById('statPeak').textContent = fmt(Math.max(...channels.map(c=>c.peak_viewers||0)));
   document.getElementById('statFollowers').textContent = fmt(channels.reduce((s,c)=>s+(c.followers_count||0),0));
 }
@@ -670,9 +669,7 @@ async function loadFeaturedCreators() {
   const creators = data?.creators || [];
   grid.innerHTML = creators.map(creatorCardHTML).join('') + APPLY_CARD_HTML;
   document.getElementById('openApplyBtn')?.addEventListener('click', openApplyModal);
-  if (!creators.length) {
-    document.getElementById('statCreators').textContent = '0';
-  }
+  document.getElementById('statCreators').textContent = creators.length;
 }
 
 // ===== APPLY MODAL =====
