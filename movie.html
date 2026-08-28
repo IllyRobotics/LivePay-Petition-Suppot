@@ -147,14 +147,23 @@
       width:100%;
       min-height:85vh;
       overflow:hidden;
-      background:#000;
+      background:linear-gradient(160deg,#FF6B00 0%,#FF006E 30%,#7B2FFF 60%,#05000A 100%);
     }
     .hero-bg{
       position:absolute;inset:0;
       background:
-        radial-gradient(ellipse 120% 80% at 70% 30%, rgba(79,209,255,.12), transparent 50%),
-        radial-gradient(ellipse 80% 60% at 20% 60%, rgba(124,92,255,.1), transparent 50%),
-        linear-gradient(180deg, #0a0a0a 0%, #0d1117 30%, #0a0e1a 60%, #0a0a0a 100%);
+        radial-gradient(ellipse 90% 60% at 75% 25%, rgba(255,107,0,.35), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 15% 55%, rgba(123,47,255,.28), transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 80%, rgba(0,245,255,.12), transparent 60%),
+        linear-gradient(180deg, #1a0008 0%, #200035 35%, #0d0020 65%, #05000A 100%);
+    }
+    /* Retrowave grid overlay in hero */
+    .hero-bg::before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        repeating-linear-gradient(90deg,rgba(0,245,255,.04) 0,rgba(0,245,255,.04) 1px,transparent 1px,transparent 60px),
+        repeating-linear-gradient(0deg,rgba(0,245,255,.04) 0,rgba(0,245,255,.04) 1px,transparent 1px,transparent 60px);
     }
     .hero-bg::after{
       content:"";
@@ -296,7 +305,7 @@
     .title-card-video{
       width:100%;
       aspect-ratio:16/9;
-      background:#000;
+      background:linear-gradient(135deg,#1a0008 0%,#200035 50%,#05000A 100%);
       position:relative;
       overflow:hidden;
     }
