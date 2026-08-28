@@ -206,31 +206,55 @@ async function getTrending(limit = 10, forceRefresh = false) {
   }
 }
 
-// Scrape live status from the public Bigo profile HTML page
-// (fallback when JSON API endpoints are blocked by Railway IPs)
+// Scrape live status + stats from the public Bigo profile HTML page.
+// Bigo embeds JSON state in the page — try multiple field name variants
+// since the schema changes between app versions.
 async function tryPageScrape(username) {
   const r = await request(`https://www.bigo.tv/${encodeURIComponent(username)}`);
   if (r.status !== 200) throw new Error(`Page HTTP ${r.status}`);
   const html = r.body;
 
-  // Extract any first JSON-like blob that has a recognisable nick/display name field
-  const nickMatch   = html.match(/"nick"\s*:\s*"([^"]{1,80})"/);
-  const nick        = nickMatch ? nickMatch[1] : null;
-  if (!nick || nick === username) throw new Error('No real nick in page — blocked or wrong page');
+  // Display name — try several field names
+  const nickMatch = html.match(/"(?:nick|nickName|displayName|userName)"\s*:\s*"([^"]{2,80})"/);
+  const nick = nickMatch ? nickMatch[1] : null;
+  if (!nick || nick.toLowerCase() === username.toLowerCase())
+    throw new Error('No real nick in page — likely blocked or wrong page');
 
-  const isLive = /["'](?:isLive|liveStatus|status)["']\s*:\s*(?:true|1)[,}\s]/.test(html);
-  const num    = key => parseInt((html.match(new RegExp(`["']${key}["']\\s*:\\s*(\\d+)`)) || [])[1]) || 0;
-  const str    = key => ((html.match(new RegExp(`["']${key}["']\\s*:\\s*["']([^"']+)["']`)) || [])[1] || '').replace(/\\u002F/g, '/').replace(/\\\//g, '/');
+  // Live status — various field names Bigo uses across versions
+  const isLive = /(?:"status"\s*:\s*1(?!\d)|"isLive"\s*:\s*true|"liveStatus"\s*:\s*1(?!\d)|"isLiving"\s*:\s*true|"roomStatus"\s*:\s*1(?!\d))/.test(html);
+
+  // Find first non-zero numeric match across a list of candidate field names
+  function findNum(...keys) {
+    for (const key of keys) {
+      const m = html.match(new RegExp(`"${key}"\\s*:\\s*(\\d+)`));
+      if (m && parseInt(m[1]) > 0) return parseInt(m[1]);
+    }
+    return 0;
+  }
+  // Find first non-empty string match
+  function findStr(...keys) {
+    for (const key of keys) {
+      const m = html.match(new RegExp(`"${key}"\\s*:\\s*"([^"]+)"`));
+      if (m && m[1]) return m[1].replace(/\\u002F/g, '/').replace(/\\\//g, '/').replace(/\\/g, '');
+    }
+    return '';
+  }
+
+  const viewers   = findNum('userCount', 'audienceCount', 'viewerCount', 'clickCount', 'watcherCount');
+  const fans      = findNum('fanCount', 'fans', 'followers', 'followCount', 'followerCount');
+  const peakView  = findNum('peakViewers', 'maxViewers', 'highestViewers', 'maxUserCount');
+  const avatar    = findStr('snapshot', 'headPicture', 'avatarUrl', 'coverUrl', 'headUrl');
+  const roomTopic = findStr('roomTopic', 'title', 'streamTitle');
 
   return {
     channel_name    : nick,
     username,
     is_live         : isLive,
-    current_viewers : num('userCount') || num('audienceCount') || num('clickCount'),
-    peak_viewers    : num('peakViewers') || num('clickCount'),
-    followers_count : num('fanCount') || num('followers'),
-    room_topic      : str('roomTopic'),
-    avatar          : str('snapshot') || str('headPicture') || str('avatarUrl'),
+    current_viewers : viewers,
+    peak_viewers    : peakView || (isLive ? viewers : 0),
+    followers_count : fans,
+    room_topic      : roomTopic,
+    avatar,
   };
 }
 

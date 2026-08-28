@@ -141,6 +141,41 @@
     .footer-logo{font-weight:900;font-size:1rem;letter-spacing:2px;background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
     .footer-text{font-size:.78rem;color:var(--text-dim);}
 
+    /* LAST SEEN / OFFLINE TIME */
+    .stat-item.last-seen .sn{font-size:1rem;background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+    /* CLIPS + HISTORY SECTION */
+    .stream-history{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+    .history-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);font-size:.82rem;}
+    .history-row .hr-label{color:var(--text-dim);font-size:.72rem;text-transform:uppercase;letter-spacing:.7px;}
+    .history-row .hr-value{color:var(--text-muted);font-weight:700;}
+
+    /* FAN COMMENTS */
+    .comments-section{max-width:1200px;margin:0 auto 48px;padding:0 48px;}
+    @media(max-width:768px){.comments-section{padding:0 16px;}}
+    .comments-section h2{font-size:1.3rem;font-weight:900;margin-bottom:16px;}
+    .comments-section h2 .accent{background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .comment-form{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;}
+    .comment-form h4{font-size:.85rem;font-weight:800;margin-bottom:14px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;}
+    .cf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+    @media(max-width:600px){.cf-row{grid-template-columns:1fr;}}
+    .cf-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:.88rem;padding:10px 14px;outline:none;transition:border-color .2s;font-family:inherit;}
+    .cf-input:focus{border-color:rgba(79,209,255,.45);}
+    .cf-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:.88rem;padding:10px 14px;outline:none;resize:vertical;min-height:80px;transition:border-color .2s;font-family:inherit;}
+    .cf-textarea:focus{border-color:rgba(79,209,255,.45);}
+    .cf-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .cf-hint{font-size:.72rem;color:var(--text-dim);}
+    .comment-list{display:flex;flex-direction:column;gap:10px;}
+    .comment-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;gap:12px;}
+    .ci-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;color:#fff;}
+    .ci-body{flex:1;}
+    .ci-header{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+    .ci-name{font-weight:700;font-size:.88rem;}
+    .ci-time{font-size:.72rem;color:var(--text-dim);}
+    .ci-msg{font-size:.85rem;color:var(--text-muted);line-height:1.55;word-break:break-word;}
+    .comments-empty{text-align:center;padding:32px;color:var(--text-dim);font-size:.85rem;}
+    .comments-more{text-align:center;margin-top:12px;}
+
     /* LOADING / ERROR */
     .page-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;}
     .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--bigo);border-radius:50%;animation:spin .8s linear infinite;}
@@ -219,6 +254,28 @@
       <div class="about-meta" id="aboutMeta"></div>
     </div>
 
+    <!-- Recent Streams & Clips -->
+    <div class="about-card" id="clipsCard">
+      <h3><span class="icon">🎬</span> Recent Streams &amp; Clips</h3>
+      <div class="stream-history" id="streamHistory">
+        <div class="history-row">
+          <span class="hr-label">Last Stream</span>
+          <span class="hr-value" id="lastStreamDate">—</span>
+        </div>
+        <div class="history-row">
+          <span class="hr-label">Peak Viewers (last stream)</span>
+          <span class="hr-value" id="lastStreamPeak">—</span>
+        </div>
+      </div>
+      <a id="clipsLink" href="#" target="_blank" rel="noopener"
+         class="btn btn-outline" style="width:100%;justify-content:center;font-size:.82rem;">
+        View Clips &amp; Replay on Bigo ↗
+      </a>
+      <p style="font-size:.72rem;color:var(--text-dim);margin-top:10px;line-height:1.5;">
+        Bigo saves recent stream replays and clips on the creator's profile. Click above to browse their full archive on Bigo Live.
+      </p>
+    </div>
+
   </div>
 
   <!-- RIGHT: Stats Sidebar -->
@@ -235,6 +292,10 @@
         <div class="stat-item" id="statPeak">
           <span class="sn" id="snPeak">—</span>
           <div class="sl">Peak Viewers</div>
+        </div>
+        <div class="stat-item last-seen" id="statLastSeen" style="grid-column:1/-1;">
+          <span class="sn" id="snLastSeen">—</span>
+          <div class="sl">Last Seen Streaming</div>
         </div>
         <div class="stat-item live-now" id="statLive" style="grid-column:1/-1;display:none;">
           <span class="sn" id="snLive">—</span>
@@ -260,6 +321,34 @@
       <button class="share-btn share-copy" id="copyLinkBtn" style="width:100%;padding:10px;">Copy Page Link</button>
     </div>
 
+  </div>
+</div>
+
+<!-- FAN COMMENTS SECTION -->
+<div class="comments-section" id="commentsSection" style="display:none;">
+  <h2>Fan <span class="accent">Comments</span></h2>
+
+  <!-- Post a comment -->
+  <div class="comment-form">
+    <h4>Leave a Message for this Creator</h4>
+    <div class="cf-row">
+      <input type="text" class="cf-input" id="cfName" placeholder="Your name" maxlength="50" autocomplete="off">
+      <input type="text" class="cf-input" id="cfHandle" placeholder="@bigo_username (optional)" maxlength="50" autocomplete="off">
+    </div>
+    <textarea class="cf-textarea" id="cfMessage" placeholder="Write a comment, show your support, or share a highlight from their stream…" maxlength="500"></textarea>
+    <div class="cf-footer">
+      <span class="cf-hint">Be kind — comments are public.</span>
+      <button class="btn btn-bigo" id="cfSubmit" style="font-size:.82rem;padding:9px 22px;">Post Comment</button>
+    </div>
+    <div id="cfStatus" style="font-size:.8rem;margin-top:10px;"></div>
+  </div>
+
+  <!-- Comment list -->
+  <div class="comment-list" id="commentList">
+    <div class="comments-empty" id="commentsEmpty">No comments yet — be the first!</div>
+  </div>
+  <div class="comments-more" id="commentsMore" style="display:none;">
+    <button class="btn btn-outline" id="loadMoreBtn" style="font-size:.8rem;">Load more</button>
   </div>
 </div>
 
@@ -305,6 +394,19 @@ function fmt(n) {
 function fmtRaw(n) {
   if (!n || isNaN(parseInt(n))) return '—';
   return parseInt(n).toLocaleString();
+}
+
+function timeSince(date) {
+  const sec = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (sec < 60) return 'Just now';
+  const min = Math.floor(sec / 60);
+  if (min < 60) return `${min}m ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}h ago`;
+  const d = Math.floor(hr / 24);
+  if (d < 7) return `${d} day${d !== 1 ? 's' : ''} ago`;
+  if (d < 30) return `${Math.floor(d / 7)} week${Math.floor(d/7) !== 1 ? 's' : ''} ago`;
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 // ===== FACTORY FLOOR SVG (seeded, unique per creator) =====
@@ -386,27 +488,35 @@ function factoryFloorSVG(seed, W, H) {
 // ===== LOAD CREATOR =====
 const params = new URLSearchParams(location.search);
 const creatorId = params.get('id') || params.get('creator');
+let _currentCreator = null;
+let _refreshTimer = null;
+
+async function fetchCreator() {
+  let creator = null;
+  const singleRes = await fetch(`${API_BASE}/creators/featured/${creatorId}`, { signal: AbortSignal.timeout(10000) });
+  if (singleRes.ok) { const d = await singleRes.json(); creator = d.creator; }
+  if (!creator) {
+    const allRes = await fetch(`${API_BASE}/creators/featured`, { signal: AbortSignal.timeout(10000) });
+    if (allRes.ok) { const d = await allRes.json(); creator = (d.creators || []).find(c => c.id === creatorId || c.bigo_username === creatorId); }
+  }
+  return creator;
+}
 
 async function loadCreator() {
   if (!creatorId) { showError(); return; }
   try {
-    // Try single-creator endpoint first
-    let creator = null;
-    const singleRes = await fetch(`${API_BASE}/creators/featured/${creatorId}`, { signal: AbortSignal.timeout(10000) });
-    if (singleRes.ok) {
-      const d = await singleRes.json();
-      creator = d.creator;
-    }
-    // Fallback: fetch all, find by id or username
-    if (!creator) {
-      const allRes = await fetch(`${API_BASE}/creators/featured`, { signal: AbortSignal.timeout(10000) });
-      if (allRes.ok) {
-        const d = await allRes.json();
-        creator = (d.creators || []).find(c => c.id === creatorId || c.bigo_username === creatorId);
-      }
-    }
+    const creator = await fetchCreator();
     if (!creator) { showError(); return; }
+    _currentCreator = creator;
     render(creator);
+    loadComments(creatorId);
+    // Auto-refresh live stats every 30s
+    _refreshTimer = setInterval(async () => {
+      try {
+        const updated = await fetchCreator();
+        if (updated) { _currentCreator = updated; refreshLiveStats(updated); }
+      } catch (_) {}
+    }, 30000);
   } catch (e) {
     console.error('Creator load failed:', e);
     showError();
@@ -474,7 +584,18 @@ function render(cr) {
   // Sidebar stats
   document.getElementById('snFollowers').textContent = fmt(cr.followers_count);
   document.getElementById('snPeak').textContent = fmt(cr.peak_viewers);
-  if (live && cr.current_viewers) {
+
+  // Last seen streaming
+  if (live) {
+    document.getElementById('snLastSeen').textContent = 'Live Now';
+    document.getElementById('snLastSeen').style.cssText = '-webkit-text-fill-color:var(--bigo);background:none;';
+    document.getElementById('statLastSeen').style.display = 'none'; // hide when live — the live now card shows
+  } else if (cr.last_live_at) {
+    document.getElementById('snLastSeen').textContent = timeSince(new Date(cr.last_live_at));
+    document.getElementById('statLastSeen').title = new Date(cr.last_live_at).toLocaleString();
+  }
+
+  if (live && cr.current_viewers != null) {
     document.getElementById('statLive').style.display = 'block';
     document.getElementById('snLive').textContent = fmtRaw(cr.current_viewers);
     document.getElementById('liveIndicator').style.display = 'flex';
@@ -499,21 +620,172 @@ function render(cr) {
     });
   });
 
+  // Clips card
+  const clipsUrl = cr.bigo_url || `https://www.bigo.tv/${cr.bigo_username}`;
+  document.getElementById('clipsLink').href = clipsUrl;
+  if (cr.last_live_at) {
+    document.getElementById('lastStreamDate').textContent = timeSince(new Date(cr.last_live_at)) + ' · ' + new Date(cr.last_live_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+  document.getElementById('lastStreamPeak').textContent = fmt(cr.peak_viewers);
+
   // Insights
   const featuredDays = cr.featured_at ? Math.floor((Date.now() - new Date(cr.featured_at)) / 86400000) : null;
+  const lastSeenText = cr.last_live_at ? timeSince(new Date(cr.last_live_at)) : '—';
   const insightsGrid = document.getElementById('insightsGrid');
   insightsGrid.innerHTML = `
     <div class="insight-card"><div class="ic-num">${fmt(cr.followers_count)}</div><div class="ic-label">Total Followers</div><div class="ic-sub">on Bigo Live</div></div>
     <div class="insight-card"><div class="ic-num">${fmt(cr.peak_viewers)}</div><div class="ic-label">Peak Viewers</div><div class="ic-sub">best stream session</div></div>
     <div class="insight-card"><div class="ic-num">${live ? fmtRaw(cr.current_viewers) : '—'}</div><div class="ic-label">Watching Now</div><div class="ic-sub">${live ? 'live right now' : 'creator offline'}</div></div>
-    <div class="insight-card"><div class="ic-num">${featuredDays !== null ? featuredDays + 'd' : '—'}</div><div class="ic-label">Days on I-RIS</div><div class="ic-sub">featured creator</div></div>
+    <div class="insight-card"><div class="ic-num" style="font-size:1.1rem;">${lastSeenText}</div><div class="ic-label">Last Seen Live</div><div class="ic-sub">${cr.last_live_at ? new Date(cr.last_live_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'no data yet'}</div></div>
   `;
   document.getElementById('insightsSection').style.display = 'block';
 
-  // Show content
+  // Show content + comments section
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('mainContent').style.display = 'grid';
+  document.getElementById('commentsSection').style.display = 'block';
 }
+
+// ===== LIVE STAT REFRESH (called every 30s without full re-render) =====
+function refreshLiveStats(cr) {
+  const live = cr.is_live;
+  // Update badges
+  const badgesEl = document.getElementById('creatorBadges');
+  if (badgesEl) {
+    badgesEl.innerHTML = '';
+    if (live) badgesEl.innerHTML += `<span class="badge badge-live"><span class="dot"></span> Live Now · ${fmtRaw(cr.current_viewers)} watching</span>`;
+    else badgesEl.innerHTML += `<span class="badge badge-offline">Currently Offline</span>`;
+    badgesEl.innerHTML += `<span class="badge badge-featured">I-RIS Featured Creator</span>`;
+  }
+  // Status bar
+  const statusEl = document.getElementById('streamStatus');
+  if (statusEl) {
+    if (live) {
+      statusEl.innerHTML = `<span class="live-pill"><span class="dot"></span> Live Now</span><span style="margin-left:4px;">${fmtRaw(cr.current_viewers)} watching</span>`;
+    } else {
+      statusEl.innerHTML = `<span style="color:var(--text-dim);">Currently offline — stream will appear here when live</span>`;
+    }
+  }
+  // Sidebar
+  document.getElementById('snFollowers').textContent = fmt(cr.followers_count);
+  document.getElementById('snPeak').textContent = fmt(cr.peak_viewers);
+  if (live) {
+    document.getElementById('statLive').style.display = 'block';
+    document.getElementById('snLive').textContent = fmtRaw(cr.current_viewers);
+    document.getElementById('liveIndicator').style.display = 'flex';
+    document.getElementById('statLastSeen').style.display = 'none';
+  } else {
+    document.getElementById('statLive').style.display = 'none';
+    document.getElementById('liveIndicator').style.display = 'none';
+    document.getElementById('statLastSeen').style.display = 'block';
+    if (cr.last_live_at) document.getElementById('snLastSeen').textContent = timeSince(new Date(cr.last_live_at));
+  }
+  // Insights
+  const lastSeenText = cr.last_live_at ? timeSince(new Date(cr.last_live_at)) : '—';
+  const insightsGrid = document.getElementById('insightsGrid');
+  if (insightsGrid) {
+    const cards = insightsGrid.querySelectorAll('.insight-card');
+    if (cards[2]) cards[2].querySelector('.ic-num').textContent = live ? fmtRaw(cr.current_viewers) : '—';
+    if (cards[3]) {
+      cards[3].querySelector('.ic-num').textContent = lastSeenText;
+      if (cards[3].querySelector('.ic-sub')) cards[3].querySelector('.ic-sub').textContent = cr.last_live_at ? new Date(cr.last_live_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'no data yet';
+    }
+  }
+}
+
+// ===== FAN COMMENTS =====
+let _commentsPage = 0;
+let _allComments = [];
+
+async function loadComments(id) {
+  try {
+    const res = await fetch(`${API_BASE}/creators/featured/${id}/comments`, { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) return;
+    const data = await res.json();
+    _allComments = data.comments || [];
+    _commentsPage = 0;
+    renderComments();
+  } catch (_) {}
+}
+
+function renderComments() {
+  const list = document.getElementById('commentList');
+  const empty = document.getElementById('commentsEmpty');
+  const moreBtn = document.getElementById('commentsMore');
+  const PAGE_SIZE = 10;
+  const visible = _allComments.slice(0, (_commentsPage + 1) * PAGE_SIZE);
+
+  if (!_allComments.length) {
+    empty.style.display = 'block';
+    moreBtn.style.display = 'none';
+    list.querySelectorAll('.comment-item').forEach(e => e.remove());
+    return;
+  }
+  empty.style.display = 'none';
+  list.querySelectorAll('.comment-item').forEach(e => e.remove());
+  visible.forEach(c => {
+    const initials = (c.name || '?').slice(0, 2).toUpperCase();
+    const div = document.createElement('div');
+    div.className = 'comment-item';
+    div.innerHTML = `
+      <div class="ci-avatar">${initials}</div>
+      <div class="ci-body">
+        <div class="ci-header">
+          <span class="ci-name">${escHtml(c.name)}</span>
+          <span class="ci-time">${timeSince(new Date(c.at))}</span>
+        </div>
+        <div class="ci-msg">${escHtml(c.message)}</div>
+      </div>`;
+    list.appendChild(div);
+  });
+  moreBtn.style.display = _allComments.length > visible.length ? 'block' : 'none';
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Load more
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  if (loadMoreBtn) loadMoreBtn.addEventListener('click', () => { _commentsPage++; renderComments(); });
+
+  // Submit comment
+  const submitBtn = document.getElementById('cfSubmit');
+  if (submitBtn) submitBtn.addEventListener('click', async () => {
+    const name = document.getElementById('cfName').value.trim();
+    const message = document.getElementById('cfMessage').value.trim();
+    const statusEl = document.getElementById('cfStatus');
+    if (!name) { statusEl.textContent = 'Please enter your name.'; statusEl.style.color = 'var(--bigo)'; return; }
+    if (!message) { statusEl.textContent = 'Please write a comment.'; statusEl.style.color = 'var(--bigo)'; return; }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Posting…';
+    statusEl.textContent = '';
+    try {
+      const res = await fetch(`${API_BASE}/creators/featured/${creatorId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, message }),
+        signal: AbortSignal.timeout(8000),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Failed to post');
+      document.getElementById('cfName').value = '';
+      document.getElementById('cfMessage').value = '';
+      statusEl.style.color = 'var(--green)';
+      statusEl.textContent = 'Comment posted!';
+      // Prepend new comment to list
+      _allComments.unshift({ ...d.comment, at: d.comment.at || new Date().toISOString(), name, message });
+      renderComments();
+      setTimeout(() => { statusEl.textContent = ''; }, 3000);
+    } catch (e) {
+      statusEl.style.color = 'var(--bigo)';
+      statusEl.textContent = e.message || 'Could not post comment. Try again.';
+    }
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Post Comment';
+  });
+});
 
 loadCreator();
 </script>

@@ -373,6 +373,7 @@ app.get('/api/bigo/creators/featured', async (req, res) => {
         const profile = await bigoScraper.getCreator(c.bigo_username);
         // Only update live status/viewers from scraper if no manual override is active
         if (!c.status_override) {
+          if (!profile.is_live && c.is_live) { c.last_live_at = new Date().toISOString(); dirty = true; }
           c.is_live         = profile.is_live;
           c.current_viewers = profile.current_viewers;
         }
@@ -453,19 +454,60 @@ app.post('/api/bigo/creators/reject/:id', adminAuth, (req, res) => {
   res.json({ success: true });
 });
 
-// POST /api/bigo/creators/featured/:id/status — admin: manually set live status & viewer count
+// POST /api/bigo/creators/featured/:id/status — admin: manually set live status, viewers, followers, peak
 app.post('/api/bigo/creators/featured/:id/status', adminAuth, (req, res) => {
   const creators = readCreators();
   const idx = creators.findIndex(c => c.id === req.params.id || c.bigo_username === req.params.id);
   if (idx === -1) return res.status(404).json({ error: 'Creator not found' });
-  const { is_live, current_viewers } = req.body;
-  if (typeof is_live === 'boolean') creators[idx].is_live = is_live;
+  const { is_live, current_viewers, followers_count, peak_viewers } = req.body;
+  if (typeof is_live === 'boolean') {
+    // Going offline — record last seen live time
+    if (!is_live && creators[idx].is_live) creators[idx].last_live_at = new Date().toISOString();
+    creators[idx].is_live = is_live;
+  }
   if (current_viewers != null) creators[idx].current_viewers = parseInt(current_viewers) || 0;
-  // Mark Offline clears the override so auto-detection resumes; Mark Live holds the override
+  if (followers_count != null) creators[idx].followers_count = parseInt(followers_count) || 0;
+  if (peak_viewers != null) creators[idx].peak_viewers = parseInt(peak_viewers) || 0;
+  // Mark Offline clears the override so auto-detection resumes; Mark Live holds it
   creators[idx].status_override = is_live === true;
   creators[idx].status_set_at = new Date().toISOString();
   writeCreators(creators);
   res.json({ success: true, creator: creators[idx] });
+});
+
+// ── Fan Comments ──────────────────────────────────────────────────────────────
+function commentsFile(id) { return path.join(dataDir, `comments-${id}.json`); }
+const readComments  = id => { try { return JSON.parse(fs.readFileSync(commentsFile(id), 'utf8')); } catch { return []; } };
+const writeComments = (id, d) => fs.writeFileSync(commentsFile(id), JSON.stringify(d, null, 2), 'utf8');
+
+// GET /api/bigo/creators/featured/:id/comments
+app.get('/api/bigo/creators/featured/:id/comments', (req, res) => {
+  const comments = readComments(req.params.id);
+  res.json({ comments: comments.slice(-100).reverse() });
+});
+
+// POST /api/bigo/creators/featured/:id/comments
+app.post('/api/bigo/creators/featured/:id/comments', (req, res) => {
+  const { name, message } = req.body;
+  if (!name || !message) return res.status(400).json({ error: 'name and message are required' });
+  if (name.length > 50 || message.length > 500) return res.status(400).json({ error: 'Input too long' });
+  const creators = readCreators();
+  if (!creators.find(c => c.id === req.params.id || c.bigo_username === req.params.id))
+    return res.status(404).json({ error: 'Creator not found' });
+  const ip = (req.headers['x-forwarded-for'] || req.ip || 'unknown').split(',')[0].trim();
+  const existing = readComments(req.params.id);
+  const recentFromIp = existing.filter(c => c.ip === ip && Date.now() - new Date(c.at).getTime() < 60000);
+  if (recentFromIp.length >= 3) return res.status(429).json({ error: 'Too many comments. Wait a minute.' });
+  const comment = { id: Date.now().toString(), name: name.trim().slice(0, 50), message: message.trim().slice(0, 500), at: new Date().toISOString(), ip };
+  existing.push(comment);
+  writeComments(req.params.id, existing);
+  res.status(201).json({ success: true, comment: { ...comment, ip: undefined } });
+});
+
+// DELETE /api/bigo/creators/featured/:id/comments/:commentId — admin
+app.delete('/api/bigo/creators/featured/:id/comments/:commentId', adminAuth, (req, res) => {
+  writeComments(req.params.id, readComments(req.params.id).filter(c => c.id !== req.params.commentId));
+  res.json({ success: true });
 });
 
 // GET /api/bigo/creators/featured/:id — public: single featured creator by id or username

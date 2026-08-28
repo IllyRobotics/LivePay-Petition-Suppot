@@ -820,10 +820,17 @@ async function initAdmin() {
           <div class="ar-name">${c.display_name} <span class="ar-status ${c.is_live?'approved':'pending'}" style="font-size:.65rem;">${c.is_live?'● LIVE':'○ offline'}</span></div>
           <div class="ar-id">@${c.bigo_username}${c.current_viewers?' · '+c.current_viewers+' viewers':''}</div>
         </div>
-        <input type="number" class="admin-viewers-input" data-id="${c.id}" placeholder="Viewers" value="${c.current_viewers||0}" min="0" style="width:80px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:#fff;font-size:.75rem;">
-        <button class="admin-btn approve admin-mark-live" data-id="${c.id}">Mark Live</button>
-        <button class="admin-btn reject admin-mark-offline" data-id="${c.id}">Mark Offline</button>
-        <button class="admin-btn remove" data-id="${c.id}">Remove</button>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <input type="number" class="admin-viewers-input" data-id="${c.id}" placeholder="Viewers" value="${c.current_viewers||0}" min="0" title="Current viewers (for Mark Live)" style="width:80px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:#fff;font-size:.75rem;">
+          <input type="number" class="admin-followers-input" data-id="${c.id}" placeholder="Followers" value="${c.followers_count||0}" min="0" title="Total followers count" style="width:80px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:#fff;font-size:.75rem;">
+          <input type="number" class="admin-peak-input" data-id="${c.id}" placeholder="Peak viewers" value="${c.peak_viewers||0}" min="0" title="Peak viewers ever" style="width:80px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:#fff;font-size:.75rem;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <button class="admin-btn approve admin-mark-live" data-id="${c.id}">Mark Live</button>
+          <button class="admin-btn reject admin-mark-offline" data-id="${c.id}">Mark Offline</button>
+          <button class="admin-btn approve admin-update-stats" data-id="${c.id}" style="background:rgba(79,209,255,.15);color:var(--accent);border-color:rgba(79,209,255,.3);">Update Stats</button>
+          <button class="admin-btn remove" data-id="${c.id}">Remove</button>
+        </div>
       </div>`).join('') : '<div class="admin-empty">No featured creators yet.</div>';
 
     appsEl.querySelectorAll('.admin-btn.approve').forEach(btn => btn.addEventListener('click', async () => {
@@ -838,12 +845,26 @@ async function initAdmin() {
     }));
     featEl.querySelectorAll('.admin-mark-live').forEach(btn => btn.addEventListener('click', async () => {
       const viewers = parseInt(featEl.querySelector(`.admin-viewers-input[data-id="${btn.dataset.id}"]`)?.value) || 0;
-      await apiFetch(`/creators/featured/${btn.dataset.id}/status`, { method: 'POST', body: JSON.stringify({ is_live: true, current_viewers: viewers }) });
+      const followers = parseInt(featEl.querySelector(`.admin-followers-input[data-id="${btn.dataset.id}"]`)?.value) || undefined;
+      const peak = parseInt(featEl.querySelector(`.admin-peak-input[data-id="${btn.dataset.id}"]`)?.value) || undefined;
+      await apiFetch(`/creators/featured/${btn.dataset.id}/status`, { method: 'POST', body: JSON.stringify({ is_live: true, current_viewers: viewers, followers_count: followers, peak_viewers: peak }) });
       await render(); await loadFeaturedCreators();
     }));
     featEl.querySelectorAll('.admin-mark-offline').forEach(btn => btn.addEventListener('click', async () => {
-      await apiFetch(`/creators/featured/${btn.dataset.id}/status`, { method: 'POST', body: JSON.stringify({ is_live: false, current_viewers: 0 }) });
+      const followers = parseInt(featEl.querySelector(`.admin-followers-input[data-id="${btn.dataset.id}"]`)?.value) || undefined;
+      const peak = parseInt(featEl.querySelector(`.admin-peak-input[data-id="${btn.dataset.id}"]`)?.value) || undefined;
+      await apiFetch(`/creators/featured/${btn.dataset.id}/status`, { method: 'POST', body: JSON.stringify({ is_live: false, current_viewers: 0, followers_count: followers, peak_viewers: peak }) });
       await render(); await loadFeaturedCreators();
+    }));
+    featEl.querySelectorAll('.admin-update-stats').forEach(btn => btn.addEventListener('click', async () => {
+      const followers = parseInt(featEl.querySelector(`.admin-followers-input[data-id="${btn.dataset.id}"]`)?.value);
+      const peak = parseInt(featEl.querySelector(`.admin-peak-input[data-id="${btn.dataset.id}"]`)?.value);
+      const body = {};
+      if (!isNaN(followers)) body.followers_count = followers;
+      if (!isNaN(peak)) body.peak_viewers = peak;
+      await apiFetch(`/creators/featured/${btn.dataset.id}/status`, { method: 'POST', body: JSON.stringify(body) });
+      btn.textContent = 'Saved ✓';
+      setTimeout(() => { btn.textContent = 'Update Stats'; }, 2000);
     }));
     featEl.querySelectorAll('.admin-btn.remove').forEach(btn => btn.addEventListener('click', async () => {
       await apiFetch(`/creators/featured/${btn.dataset.id}`, { method: 'DELETE' });
