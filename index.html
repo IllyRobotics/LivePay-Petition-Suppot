@@ -172,18 +172,49 @@
       height:300px;
       background:linear-gradient(transparent,var(--bg));
     }
-    .hero-iframe-bg{
-      position:absolute;inset:0;
-      overflow:hidden;
-      opacity:.35;
-    }
-    .hero-iframe-bg iframe{
-      position:absolute;
-      top:50%;left:50%;
-      width:180%;height:180%;
+    /* Global rotating video background */
+    .hero-video-bg{position:absolute;inset:0;overflow:hidden;z-index:0;}
+    .hero-video-bg video{
+      position:absolute;top:50%;left:50%;
+      min-width:100%;min-height:100%;
+      width:auto;height:auto;
       transform:translate(-50%,-50%);
-      border:none;
-      pointer-events:none;
+      object-fit:cover;
+      opacity:0;
+      transition:opacity 1.5s ease;
+      filter:brightness(0.52) saturate(1.25);
+    }
+    .hero-video-bg video.loaded{opacity:1;}
+    /* Cinematic overlay — kills murkiness, lifts text */
+    .hero-video-overlay{
+      position:absolute;inset:0;z-index:1;
+      background:
+        linear-gradient(135deg,rgba(5,0,15,.6) 0%,rgba(5,0,10,.15) 55%,rgba(5,0,15,.65) 100%);
+    }
+    .hero-video-overlay::after{
+      content:"";position:absolute;bottom:0;left:0;right:0;height:55%;
+      background:linear-gradient(transparent,#0a0a0a);
+    }
+    /* Mute toggle */
+    #heroMuteBtn{
+      position:absolute;bottom:88px;right:28px;z-index:10;
+      background:rgba(0,0,0,.55);
+      border:1.5px solid rgba(255,255,255,.35);
+      color:#fff;width:42px;height:42px;border-radius:50%;
+      cursor:pointer;font-size:17px;
+      display:flex;align-items:center;justify-content:center;
+      backdrop-filter:blur(10px);
+      transition:background .2s,border-color .2s;
+    }
+    #heroMuteBtn:hover{background:rgba(255,0,110,.45);border-color:rgba(255,0,110,.7);}
+    /* Stronger text contrast */
+    .hero-title{text-shadow:0 2px 32px rgba(0,0,0,.95),0 0 80px rgba(0,0,0,.6)!important;}
+    .hero-studio-tag{text-shadow:0 1px 10px rgba(0,0,0,.9)!important;}
+    .hero-desc{
+      text-shadow:0 1px 14px rgba(0,0,0,1)!important;
+      background:rgba(0,0,0,.25);
+      padding:10px 14px;border-radius:6px;
+      backdrop-filter:blur(4px);
     }
     .hero-content{
       position:relative;z-index:2;
@@ -982,17 +1013,18 @@
 <!-- ===== HERO BILLBOARD (Alternating) ===== -->
 <section class="hero-billboard" id="hero-billboard">
 
+  <!-- Global rotating video background (behind all slides) -->
+  <div class="hero-video-bg">
+    <video id="heroVideo" autoplay muted playsinline loop>
+      <source id="heroVideoSrc" src="" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+  </div>
+  <button id="heroMuteBtn" aria-label="Toggle mute" title="Toggle sound">🔇</button>
+
   <!-- SLIDE 1: The Reclamation -->
   <div class="hero-slide active" id="slide-reclamation">
-    <div class="hero-bg"></div>
-    <div class="hero-iframe-bg">
-      <iframe 
-        src="https://www.youtube.com/embed/iJOXfm3BdwY?autoplay=1&mute=1&loop=1&playlist=iJOXfm3BdwY&controls=0&showinfo=0&modestbranding=1" 
-        allow="autoplay;encrypted-media" 
-        loading="lazy"
-        title="The Reclamation Background">
-      </iframe>
-    </div>
+    <div class="hero-bg" style="opacity:.35;"></div>
     <div class="hero-content">
       <div class="hero-studio-tag">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -1605,6 +1637,58 @@ window.addEventListener('scroll', () => {
   });
 
   startTimer();
+})();
+
+// ===== HERO ROTATING VIDEO BACKGROUND =====
+(function() {
+  // Free Mixkit stock videos — social media, live streaming, chat, city night themes
+  // All from https://mixkit.co (free for commercial use, no attribution needed)
+  const POOL = [
+    'https://assets.mixkit.co/videos/preview/mixkit-young-woman-talking-on-a-mobile-phone-at-the-street-4479-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-man-recording-himself-with-his-phone-4438-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-girl-scrolling-on-her-phone-and-looking-surprised-4491-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-young-woman-looking-at-her-phone-and-smiling-4499-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-phone-while-using-social-media-4500-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-large-city-at-night-2-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-young-man-video-chatting-on-laptop-4289-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-instagram-feed-scrolling-on-a-smartphone-4044-large.mp4',
+  ];
+
+  const vid = document.getElementById('heroVideo');
+  const src = document.getElementById('heroVideoSrc');
+  const btn = document.getElementById('heroMuteBtn');
+  let idx = Math.floor(Math.random() * POOL.length);
+  let rotateTimer = null;
+
+  function tryLoad(attempt) {
+    if (attempt >= POOL.length) return; // all failed — gradient fallback shows
+    const url = POOL[(idx + attempt) % POOL.length];
+    vid.classList.remove('loaded');
+    src.src = url;
+    vid.load();
+    const onPlay = () => { vid.classList.add('loaded'); vid.removeEventListener('error', onErr); };
+    const onErr = () => { vid.removeEventListener('canplay', onPlay); tryLoad(attempt + 1); };
+    vid.addEventListener('canplay', onPlay, { once: true });
+    vid.addEventListener('error', onErr, { once: true });
+    vid.play().catch(() => {});
+  }
+
+  function nextVideo() {
+    idx = (idx + 1) % POOL.length;
+    tryLoad(0);
+  }
+
+  tryLoad(0);
+
+  // Rotate every 18 seconds
+  rotateTimer = setInterval(nextVideo, 18000);
+
+  // Mute / unmute toggle
+  btn.addEventListener('click', () => {
+    vid.muted = !vid.muted;
+    btn.textContent = vid.muted ? '🔇' : '🔊';
+    btn.title = vid.muted ? 'Unmute' : 'Mute';
+  });
 })();
 
 // ===== BIGO LIVE TRENDING MINI LEADERBOARD =====
