@@ -310,4 +310,4 @@ function scheduleDailyRefresh() {
   }, CACHE_TTL);
 }
 
-module.exports = { getTrending, getCreator, scheduleDailyRefresh };
+module.exports = { getTrending, getCreator, scheduleDailyRefresh, rawRequest: request };

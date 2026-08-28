@@ -379,7 +379,8 @@
 </footer>
 
 <script>
-const API_BASE = 'https://vivacious-forgiveness-production-dc09.up.railway.app/api/bigo';
+const API_BASE   = 'https://vivacious-forgiveness-production-dc09.up.railway.app/api/bigo';
+const PROXY_BASE = 'https://vivacious-forgiveness-production-dc09.up.railway.app';
 const BLANK_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect fill='%23222' width='64' height='64'/%3E%3Ccircle cx='32' cy='24' r='12' fill='%23444'/%3E%3Cellipse cx='32' cy='54' rx='22' ry='14' fill='%23444'/%3E%3C/svg%3E";
 
 function fmt(n) {
@@ -558,9 +559,10 @@ function render(cr) {
   else badgesEl.innerHTML += `<span class="badge badge-offline">Currently Offline</span>`;
   badgesEl.innerHTML += `<span class="badge badge-featured">I-RIS Featured Creator</span>`;
 
-  // Stream player — load the Bigo page directly in the iframe
+  // Stream player — load via proxy to bypass Bigo's X-Frame-Options block
   const streamUrl = bigoUrl || `https://www.bigo.tv/${cr.bigo_username}`;
-  document.getElementById('streamIframe').src = streamUrl;
+  const proxyUrl  = `${PROXY_BASE}/proxy/bigo/${encodeURIComponent(cr.bigo_username)}`;
+  document.getElementById('streamIframe').src = proxyUrl;
   document.getElementById('spWatchBtn').href = streamUrl;
   document.getElementById('navWatchBtn').href = streamUrl;
   document.getElementById('watchBtn').href = streamUrl;

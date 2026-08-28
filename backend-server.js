@@ -552,6 +552,30 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
+// ── Bigo Live Page Proxy ──────────────────────────────────────────────────────
+// Fetches a Bigo profile page server-side and re-serves it without
+// X-Frame-Options or frame-blocking CSP, so it can be embedded in an iframe.
+app.get('/proxy/bigo/:uid', async (req, res) => {
+  const uid = req.params.uid;
+  if (!/^[a-zA-Z0-9_]{1,40}$/.test(uid)) return res.status(400).send('Invalid ID');
+  try {
+    const r = await bigoScraper.rawRequest(`https://www.bigo.tv/${encodeURIComponent(uid)}`);
+    if (r.status !== 200) return res.status(r.status).send(`Bigo returned ${r.status}`);
+    let html = r.body;
+    // Inject <base> so relative asset URLs resolve back to bigo.tv
+    html = html.replace(/(<head[^>]*>)/i, '$1<base href="https://www.bigo.tv/">');
+    // Remove any inline frame-blocking meta tags Bigo may include
+    html = html.replace(/X-Frame-Options[^"']*/gi, '');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    // Explicitly do NOT set X-Frame-Options — that's the whole point of this proxy
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(html);
+  } catch (e) {
+    console.error('[proxy/bigo] error:', e.message);
+    res.status(502).send('Proxy error');
+  }
+});
+
 // Start server
 bigoScraper.scheduleDailyRefresh();
 app.listen(PORT, () => {
