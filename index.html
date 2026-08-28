@@ -147,14 +147,23 @@
       width:100%;
       min-height:85vh;
       overflow:hidden;
-      background:#000;
+      background:linear-gradient(160deg,#FF6B00 0%,#FF006E 30%,#7B2FFF 60%,#05000A 100%);
     }
     .hero-bg{
       position:absolute;inset:0;
       background:
-        radial-gradient(ellipse 120% 80% at 70% 30%, rgba(79,209,255,.12), transparent 50%),
-        radial-gradient(ellipse 80% 60% at 20% 60%, rgba(124,92,255,.1), transparent 50%),
-        linear-gradient(180deg, #0a0a0a 0%, #0d1117 30%, #0a0e1a 60%, #0a0a0a 100%);
+        radial-gradient(ellipse 90% 60% at 75% 25%, rgba(255,107,0,.35), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 15% 55%, rgba(123,47,255,.28), transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 80%, rgba(0,245,255,.12), transparent 60%),
+        linear-gradient(180deg, #1a0008 0%, #200035 35%, #0d0020 65%, #05000A 100%);
+    }
+    /* Retrowave grid overlay in hero */
+    .hero-bg::before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        repeating-linear-gradient(90deg,rgba(0,245,255,.04) 0,rgba(0,245,255,.04) 1px,transparent 1px,transparent 60px),
+        repeating-linear-gradient(0deg,rgba(0,245,255,.04) 0,rgba(0,245,255,.04) 1px,transparent 1px,transparent 60px);
     }
     .hero-bg::after{
       content:"";
@@ -296,7 +305,7 @@
     .title-card-video{
       width:100%;
       aspect-ratio:16/9;
-      background:#000;
+      background:linear-gradient(135deg,#1a0008 0%,#200035 50%,#05000A 100%);
       position:relative;
       overflow:hidden;
     }
@@ -607,6 +616,8 @@
       animation:dotFill var(--slide-dur,10s) linear forwards;
     }
     @keyframes dotFill{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+    @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,0,128,.7);}50%{box-shadow:0 0 0 6px rgba(255,0,128,0);}}
+    @keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
 
     /* ===== CSS GENERATED TRAILER ===== */
     .hero-trailer-bg{position:absolute;inset:0;overflow:hidden;}
@@ -699,6 +710,65 @@
 
     /* Clickable show cards */
     a.show-card{text-decoration:none;color:inherit;display:block;}
+
+    /* ===== NEWLY RELEASED BADGE ===== */
+    .newly-released-banner{
+      display:inline-flex;align-items:center;gap:10px;
+      background:linear-gradient(135deg,#e50914,#ff6b35);
+      color:#fff;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:.85rem;
+      font-weight:800;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      animation:newPulse 2s ease-in-out infinite;
+      box-shadow:0 4px 20px rgba(229,9,20,.4);
+      margin-bottom:4px;
+    }
+    .newly-released-banner .pulse-dot{
+      width:10px;height:10px;
+      background:#fff;
+      border-radius:50%;
+      animation:dotPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes newPulse{
+      0%,100%{box-shadow:0 4px 20px rgba(229,9,20,.4);}
+      50%{box-shadow:0 4px 30px rgba(229,9,20,.7),0 0 40px rgba(255,107,53,.3);}
+    }
+    @keyframes dotPulse{
+      0%,100%{opacity:1;transform:scale(1);}
+      50%{opacity:.5;transform:scale(.7);}
+    }
+    .now-playing-header{
+      display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    }
+    .featured-player-shorts{
+      margin:16px 0 56px;
+      border-radius:12px;
+      overflow:hidden;
+      background:#000;
+      position:relative;
+      max-width:400px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .featured-video-shorts{
+      width:100%;
+      aspect-ratio:9/16;
+      max-height:80vh;
+    }
+    .featured-video-shorts iframe{
+      width:100%;height:100%;border:none;
+    }
+    .release-date-tag{
+      text-align:center;
+      color:var(--text-muted);
+      font-size:.85rem;
+      margin-top:12px;
+      padding-bottom:4px;
+    }
+    .release-date-tag strong{color:var(--accent);}
 
     /* ===== IRIS VISION SECTION ===== */
     .iris-vision{
@@ -864,9 +934,25 @@
       .hero-billboard{min-height:65vh;}
       .about-stats{grid-template-columns:1fr;}
     }
+
+    /* ===== WATERMARK LOGO ===== */
+    .watermark-logo{
+      position:fixed;
+      top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      width:55vmin;
+      height:55vmin;
+      background:url('images/i-rislogo.png') no-repeat center/contain;
+      opacity:.06;
+      pointer-events:none;
+      z-index:0;
+    }
   </style>
 </head>
 <body>
+
+<!-- ===== WATERMARK LOGO ===== -->
+<div class="watermark-logo" aria-hidden="true"></div>
 
 <!-- ===== STREAMING NAV BAR ===== -->
 <nav class="nav-bar" id="navbar">
@@ -901,7 +987,7 @@
     <div class="hero-bg"></div>
     <div class="hero-iframe-bg">
       <iframe 
-        src="https://www.youtube.com/embed/Jo3ZVujhak0?autoplay=1&mute=1&loop=1&playlist=Jo3ZVujhak0&controls=0&showinfo=0&modestbranding=1" 
+        src="https://www.youtube.com/embed/iJOXfm3BdwY?autoplay=1&mute=1&loop=1&playlist=iJOXfm3BdwY&controls=0&showinfo=0&modestbranding=1" 
         allow="autoplay;encrypted-media" 
         loading="lazy"
         title="The Reclamation Background">
@@ -917,11 +1003,11 @@
         THE RECLAMATION
       </h1>
       <div class="hero-meta">
-        <span class="hero-badge new">New Episodes</span>
+        <span class="hero-badge new">🔥 Newly Released</span>
         <span class="hero-badge series">Sci-Fi</span>
         <span class="hero-meta-text">Season 1</span>
         <span class="hero-meta-text">•</span>
-        <span class="hero-meta-text">2025</span>
+        <span class="hero-meta-text">2026</span>
         <span class="hero-meta-text">•</span>
         <span class="hero-meta-text">TV-14</span>
       </div>
@@ -931,7 +1017,7 @@
         and innovation expands opportunity.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-play" href="#watch-reclamation">▶ Play</a>
+        <a class="btn btn-play" href="#now-playing-reclamation">▶ Play New Episode</a>
         <a class="btn btn-info" href="#originals">ℹ More Info</a>
       </div>
     </div>
@@ -941,19 +1027,15 @@
   <div class="hero-slide" id="slide-hoy">
     <div class="hero-bg"></div>
     <div class="hero-trailer-bg">
-      <!-- Scene 1: Ashlee portrait — neon ambiance -->
       <div class="trailer-scene">
         <img src="images/ashlee-young-1.jpg" alt="Ashlee Young">
       </div>
-      <!-- Scene 2: Ashlee full look — luxury setting -->
       <div class="trailer-scene">
         <img src="images/ashlee-young-2.jpg" alt="Ashlee Young">
       </div>
-      <!-- Cinematic overlays -->
       <div class="trailer-vignette"></div>
       <div class="trailer-warmth"></div>
       <div class="trailer-letterbox"></div>
-      <!-- Trailer title cards -->
       <div class="trailer-titles">
         <span class="tt-iris">I-RIS Original Series</span>
         <span class="tt-show">House of Young</span>
@@ -1060,6 +1142,10 @@
     <span class="cat-tab">Sci-Fi</span>
     <span class="cat-tab">Reality</span>
     <span class="cat-tab">Entertainment</span>
+    <a class="cat-tab" href="movie/BigoLive" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;background:rgba(255,0,128,.1);border:1px solid rgba(255,0,128,.25);border-radius:999px;color:#FF0080;font-weight:700;">
+      <span style="width:7px;height:7px;border-radius:50%;background:#FF0080;animation:livePulse 1.5s infinite;display:inline-block;"></span>
+      Bigo Live
+    </a>
   </div>
 
   <!-- ===== ORIGINALS ROW ===== -->
@@ -1073,11 +1159,11 @@
       <!-- The Reclamation Card -->
       <div class="title-card" id="watch-reclamation">
         <div class="title-card-video">
-          <iframe 
-            src="https://www.youtube.com/embed/Jo3ZVujhak0?mute=1&loop=1&playlist=Jo3ZVujhak0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen 
-            title="The Reclamation"
+          <iframe
+            src="https://www.youtube.com/embed/iJOXfm3BdwY?mute=1&loop=1&playlist=iJOXfm3BdwY"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            title="The Reclamation — Now Streaming"
             loading="lazy">
           </iframe>
         </div>
@@ -1086,25 +1172,26 @@
             <span class="card-badge live">Streaming</span>
             <span class="card-match">98% Match</span>
           </div>
-          <div class="title-card-name">The Reclamation</div>
+          <div class="title-card-name">The Reclamation: Now Streaming</div>
           <div class="title-card-genre">
             Sci-Fi <span class="dot">•</span> Drama <span class="dot">•</span> Mini-Series
           </div>
           <p class="title-card-desc">
-            An alternate reality where humanity ensured AI strengthened human dignity. 
-            Set in a world where data is labor and innovation expands opportunity.
+            Now streaming exclusively on I-RIS. Step into a near-future where humanity made a
+            different choice — AI was built to amplify dignity, not extract it. Data became labor,
+            innovation became liberation, and the world finally tilted toward everyone.
           </p>
         </div>
       </div>
 
-      <!-- The Captains Quarters Card -->
+      <!-- The Reclamation Season 1 Trailer Card -->
       <div class="title-card">
         <div class="title-card-video">
-          <iframe 
-            src="https://www.youtube.com/embed/-nH5V7X5jPY?mute=1" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen 
-            title="The Captains Quarters"
+          <iframe
+            src="https://www.youtube.com/embed/xGlY9K1wRSo?mute=1"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            title="The Reclamation — Season 1 Trailer"
             loading="lazy">
           </iframe>
         </div>
@@ -1113,13 +1200,14 @@
             <span class="card-badge new">New</span>
             <span class="card-match">95% Match</span>
           </div>
-          <div class="title-card-name">The Captains Quarters</div>
+          <div class="title-card-name">The Reclamation: Season 1 Trailer</div>
           <div class="title-card-genre">
-            Drama <span class="dot">•</span> Indie <span class="dot">•</span> Mini-Series
+            Sci-Fi <span class="dot">•</span> Drama <span class="dot">•</span> Mini-Series
           </div>
           <p class="title-card-desc">
-            Step inside The Captains Quarters for an immersive journey through stories that 
-            challenge convention and redefine independent storytelling.
+            The official Season 1 trailer for The Reclamation. Watch the full arc of discovery,
+            conflict, and consequence unfold — a civilization reshaped by data sovereignty,
+            told through the perspectives of those who lived it from the inside.
           </p>
         </div>
       </div>
@@ -1184,24 +1272,61 @@
         </div>
       </a>
 
+      <!-- YASHHH -->
+      <a class="show-card" href="movie/Yashhh">
+        <img class="show-card-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=720&q=80" alt="YASHHH — India's Rising Pop Star" style="background:linear-gradient(135deg,#ff6b35,#f7c948,#e5397d);">
+        <span class="show-rank">5</span>
+        <div class="show-card-overlay">
+          <div class="show-card-badge irl" style="background:linear-gradient(135deg,#ff6b35,#e5397d);">IRL Original</div>
+          <div class="show-card-title">YASHHH</div>
+          <div class="show-card-sub">Yashmeeth — India's Rising Pop Star</div>
+          <div class="show-card-desc">The John Mayer meets Alan Thicke of India — follow YASHHH behind the scenes as he navigates concerts, personal life, and bidding wars between India's top record labels.</div>
+        </div>
+      </a>
+
     </div>
   </section>
 
-  <!-- ===== FEATURED: CAPTAINS QUARTERS ===== -->
-  <section class="row">
-    <div class="row-header">
-      <h2 class="row-title">Now Playing: <span class="accent">The Captains Quarters</span></h2>
+  <!-- ===== BIGO LIVE TRENDING ===== -->
+  <section class="row" id="bigo-live" style="padding:0 var(--row-pad,48px) 16px;">
+    <div class="row-header" style="display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap;">
+      <h2 class="row-title" style="display:flex;align-items:center;gap:10px;">
+        <span style="width:9px;height:9px;border-radius:50%;background:#FF0080;display:inline-block;animation:livePulse 1.5s infinite;flex-shrink:0;"></span>
+        Bigo Live <span class="accent" style="color:#FF0080;">Trending</span>
+      </h2>
+      <a href="movie/BigoLive" style="font-size:.82rem;color:#FF0080;text-decoration:none;font-weight:700;white-space:nowrap;border:1px solid rgba(255,0,128,.3);padding:6px 14px;border-radius:999px;transition:all .2s;" onmouseover="this.style.background='rgba(255,0,128,.1)'" onmouseout="this.style.background=''">&rarr; Full Creator Hub</a>
     </div>
-    <div class="featured-player">
-      <div class="featured-video">
+
+    <!-- Mini leaderboard -->
+    <div id="movie-bigo-lb" style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+      <!-- Skeleton rows -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;height:56px;animation:shimmer 1.5s infinite;background:linear-gradient(90deg,#141414 25%,#1a1a1a 50%,#141414 75%);background-size:200% 100%;"></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;height:56px;animation:shimmer 1.5s infinite;background:linear-gradient(90deg,#141414 25%,#1a1a1a 50%,#141414 75%);background-size:200% 100%;animation-delay:.1s;"></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;height:56px;animation:shimmer 1.5s infinite;background:linear-gradient(90deg,#141414 25%,#1a1a1a 50%,#141414 75%);background-size:200% 100%;animation-delay:.2s;"></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;height:56px;animation:shimmer 1.5s infinite;background:linear-gradient(90deg,#141414 25%,#1a1a1a 50%,#141414 75%);background-size:200% 100%;animation-delay:.3s;"></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;height:56px;animation:shimmer 1.5s infinite;background:linear-gradient(90deg,#141414 25%,#1a1a1a 50%,#141414 75%);background-size:200% 100%;animation-delay:.4s;"></div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED: THE RECLAMATION — NEW EPISODE ===== -->
+  <section class="row" id="now-playing-reclamation">
+    <div class="row-header">
+      <div class="now-playing-header">
+        <h2 class="row-title">Now Playing: <span class="accent">The Reclamation</span></h2>
+        <span class="newly-released-banner"><span class="pulse-dot"></span> Newly Released — March 23, 2026</span>
+      </div>
+    </div>
+    <div class="featured-player-shorts">
+      <div class="featured-video-shorts">
         <iframe 
-          src="https://www.youtube.com/embed/-nH5V7X5jPY" 
+          src="https://www.youtube.com/embed/iJOXfm3BdwY" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen 
-          title="The Captains Quarters — Full Episode"
+          title="The Reclamation — Latest Episode"
           loading="lazy">
         </iframe>
       </div>
+      <p class="release-date-tag">🎬 New episode dropped <strong>today</strong> — watch it right here!</p>
     </div>
   </section>
 
@@ -1218,7 +1343,6 @@
       but no sustainable income. <strong>I-RIS is the bridge.</strong>
     </p>
 
-    <!-- Infographic -->
     <div class="vision-infographic">
       <img src="images/iris-bridge-infographic.png" alt="The IRIS Vision — Bridging the gap between exclusive networks and free platforms. I-RIS is the Creator Incubator and Network Scaler.">
     </div>
@@ -1231,7 +1355,6 @@
     </p>
 
     <div class="vision-pillars">
-      <!-- FOR CREATORS -->
       <div class="vision-pillar">
         <div class="vision-pillar-icon creators">🎬</div>
         <h3>For Creators</h3>
@@ -1243,7 +1366,6 @@
           <li>All social &amp; original content managed in one place</li>
         </ul>
       </div>
-      <!-- FOR NETWORKS -->
       <div class="vision-pillar">
         <div class="vision-pillar-icon networks">📡</div>
         <h3>For Networks &amp; Studios</h3>
@@ -1255,7 +1377,6 @@
           <li>Co-produce original content with proven creators</li>
         </ul>
       </div>
-      <!-- FOR FANS -->
       <div class="vision-pillar">
         <div class="vision-pillar-icon fans">🔥</div>
         <h3>For Fans</h3>
@@ -1387,7 +1508,7 @@
         <div class="stat-label">Original Series</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">4</div>
+        <div class="stat-num">5</div>
         <div class="stat-label">IRL Shows</div>
       </div>
       <div class="stat-card">
@@ -1423,6 +1544,7 @@
       <a href="movie/SwamiTsunami">Swami Tsunami — Live in Miami</a>
       <a href="https://illmedicine.github.io/blissfulyogamiami/index.html" target="_blank" rel="noopener">Blissful Yoga Miami — Paola Villegas</a>
       <a href="movie/RizzRateDating">MilkyMoMo — Rizz Rate Dating</a>
+      <a href="movie/Yashhh">YASHHH — India's Rising Pop Star</a>
     </div>
     <div class="footer-col">
       <h4>Platform</h4>
@@ -1460,7 +1582,6 @@ window.addEventListener('scroll', () => {
     current = idx;
     slides[current].classList.add('active');
     dots[current].classList.add('active');
-    // Restart dot fill animation
     dots.forEach(d => {
       const fill = d.querySelector('.hero-dot-fill');
       if (fill) { fill.style.animation = 'none'; fill.offsetHeight; fill.style.animation = ''; }
@@ -1484,6 +1605,57 @@ window.addEventListener('scroll', () => {
   });
 
   startTimer();
+})();
+
+// ===== BIGO LIVE TRENDING MINI LEADERBOARD =====
+(function() {
+  function fmt(n) {
+    if (n == null) return '—';
+    n = parseInt(n); if (isNaN(n)) return '—';
+    if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+    if (n >= 1000) return (n/1000).toFixed(1)+'K';
+    return n.toLocaleString();
+  }
+
+  async function loadBigoLeaderboard() {
+    const container = document.getElementById('movie-bigo-lb');
+    if (!container) return;
+    try {
+      const r = await fetch('https://vivacious-forgiveness-production-dc09.up.railway.app/api/bigo/trending?limit=5', { signal: AbortSignal.timeout(5000) });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      const json = await r.json();
+      const channels = (json.data || []).slice(0, 5);
+      if (!channels.length) throw new Error('empty');
+
+      container.innerHTML = channels.map((ch, i) => {
+        const isLive = ch.is_live;
+        const viewers = ch.current_viewers || 0;
+        return `
+          <div style="background:var(--surface);border:1px solid ${isLive ? 'rgba(255,0,128,.3)' : 'var(--border)'};border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;transition:all .2s;">
+            <span style="font-size:.9rem;font-weight:900;color:var(--text-dim);width:20px;text-align:center;">${i+1}</span>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:700;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${ch.channel_name || ch.username || 'Unknown'}</div>
+              <div style="font-size:.72rem;color:var(--text-dim);display:flex;gap:10px;margin-top:2px;">
+                <span>${fmt(ch.peak_viewers)} peak</span>
+                <span>${fmt(ch.followers_count)} followers</span>
+              </div>
+            </div>
+            ${isLive ? `<span style="display:flex;align-items:center;gap:5px;font-size:.7rem;font-weight:700;color:#FF0080;border:1px solid rgba(255,0,128,.3);border-radius:999px;padding:3px 9px;flex-shrink:0;"><span style="width:5px;height:5px;border-radius:50%;background:#FF0080;animation:livePulse 1.5s infinite;"></span> ${fmt(viewers)}</span>`
+              : `<span style="font-size:.7rem;color:var(--text-dim);flex-shrink:0;">Offline</span>`}
+          </div>`;
+      }).join('');
+    } catch {
+      const container = document.getElementById('movie-bigo-lb');
+      if (container) container.innerHTML = `
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <span style="font-size:.85rem;color:var(--text-muted);">Live Bigo data requires the backend server.</span>
+          <a href="movie/BigoLive" style="font-size:.8rem;color:#FF0080;text-decoration:none;font-weight:700;white-space:nowrap;">View Hub &rarr;</a>
+        </div>`;
+    }
+  }
+
+  loadBigoLeaderboard();
+  setInterval(loadBigoLeaderboard, 3 * 60 * 1000);
 })();
 </script>
 

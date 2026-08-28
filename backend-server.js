@@ -538,9 +538,6 @@ app.delete('/api/bigo/creators/featured/:id', adminAuth, (req, res) => {
   res.json({ success: true });
 });
 
-// Root serves movie.html so illy-ris.com/ shows the hub without /movie.html in the URL
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'movie.html')));
-
 // Serve static files from project root for the IRIS pages
 app.use(express.static(path.join(__dirname)));
 
