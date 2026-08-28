@@ -371,13 +371,15 @@ app.get('/api/bigo/creators/featured', async (req, res) => {
     await Promise.allSettled(creators.map(async c => {
       try {
         const profile = await bigoScraper.getCreator(c.bigo_username);
-        // Overwrite live fields; keep display_name/bio/avatar if creator set them manually
-        c.is_live         = profile.is_live;
-        c.current_viewers = profile.current_viewers;
+        // Only update live status/viewers from scraper if no manual override is active
+        if (!c.status_override) {
+          c.is_live         = profile.is_live;
+          c.current_viewers = profile.current_viewers;
+        }
+        // Always update enrichment fields from scraper
         if (profile.peak_viewers)    { c.peak_viewers    = profile.peak_viewers;    dirty = true; }
         if (profile.followers_count) { c.followers_count = profile.followers_count; dirty = true; }
         if (profile.avatar && !c.avatar) { c.avatar = profile.avatar;              dirty = true; }
-        // Use Bigo's real display name if the stored one is still the raw Bigo ID
         if (profile.channel_name && profile.channel_name !== c.bigo_username && c.display_name === c.bigo_username) {
           c.display_name = profile.channel_name; dirty = true;
         }
@@ -459,7 +461,8 @@ app.post('/api/bigo/creators/featured/:id/status', adminAuth, (req, res) => {
   const { is_live, current_viewers } = req.body;
   if (typeof is_live === 'boolean') creators[idx].is_live = is_live;
   if (current_viewers != null) creators[idx].current_viewers = parseInt(current_viewers) || 0;
-  creators[idx].status_override = true;
+  // Mark Offline clears the override so auto-detection resumes; Mark Live holds the override
+  creators[idx].status_override = is_live === true;
   creators[idx].status_set_at = new Date().toISOString();
   writeCreators(creators);
   res.json({ success: true, creator: creators[idx] });

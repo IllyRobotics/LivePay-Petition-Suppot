@@ -75,29 +75,13 @@
 
     /* STREAM PLAYER */
     .stream-section{display:flex;flex-direction:column;gap:20px;}
+    .stream-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+    .stream-status{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--text-muted);}
+    .stream-status .live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,0,128,.15);border:1px solid rgba(255,0,128,.4);border-radius:999px;padding:4px 12px;font-size:.72rem;font-weight:800;color:var(--bigo);text-transform:uppercase;letter-spacing:1px;}
+    .stream-status .live-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--bigo);animation:livePulse 1.4s infinite;}
     .stream-player{position:relative;background:#000;border-radius:16px;overflow:hidden;border:1px solid var(--border);aspect-ratio:16/9;}
-    .sp-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(20px) brightness(.35);transform:scale(1.08);}
-    .sp-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;}
-    .sp-avatar{width:96px;height:96px;border-radius:50%;border:3px solid rgba(255,255,255,.15);object-fit:cover;margin-bottom:4px;}
-    .sp-name{font-size:1.3rem;font-weight:800;}
-    .sp-status{font-size:.85rem;color:var(--text-muted);}
-    .sp-live-badge{display:flex;align-items:center;gap:6px;background:rgba(255,0,128,.15);border:1px solid rgba(255,0,128,.4);border-radius:999px;padding:5px 14px;font-size:.75rem;font-weight:800;color:var(--bigo);text-transform:uppercase;letter-spacing:1.2px;}
-    .sp-viewer-count{font-size:1.5rem;font-weight:900;color:#fff;}
-    .sp-viewer-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-top:-8px;}
-    .sp-actions{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:280px;}
-    .sp-watch-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:10px;background:var(--bigo-grad);color:#fff;font-weight:800;font-size:1rem;text-decoration:none;border:none;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(255,0,128,.35);}
-    .sp-watch-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,0,128,.5);}
-    .sp-embed-btn{background:rgba(255,255,255,.06);color:var(--text-muted);border:1px solid var(--border);border-radius:8px;padding:9px 18px;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;width:100%;}
-    .sp-embed-btn:hover{color:#fff;border-color:rgba(255,255,255,.2);}
-    /* Iframe embed modal */
-    .embed-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
-    .embed-modal.open{opacity:1;pointer-events:all;}
-    .embed-modal-inner{width:100%;max-width:900px;position:relative;}
-    .embed-close{position:absolute;top:-44px;right:0;background:rgba(255,255,255,.1);border:1px solid var(--border);color:#fff;border-radius:8px;padding:6px 16px;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;}
-    .embed-close:hover{background:rgba(255,255,255,.2);}
-    .embed-iframe-wrap{width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#000;}
-    .embed-iframe-wrap iframe{width:100%;height:100%;border:none;}
-    .embed-note{margin-top:12px;font-size:.75rem;color:var(--text-dim);text-align:center;line-height:1.5;}
+    .stream-player iframe{width:100%;height:100%;border:none;display:block;}
+    .stream-note{font-size:.72rem;color:var(--text-dim);text-align:center;line-height:1.5;}
 
     /* ABOUT SECTION */
     .about-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;}
@@ -212,26 +196,21 @@
   <!-- LEFT: Stream + About -->
   <div class="stream-section">
 
-    <!-- Player -->
-    <div class="stream-player" id="streamPlayer">
-      <div class="sp-bg" id="spBg"></div>
-      <div class="sp-overlay">
-        <img class="sp-avatar" id="spAvatar" src="" alt="">
-        <div class="sp-name" id="spName"></div>
-        <div id="spLiveBadge" class="sp-live-badge" style="display:none;">
-          <span class="live-dot"></span> Live Now
-        </div>
-        <div class="sp-viewer-count" id="spViewers" style="display:none;"></div>
-        <div class="sp-viewer-label" id="spViewersLabel" style="display:none;">viewers watching</div>
-        <div class="sp-status" id="spStatus"></div>
-        <div class="sp-actions">
-          <a class="sp-watch-btn" id="spWatchBtn" href="#" target="_blank" rel="noopener">
-            ▶ &nbsp;Watch Live on Bigo
-          </a>
-          <button class="sp-embed-btn" id="openEmbedBtn">Try Embedded Player</button>
-        </div>
+    <!-- Stream header bar -->
+    <div class="stream-header">
+      <div class="stream-status" id="streamStatus">
+        <span id="streamStatusText" style="color:var(--text-dim);">Loading…</span>
       </div>
+      <a class="btn btn-bigo" id="spWatchBtn" href="#" target="_blank" rel="noopener" style="font-size:.8rem;padding:8px 16px;">Open on Bigo ↗</a>
     </div>
+
+    <!-- Embedded player (loads Bigo page directly) -->
+    <div class="stream-player" id="streamPlayer">
+      <iframe id="streamIframe" src="about:blank" frameborder="0"
+        allowfullscreen allow="autoplay; fullscreen; camera; microphone"
+        scrolling="no" title="Bigo Live Stream"></iframe>
+    </div>
+    <p class="stream-note">Live stream embedded from Bigo Live. If the player appears blank, use <strong>Open on Bigo ↗</strong> above to watch directly.</p>
 
     <!-- About -->
     <div class="about-card" id="aboutCard">
@@ -302,17 +281,6 @@
   <h2>Creator Not Found</h2>
   <p>This Creator's Corner doesn't exist or hasn't been set up yet.</p>
   <a class="btn btn-bigo" href="./index.html">Back to Bigo Hub</a>
-</div>
-
-<!-- EMBED MODAL -->
-<div class="embed-modal" id="embedModal">
-  <div class="embed-modal-inner">
-    <button class="embed-close" id="embedClose">Close ✕</button>
-    <div class="embed-iframe-wrap">
-      <iframe id="embedIframe" src="about:blank" allowfullscreen allow="autoplay; fullscreen" title="Bigo Live Stream"></iframe>
-    </div>
-    <div class="embed-note">If the player doesn't load, Bigo may restrict external embedding. Use the "Watch Live on Bigo" button to open the stream directly.</div>
-  </div>
 </div>
 
 <!-- FOOTER -->
@@ -480,38 +448,20 @@ function render(cr) {
   else badgesEl.innerHTML += `<span class="badge badge-offline">Currently Offline</span>`;
   badgesEl.innerHTML += `<span class="badge badge-featured">I-RIS Featured Creator</span>`;
 
-  // Stream player
-  document.getElementById('spBg').style.backgroundImage = avatar !== BLANK_AVATAR ? `url(${avatar})` : `linear-gradient(135deg,#1a0010,#060d1c)`;
-  document.getElementById('spAvatar').src = avatar;
-  document.getElementById('spAvatar').onerror = () => { document.getElementById('spAvatar').src = BLANK_AVATAR; };
-  document.getElementById('spName').textContent = displayName;
-  document.getElementById('spWatchBtn').href = bigoUrl;
-  document.getElementById('watchBtn').href = bigoUrl;
-  if (live) {
-    document.getElementById('spLiveBadge').style.display = 'flex';
-    document.getElementById('spViewers').style.display = 'block';
-    document.getElementById('spViewers').textContent = fmtRaw(cr.current_viewers);
-    document.getElementById('spViewersLabel').style.display = 'block';
-    document.getElementById('spStatus').textContent = '';
-  } else {
-    document.getElementById('spStatus').textContent = `${displayName} is currently offline. Follow on Bigo to get notified when they go live.`;
-  }
+  // Stream player — load the Bigo page directly in the iframe
+  const streamUrl = bigoUrl || `https://www.bigo.tv/${cr.bigo_username}`;
+  document.getElementById('streamIframe').src = streamUrl;
+  document.getElementById('spWatchBtn').href = streamUrl;
+  document.getElementById('navWatchBtn').href = streamUrl;
+  document.getElementById('watchBtn').href = streamUrl;
 
-  // Embed button
-  document.getElementById('openEmbedBtn').addEventListener('click', () => {
-    document.getElementById('embedIframe').src = `https://www.bigo.tv/cn/live.html?roomId=${encodeURIComponent(cr.bigo_username)}`;
-    document.getElementById('embedModal').classList.add('open');
-  });
-  document.getElementById('embedClose').addEventListener('click', () => {
-    document.getElementById('embedModal').classList.remove('open');
-    document.getElementById('embedIframe').src = 'about:blank';
-  });
-  document.getElementById('embedModal').addEventListener('click', e => {
-    if (e.target === document.getElementById('embedModal')) {
-      document.getElementById('embedModal').classList.remove('open');
-      document.getElementById('embedIframe').src = 'about:blank';
-    }
-  });
+  // Stream status bar
+  const statusEl = document.getElementById('streamStatus');
+  if (live) {
+    statusEl.innerHTML = `<span class="live-pill"><span class="dot"></span> Live Now</span><span style="margin-left:4px;">${fmtRaw(cr.current_viewers)} watching</span>`;
+  } else {
+    statusEl.innerHTML = `<span id="streamStatusText" style="color:var(--text-dim);">Currently offline — stream will appear here when live</span>`;
+  }
 
   // About
   const bio = cr.bio || `${displayName} is a featured Bigo Live creator on I-RIS. Watch their streams live and follow their journey.`;
