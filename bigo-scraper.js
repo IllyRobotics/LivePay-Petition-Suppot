@@ -207,26 +207,39 @@ async function getTrending(limit = 10, forceRefresh = false) {
 }
 
 async function getCreator(username) {
-  try {
-    const r = await request(
-      `https://www.bigo.tv/api/getRoomInfo?siteId=${encodeURIComponent(username)}`
-    );
-    if (r.status !== 200) throw new Error(`HTTP ${r.status}`);
-    const json = JSON.parse(r.body);
-    const d = json.roomInfo || json.data || json;
-    return {
-      channel_name    : d.nick || d.nickName || username,
-      username,
-      is_live         : d.status === 1 || d.isLive === true || d.liveStatus === 1,
-      current_viewers : parseInt(d.clickCount || d.audienceCount || 0) || 0,
-      peak_viewers    : parseInt(d.clickCount || 0) || 0,
-      followers_count : parseInt(d.fanCount || 0) || 0,
-      room_topic      : d.roomTopic || '',
-      avatar          : d.snapshot || d.headPicture || '',
-    };
-  } catch (e) {
-    throw new Error(`Could not fetch creator ${username}: ${e.message}`);
+  const uid = encodeURIComponent(username);
+  // Try multiple Bigo endpoints in sequence
+  const attempts = [
+    () => request(`https://www.bigo.tv/api/getRoomInfo?siteId=${uid}`),
+    () => request(`https://www.bigo.tv/OB.WEB.WEBSITE/api/bigo/userinfo?siteId=${uid}`),
+    () => request('https://www.bigo.tv/api/user/info', {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(`{"siteId":"${username}"}`) },
+      body   : `{"siteId":"${username}"}`,
+    }),
+  ];
+  for (const attempt of attempts) {
+    try {
+      const r = await attempt();
+      if (r.status !== 200) continue;
+      const json = JSON.parse(r.body);
+      const d = json.roomInfo || json.userInfo || json.data || json;
+      if (!d || typeof d !== 'object') continue;
+      const name = d.nick || d.nickName || d.userName || d.displayName;
+      if (!name || name === username) continue; // empty / passthrough — endpoint probably blocked
+      return {
+        channel_name    : name,
+        username,
+        is_live         : d.status === 1 || d.isLive === true || d.liveStatus === 1,
+        current_viewers : parseInt(d.clickCount || d.audienceCount || d.userCount || 0) || 0,
+        peak_viewers    : parseInt(d.peakViewers || d.clickCount || 0) || 0,
+        followers_count : parseInt(d.fanCount || d.followers || 0) || 0,
+        room_topic      : d.roomTopic || d.gameInfo?.gameName || '',
+        avatar          : d.snapshot || d.headPicture || d.coverUrl || d.avatarUrl || '',
+      };
+    } catch (_) {}
   }
+  throw new Error(`Could not fetch creator ${username}: all endpoints blocked or returned no data`);
 }
 
 // ─── Daily auto-refresh ───────────────────────────────────────────────────────

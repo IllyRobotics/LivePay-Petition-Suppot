@@ -409,6 +409,11 @@
         <label>Bigo Profile URL <span style="color:var(--text-dim)">(optional)</span></label>
         <input type="url" id="f-url" placeholder="https://www.bigo.tv/yourname">
       </div>
+      <div class="form-row">
+        <label>Profile Picture URL <span style="color:var(--text-dim)">(optional — paste your Bigo avatar link)</span></label>
+        <input type="url" id="f-avatar" placeholder="https://…">
+        <div class="hint">Right-click your profile pic on Bigo Live → Copy image address.</div>
+      </div>
       <button class="btn btn-bigo modal-submit" id="applySubmit">Submit Application</button>
     </div>
     <div class="modal-success" id="applySuccess">
@@ -683,18 +688,19 @@ document.getElementById('modalClose').addEventListener('click', closeApplyModal)
 document.getElementById('applyModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeApplyModal(); });
 
 document.getElementById('applySubmit').addEventListener('click', async () => {
-  const name = document.getElementById('f-name').value.trim();
-  const bigo = document.getElementById('f-bigo').value.trim().replace(/^@/,'');
-  const bio  = document.getElementById('f-bio').value.trim();
-  const url  = document.getElementById('f-url').value.trim();
-  const errEl = document.getElementById('applyError');
+  const name   = document.getElementById('f-name').value.trim();
+  const bigo   = document.getElementById('f-bigo').value.trim().replace(/^@/,'');
+  const bio    = document.getElementById('f-bio').value.trim();
+  const url    = document.getElementById('f-url').value.trim();
+  const avatar = document.getElementById('f-avatar').value.trim();
+  const errEl  = document.getElementById('applyError');
   errEl.style.display = 'none';
   if (!name || !bigo) { errEl.textContent = 'Display name and Bigo username are required.'; errEl.style.display = 'block'; return; }
   const btn = document.getElementById('applySubmit');
   btn.disabled = true; btn.textContent = 'Submitting…';
   const { ok, data } = await apiFetch('/creators/apply', {
     method: 'POST',
-    body: JSON.stringify({ display_name: name, bigo_username: bigo, bio, bigo_url: url }),
+    body: JSON.stringify({ display_name: name, bigo_username: bigo, bio, bigo_url: url, avatar }),
   });
   btn.disabled = false; btn.textContent = 'Submit Application';
   if (ok) {
@@ -726,14 +732,15 @@ async function initAdmin() {
 
     const appsEl = document.getElementById('adminApplications');
     appsEl.innerHTML = apps.length ? apps.map(a => `
-      <div class="admin-row" data-id="${a.id}">
-        <div>
+      <div class="admin-row" data-id="${a.id}" style="flex-wrap:wrap;gap:8px;">
+        <div style="flex:1;min-width:0;">
           <div class="ar-name">${a.display_name}</div>
-          <div class="ar-id">@${a.bigo_username}</div>
+          <div class="ar-id">@${a.bigo_username}${a.bio?' — '+a.bio.slice(0,60)+(a.bio.length>60?'…':''):''}</div>
         </div>
         <span class="ar-status ${a.status}">${a.status}</span>
         <span class="ar-time">${new Date(a.submitted_at).toLocaleDateString()}</span>
         ${a.status==='pending'?`
+          <input type="url" class="admin-avatar-input" data-id="${a.id}" placeholder="Avatar URL (optional)" value="${a.avatar||''}" style="flex:1 1 100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:#fff;font-size:.75rem;min-width:0;">
           <button class="admin-btn approve" data-id="${a.id}">Approve</button>
           <button class="admin-btn reject"  data-id="${a.id}">Reject</button>
         `:''}
@@ -751,7 +758,9 @@ async function initAdmin() {
       </div>`).join('') : '<div class="admin-empty">No featured creators yet.</div>';
 
     appsEl.querySelectorAll('.admin-btn.approve').forEach(btn => btn.addEventListener('click', async () => {
-      await apiFetch(`/creators/approve/${btn.dataset.id}`, { method: 'POST' });
+      const avatarInput = appsEl.querySelector(`.admin-avatar-input[data-id="${btn.dataset.id}"]`);
+      const avatarUrl = avatarInput ? avatarInput.value.trim() : '';
+      await apiFetch(`/creators/approve/${btn.dataset.id}`, { method: 'POST', body: JSON.stringify({ avatar: avatarUrl }) });
       await render(); await loadFeaturedCreators();
     }));
     appsEl.querySelectorAll('.admin-btn.reject').forEach(btn => btn.addEventListener('click', async () => {

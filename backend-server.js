@@ -363,27 +363,29 @@ app.post('/api/bigo/refresh', async (req, res) => {
 
 // ===== CREATOR MANAGEMENT =====
 
-// GET /api/bigo/creators/featured — public: featured creators merged with live Bigo stats
+// GET /api/bigo/creators/featured — public: featured creators with live Bigo stats
 app.get('/api/bigo/creators/featured', async (req, res) => {
   try {
     const creators = readCreators();
-    if (creators.length > 0) {
+    let dirty = false;
+    await Promise.allSettled(creators.map(async c => {
       try {
-        const { data: trending } = await bigoScraper.getTrending(50);
-        const index = Object.fromEntries(trending.map(t => [t.username, t]));
-        creators.forEach(c => {
-          const live = index[c.bigo_username];
-          if (live) {
-            c.is_live         = live.is_live;
-            c.current_viewers = live.current_viewers;
-            c.peak_viewers    = live.peak_viewers || c.peak_viewers;
-            c.followers_count = live.followers_count || c.followers_count;
-            c.room_topic      = live.room_topic;
-            if (live.avatar) c.avatar = live.avatar;
-          }
-        });
-      } catch (_) {}
-    }
+        const profile = await bigoScraper.getCreator(c.bigo_username);
+        // Overwrite live fields; keep display_name/bio/avatar if creator set them manually
+        c.is_live         = profile.is_live;
+        c.current_viewers = profile.current_viewers;
+        if (profile.peak_viewers)    { c.peak_viewers    = profile.peak_viewers;    dirty = true; }
+        if (profile.followers_count) { c.followers_count = profile.followers_count; dirty = true; }
+        if (profile.avatar && !c.avatar) { c.avatar = profile.avatar;              dirty = true; }
+        // Use Bigo's real display name if the stored one is still the raw Bigo ID
+        if (profile.channel_name && profile.channel_name !== c.bigo_username && c.display_name === c.bigo_username) {
+          c.display_name = profile.channel_name; dirty = true;
+        }
+      } catch (_) {
+        // API blocked from Railway — fall back to stored data silently
+      }
+    }));
+    if (dirty) writeCreators(creators); // persist enriched data for next cold start
     res.json({ creators });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -392,7 +394,7 @@ app.get('/api/bigo/creators/featured', async (req, res) => {
 
 // POST /api/bigo/creators/apply — public: creator self-applies
 app.post('/api/bigo/creators/apply', (req, res) => {
-  const { display_name, bigo_username, bio, bigo_url } = req.body;
+  const { display_name, bigo_username, bio, bigo_url, avatar } = req.body;
   if (!display_name || !bigo_username)
     return res.status(400).json({ error: 'display_name and bigo_username are required' });
 
@@ -406,7 +408,7 @@ app.post('/api/bigo/creators/apply', (req, res) => {
     bigo_username: bigo_username.trim().replace(/^@/, '').slice(0, 64),
     bio          : (bio || '').slice(0, 300),
     bigo_url     : bigo_url || `https://www.bigo.tv/${bigo_username}`,
-    avatar       : '',
+    avatar       : (avatar || '').slice(0, 500),
     peak_viewers : 0,
     followers_count: 0,
     status       : 'pending',
@@ -428,6 +430,8 @@ app.post('/api/bigo/creators/approve/:id', adminAuth, (req, res) => {
   const idx = apps.findIndex(a => a.id === req.params.id);
   if (idx === -1) return res.status(404).json({ error: 'Application not found' });
   apps[idx].status = 'approved';
+  // Admin can override avatar at approval time
+  if (req.body && req.body.avatar) apps[idx].avatar = req.body.avatar.slice(0, 500);
   writeApplications(apps);
   const creators = readCreators();
   if (!creators.some(c => c.bigo_username === apps[idx].bigo_username)) {
