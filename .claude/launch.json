@@ -1,0 +1,11 @@
+﻿{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "iris-backend",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["backend-server.js"],
+      "port": 5000
+    }
+  ]
+}

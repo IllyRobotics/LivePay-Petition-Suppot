@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Bigo Live × I-RIS — Creator's Corner</title>
+  <meta name="description" content="Featured Bigo Live creators on I-RIS. Live viewer counts, trending leaderboards, creator stats, and fan engagement — all in one place." />
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23FF0080' width='100' height='100'/><text x='50%' y='55%' font-size='52' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>BL</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#0a0a0a;--surface:#141414;--surface2:#1a1a1a;--surface3:#222;
+      --text:#fff;--text-muted:#a0a0a0;--text-dim:#666;
+      --accent:#4fd1ff;--accent2:#7c5cff;
+      --iris-grad:linear-gradient(135deg,#4fd1ff,#7c5cff);
+      --bigo:#FF0080;--bigo2:#FF6B35;
+      --bigo-grad:linear-gradient(135deg,#FF0080,#FF6B35);
+      --bigo-glow:rgba(255,0,128,.25);
+      --red:#e50914;--green:#46d369;--gold:#f5c518;
+      --border:rgba(255,255,255,.08);--radius:8px;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+    /* ===== NAV ===== */
+    .nav-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,.98);box-shadow:0 2px 20px rgba(0,0,0,.5);padding:0;}
+    .nav-inner{max-width:1400px;margin:auto;display:flex;align-items:center;padding:16px 48px;gap:32px;}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);}
+    .nav-logo-text{font-size:1.6rem;font-weight:900;letter-spacing:3px;background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .nav-logo-sub{font-size:.6rem;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-top:-2px;}
+    .nav-links{display:flex;gap:24px;align-items:center;list-style:none;flex:1;}
+    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s;}
+    .nav-links a:hover,.nav-links a.active{color:#fff;}
+    .nav-right{display:flex;gap:12px;align-items:center;margin-left:auto;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:var(--radius);font-weight:700;font-size:.9rem;text-decoration:none;border:none;cursor:pointer;transition:all .2s;}
+    .btn-primary{background:var(--iris-grad);color:#fff;box-shadow:0 4px 15px rgba(79,209,255,.2);}
+    .btn-primary:hover{transform:scale(1.03);}
+    .btn-bigo{background:var(--bigo-grad);color:#fff;box-shadow:0 4px 15px var(--bigo-glow);}
+    .btn-bigo:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(255,0,128,.4);}
+    .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);}
+    .btn-outline:hover{background:rgba(255,255,255,.08);}
+    .btn-sm{padding:8px 16px;font-size:.8rem;}
+
+    /* ===== HERO ===== */
+    .bigo-hero{position:relative;min-height:70vh;display:flex;align-items:flex-end;overflow:hidden;background:#000;padding-top:80px;}
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,0,128,.18) 0%,transparent 60%),radial-gradient(ellipse at 80% 30%,rgba(255,107,53,.12) 0%,transparent 60%),linear-gradient(180deg,#0a0a0a 0%,#050505 100%);}
+    .hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+    .hero-particles span{position:absolute;border-radius:50%;animation:float linear infinite;}
+    @keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:.6;}90%{opacity:.4;}100%{transform:translateY(-10vh) scale(1);opacity:0;}}
+    .hero-content{position:relative;z-index:2;max-width:1400px;margin:auto;width:100%;padding:0 48px 80px;}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:999px;background:rgba(255,0,128,.12);border:1px solid rgba(255,0,128,.3);font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--bigo);margin-bottom:20px;}
+    .live-dot{width:8px;height:8px;border-radius:50%;background:#FF0080;animation:livePulse 1.5s infinite;}
+    @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,0,128,.7);}50%{box-shadow:0 0 0 6px rgba(255,0,128,0);}}
+    .hero-title{font-size:clamp(3rem,7vw,5.5rem);font-weight:900;line-height:.95;margin-bottom:16px;}
+    .hero-title .bigo-text{background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .hero-title .iris-text{background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .hero-sub{font-size:1.15rem;color:rgba(255,255,255,.75);max-width:600px;line-height:1.6;margin-bottom:28px;}
+    .hero-stats-row{display:flex;gap:32px;margin-bottom:32px;flex-wrap:wrap;}
+    .hero-stat{text-align:left;}
+    .hero-stat .hs-num{font-size:2rem;font-weight:900;background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+    .hero-stat .hs-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;margin-top:2px;}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+
+    /* Live ticker */
+    .live-ticker{background:rgba(255,0,128,.08);border:1px solid rgba(255,0,128,.2);border-radius:12px;padding:12px 20px;display:flex;align-items:center;gap:12px;margin-bottom:24px;max-width:480px;}
+    .live-ticker .lt-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--bigo);white-space:nowrap;}
+    .live-ticker .lt-count{font-size:1.2rem;font-weight:900;color:#fff;}
+    .live-ticker .lt-sub{font-size:.8rem;color:var(--text-muted);}
+
+    /* ===== SECTION HEADERS ===== */
+    .section-wrap{max-width:1400px;margin:auto;padding:0 48px;}
+    .section-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding:48px 0 0;}
+    .section-title-row h2{font-size:1.7rem;font-weight:900;}
+    .section-title-row h2 .accent{background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .section-title-row h2 .iris{background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .section-badge{padding:4px 12px;border-radius:999px;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+    .badge-live{background:rgba(255,0,128,.15);color:var(--bigo);border:1px solid rgba(255,0,128,.3);}
+    .badge-iris{background:rgba(79,209,255,.1);color:var(--accent);border:1px solid rgba(79,209,255,.2);}
+
+    /* ===== TRENDING LEADERBOARD ===== */
+    .leaderboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:48px;}
+    .lb-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;transition:all .25s;cursor:default;position:relative;overflow:hidden;}
+    .lb-card:hover{border-color:rgba(255,0,128,.4);transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.4);}
+    .lb-card.is-live{border-color:rgba(255,0,128,.3);background:linear-gradient(135deg,rgba(255,0,128,.05),rgba(10,10,10,0));}
+    .lb-rank{font-size:2rem;font-weight:900;color:var(--text-dim);width:44px;text-align:center;flex-shrink:0;font-variant-numeric:tabular-nums;}
+    .lb-rank.top3{background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .lb-avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border);background:var(--surface2);}
+    .lb-avatar.is-live{border-color:var(--bigo);}
+    .lb-info{flex:1;min-width:0;}
+    .lb-name{font-weight:800;font-size:1rem;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .lb-title{font-size:.78rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px;}
+    .lb-stats{display:flex;gap:12px;}
+    .lb-stat{font-size:.72rem;color:var(--text-dim);}
+    .lb-stat strong{color:var(--text-muted);font-weight:700;}
+    .lb-live-badge{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:5px;background:rgba(255,0,128,.12);border:1px solid rgba(255,0,128,.3);border-radius:999px;padding:3px 10px;font-size:.65rem;font-weight:700;color:var(--bigo);text-transform:uppercase;letter-spacing:1px;}
+    .lb-viewers{font-size:.85rem;font-weight:800;color:#fff;margin-left:auto;flex-shrink:0;text-align:right;}
+    .lb-viewers .v-num{font-size:1rem;font-weight:900;display:block;}
+    .lb-viewers .v-label{font-size:.6rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);}
+
+    /* Skeleton loader */
+    .lb-card.skeleton{animation:shimmer 1.5s infinite;}
+    @keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+    .lb-card.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;}
+    .skeleton-text{border-radius:4px;background:var(--surface3);height:14px;margin-bottom:6px;}
+    .skeleton-avatar{width:56px;height:56px;border-radius:50%;background:var(--surface3);}
+
+    /* ===== FEATURED CREATORS GRID ===== */
+    .creators-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-bottom:48px;}
+    .creator-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .25s;position:relative;}
+    .creator-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.5);border-color:rgba(255,0,128,.3);}
+    .creator-card.live-now{border-color:rgba(255,0,128,.4);}
+    .cc-banner{height:120px;background:linear-gradient(135deg,#1a0010,#1a0800);position:relative;overflow:hidden;}
+    .cc-banner-img{width:100%;height:100%;object-fit:cover;opacity:.6;}
+    .cc-live-overlay{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:flex-end;padding:12px;}
+    .cc-live-pill{display:flex;align-items:center;gap:5px;background:rgba(255,0,128,.9);border-radius:999px;padding:4px 10px;font-size:.65rem;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;}
+    .cc-live-pill .dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:livePulse 1.5s infinite;}
+    .cc-avatar-wrap{position:absolute;bottom:-28px;left:20px;}
+    .cc-avatar{width:64px;height:64px;border-radius:50%;border:3px solid var(--bg);object-fit:cover;background:var(--surface2);}
+    .cc-body{padding:40px 20px 24px;}
+    .cc-name{font-size:1.1rem;font-weight:800;margin-bottom:2px;}
+    .cc-handle{font-size:.78rem;color:var(--bigo);font-weight:600;margin-bottom:8px;}
+    .cc-desc{font-size:.82rem;color:var(--text-muted);line-height:1.5;margin-bottom:16px;}
+    .cc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+    .cc-stat{background:var(--surface2);border-radius:10px;padding:10px 8px;text-align:center;}
+    .cc-stat .n{font-size:.95rem;font-weight:900;display:block;background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .cc-stat .l{font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);}
+    .cc-actions{display:flex;gap:8px;}
+    .cc-actions a{flex:1;text-align:center;padding:9px;border-radius:8px;font-size:.8rem;font-weight:700;text-decoration:none;transition:all .2s;}
+    .cc-btn-primary{background:var(--bigo-grad);color:#fff;}
+    .cc-btn-primary:hover{transform:scale(1.03);}
+    .cc-btn-secondary{background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);}
+    .cc-btn-secondary:hover{color:#fff;border-color:rgba(255,255,255,.2);}
+    .cc-platform-icons{display:flex;gap:6px;margin-bottom:10px;}
+    .cc-plat{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+
+    /* Coming soon creator card */
+    .creator-card.coming-soon{border-style:dashed;border-color:rgba(255,255,255,.12);}
+    .creator-card.coming-soon .cc-banner{background:linear-gradient(135deg,#111,#1a1a1a);}
+    .coming-soon-body{padding:40px 20px 24px;text-align:center;}
+    .cs-icon{font-size:2.5rem;margin-bottom:12px;display:block;}
+    .cs-title{font-size:1rem;font-weight:700;margin-bottom:6px;}
+    .cs-sub{font-size:.82rem;color:var(--text-muted);line-height:1.5;margin-bottom:16px;}
+
+    /* ===== FANS ENGAGEMENT ===== */
+    .fans-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 48px;margin:0;}
+    .fans-inner{max-width:1400px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+    .fans-text h2{font-size:2.2rem;font-weight:900;margin-bottom:16px;line-height:1.1;}
+    .fans-text h2 .bigo{background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .fans-text p{color:var(--text-muted);font-size:.95rem;line-height:1.7;margin-bottom:20px;}
+    .fans-perks{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .fans-perk{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;}
+    .fans-perk .p-icon{font-size:1.3rem;flex-shrink:0;}
+    .fans-perk .p-text{font-size:.82rem;font-weight:600;color:var(--text-muted);}
+    .fans-visual{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .fans-stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;}
+    .fans-stat-card .fsn{font-size:2rem;font-weight:900;background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .fans-stat-card .fsl{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);font-weight:600;margin-top:4px;}
+
+    /* ===== HOW IT WORKS ===== */
+    .how-section{padding:64px 48px;}
+    .how-inner{max-width:1400px;margin:auto;}
+    .how-header{text-align:center;margin-bottom:48px;}
+    .how-header h2{font-size:2rem;font-weight:900;margin-bottom:8px;}
+    .how-header h2 .accent{background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .how-header p{color:var(--text-muted);max-width:600px;margin:auto;font-size:.95rem;line-height:1.6;}
+    .how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+    .how-step{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 20px;text-align:center;position:relative;}
+    .how-step::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);font-size:1.2rem;color:var(--text-dim);font-weight:900;}
+    .how-step:last-child::after{display:none;}
+    .step-num{width:44px;height:44px;border-radius:50%;background:var(--bigo-grad);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;color:#fff;margin:0 auto 16px;}
+    .step-title{font-size:.95rem;font-weight:700;margin-bottom:6px;}
+    .step-desc{font-size:.8rem;color:var(--text-muted);line-height:1.5;}
+
+    /* ===== CTA ===== */
+    .cta-section{padding:80px 48px;text-align:center;position:relative;overflow:hidden;}
+    .cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(255,0,128,.08),transparent 70%);}
+    .cta-inner{position:relative;z-index:1;max-width:700px;margin:auto;}
+    .cta-inner h2{font-size:2.5rem;font-weight:900;margin-bottom:12px;}
+    .cta-inner h2 .bigo{background:var(--bigo-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .cta-inner p{color:var(--text-muted);font-size:1rem;line-height:1.6;margin-bottom:28px;}
+    .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+    /* ===== FOOTER ===== */
+    .site-footer{padding:48px 48px 32px;border-top:1px solid var(--border);max-width:1400px;margin:auto;}
+    .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:32px;}
+    .footer-col h4{font-size:.75rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:14px;}
+    .footer-col a{display:block;color:var(--text-dim);text-decoration:none;font-size:.85rem;margin-bottom:10px;transition:color .2s;}
+    .footer-col a:hover{color:#fff;}
+    .footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;gap:12px;}
+    .footer-bottom p{color:var(--text-dim);font-size:.8rem;}
+    .footer-logo{font-weight:900;font-size:1.1rem;letter-spacing:2px;background:var(--iris-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+    /* API status bar */
+    .api-status{background:rgba(255,107,53,.08);border-bottom:1px solid rgba(255,107,53,.2);padding:8px 48px;font-size:.78rem;color:rgba(255,107,53,.8);display:none;align-items:center;gap:8px;}
+    .api-status.show{display:flex;}
+
+    @media(max-width:1000px){
+      .leaderboard-grid{grid-template-columns:1fr;}
+      .how-steps{grid-template-columns:1fr 1fr;}
+      .how-step::after{display:none;}
+      .fans-inner{grid-template-columns:1fr;}
+    }
+    @media(max-width:768px){
+      .nav-inner{padding:12px 20px;}
+      .nav-links{display:none;}
+      .hero-content{padding:0 20px 60px;}
+      .hero-title{font-size:2.8rem;}
+      .section-wrap{padding:0 20px;}
+      .fans-section{padding:40px 20px;}
+      .how-section{padding:40px 20px;}
+      .cta-section{padding:48px 20px;}
+      .site-footer{padding:32px 20px;}
+      .footer-grid{grid-template-columns:1fr 1fr;}
+      .creators-grid{grid-template-columns:1fr;}
+      .how-steps{grid-template-columns:1fr;}
+      .fans-perks{grid-template-columns:1fr;}
+      .fans-visual{grid-template-columns:1fr 1fr;}
+      .hero-stats-row{gap:20px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- API status warning (shown when backend unreachable) -->
+<div class="api-status" id="apiStatus">
+  ⚠ Live data unavailable — run <strong>node backend-server.js</strong> locally to enable real-time stats.
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../movie.html">
+      <span>
+        <div class="nav-logo-text">I-RIS</div>
+        <div class="nav-logo-sub">Bigo Live Hub</div>
+      </span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../movie.html#irl">IRL Shows</a></li>
+      <li><a href="#trending">Trending</a></li>
+      <li><a href="#creators">Creators</a></li>
+      <li><a href="../../movie.html#iris-vision">For Creators</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="btn btn-outline btn-sm" href="../../movie.html">&larr; All Shows</a>
+      <a class="btn btn-bigo btn-sm" href="#creators">Featured Creators</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="bigo-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles" id="heroParticles"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="live-dot"></span>
+      Live on Bigo × I-RIS
+    </div>
+
+    <h1 class="hero-title">
+      <span class="bigo-text">Bigo Live</span><br>
+      <span style="color:rgba(255,255,255,.5);font-size:.55em;letter-spacing:2px;font-weight:600;text-transform:uppercase;">meets</span><br>
+      <span class="iris-text">I-RIS Studio</span>
+    </h1>
+
+    <p class="hero-sub">
+      Your favorite Bigo Live creators — now with their own Creator's Corner on I-RIS.
+      Live viewer counts, trending leaderboards, stats, and direct fan engagement, all in one place.
+    </p>
+
+    <div class="live-ticker">
+      <span class="live-dot"></span>
+      <span class="lt-label">Live Now</span>
+      <span class="lt-count" id="liveCount">—</span>
+      <span class="lt-sub">viewers across featured creators</span>
+    </div>
+
+    <div class="hero-stats-row">
+      <div class="hero-stat">
+        <div class="hs-num" id="statCreators">—</div>
+        <div class="hs-label">Featured Creators</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hs-num" id="statPeak">—</div>
+        <div class="hs-label">Peak Viewers</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hs-num" id="statFollowers">—</div>
+        <div class="hs-label">Combined Followers</div>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a class="btn btn-bigo" href="#creators">&#9654; See Featured Creators</a>
+      <a class="btn btn-outline" href="#trending">View Trending Leaderboard</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRENDING LEADERBOARD ===== -->
+<div class="section-wrap" id="trending">
+  <div class="section-title-row">
+    <h2>Trending <span class="accent">Bigo Live</span> Right Now</h2>
+    <span class="section-badge badge-live">&#9679; Live Data</span>
+  </div>
+
+  <div class="leaderboard-grid" id="leaderboardGrid">
+    <!-- Skeleton placeholders -->
+    <div class="lb-card skeleton" style="min-height:88px;"></div>
+    <div class="lb-card skeleton" style="min-height:88px;"></div>
+    <div class="lb-card skeleton" style="min-height:88px;"></div>
+    <div class="lb-card skeleton" style="min-height:88px;"></div>
+    <div class="lb-card skeleton" style="min-height:88px;"></div>
+    <div class="lb-card skeleton" style="min-height:88px;"></div>
+  </div>
+</div>
+
+<!-- ===== FEATURED CREATORS ===== -->
+<div class="section-wrap" id="creators">
+  <div class="section-title-row">
+    <h2>I-RIS <span class="iris">Featured</span> Creators</h2>
+    <span class="section-badge badge-iris">Creator's Corner</span>
+  </div>
+
+  <div class="creators-grid" id="creatorsGrid">
+
+    <!-- ==========================================
+         FEATURED CREATOR SLOTS
+         To add a creator: copy a .creator-card block,
+         update the bigo-username data attr, name, handle,
+         description, and set the Creator's Corner href.
+         ========================================== -->
+
+    <!-- SLOT 1: Featured Bigo Creator -->
+    <div class="creator-card" id="cc-slot-1" data-bigo-username="">
+      <div class="cc-banner">
+        <div class="cc-live-overlay">
+          <div class="cc-live-pill" style="display:none;" id="cc1-live">
+            <span class="dot"></span> Live
+          </div>
+        </div>
+        <div class="cc-avatar-wrap">
+          <img class="cc-avatar" src="" alt="" id="cc1-avatar">
+        </div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-name" id="cc1-name">Coming Soon</div>
+        <div class="cc-handle" id="cc1-handle">@bigo-creator</div>
+        <div class="cc-desc" id="cc1-desc">The first featured Bigo Live creator on I-RIS is coming soon. Check back for their full Creator's Corner launch.</div>
+        <div class="cc-stats">
+          <div class="cc-stat"><span class="n" id="cc1-followers">—</span><span class="l">Followers</span></div>
+          <div class="cc-stat"><span class="n" id="cc1-peak">—</span><span class="l">Peak</span></div>
+          <div class="cc-stat"><span class="n" id="cc1-avg">—</span><span class="l">Avg Viewers</span></div>
+        </div>
+        <div class="cc-actions">
+          <a href="#" class="cc-btn-primary" id="cc1-corner" style="pointer-events:none;opacity:.5;">Creator's Corner</a>
+          <a href="https://www.bigo.tv" target="_blank" rel="noopener" class="cc-btn-secondary">Watch on Bigo</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLOT 2 -->
+    <div class="creator-card" id="cc-slot-2" data-bigo-username="">
+      <div class="cc-banner">
+        <div class="cc-live-overlay">
+          <div class="cc-live-pill" style="display:none;" id="cc2-live">
+            <span class="dot"></span> Live
+          </div>
+        </div>
+        <div class="cc-avatar-wrap">
+          <img class="cc-avatar" src="" alt="" id="cc2-avatar">
+        </div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-name" id="cc2-name">Coming Soon</div>
+        <div class="cc-handle" id="cc2-handle">@bigo-creator</div>
+        <div class="cc-desc" id="cc2-desc">The second featured Bigo Live creator on I-RIS is on deck. Their Creator's Corner is being built now.</div>
+        <div class="cc-stats">
+          <div class="cc-stat"><span class="n" id="cc2-followers">—</span><span class="l">Followers</span></div>
+          <div class="cc-stat"><span class="n" id="cc2-peak">—</span><span class="l">Peak</span></div>
+          <div class="cc-stat"><span class="n" id="cc2-avg">—</span><span class="l">Avg Viewers</span></div>
+        </div>
+        <div class="cc-actions">
+          <a href="#" class="cc-btn-primary" id="cc2-corner" style="pointer-events:none;opacity:.5;">Creator's Corner</a>
+          <a href="https://www.bigo.tv" target="_blank" rel="noopener" class="cc-btn-secondary">Watch on Bigo</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLOT 3 -->
+    <div class="creator-card" id="cc-slot-3" data-bigo-username="">
+      <div class="cc-banner">
+        <div class="cc-live-overlay">
+          <div class="cc-live-pill" style="display:none;" id="cc3-live">
+            <span class="dot"></span> Live
+          </div>
+        </div>
+        <div class="cc-avatar-wrap">
+          <img class="cc-avatar" src="" alt="" id="cc3-avatar">
+        </div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-name" id="cc3-name">Coming Soon</div>
+        <div class="cc-handle" id="cc3-handle">@bigo-creator</div>
+        <div class="cc-desc" id="cc3-desc">A rising Bigo Live talent joining the I-RIS Creator Network. Stay tuned for their debut Creator's Corner.</div>
+        <div class="cc-stats">
+          <div class="cc-stat"><span class="n" id="cc3-followers">—</span><span class="l">Followers</span></div>
+          <div class="cc-stat"><span class="n" id="cc3-peak">—</span><span class="l">Peak</span></div>
+          <div class="cc-stat"><span class="n" id="cc3-avg">—</span><span class="l">Avg Viewers</span></div>
+        </div>
+        <div class="cc-actions">
+          <a href="#" class="cc-btn-primary" id="cc3-corner" style="pointer-events:none;opacity:.5;">Creator's Corner</a>
+          <a href="https://www.bigo.tv" target="_blank" rel="noopener" class="cc-btn-secondary">Watch on Bigo</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- "Apply" card — encourages new creators -->
+    <div class="creator-card coming-soon">
+      <div class="cc-banner" style="display:flex;align-items:center;justify-content:center;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,0,128,.4)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      </div>
+      <div class="coming-soon-body">
+        <span class="cs-icon">📡</span>
+        <div class="cs-title">Are You a Bigo Creator?</div>
+        <div class="cs-sub">Get your own Creator's Corner on I-RIS — live stats, fan engagement, and a dedicated hub your audience can always find you at.</div>
+        <a class="btn btn-bigo" href="../../movie.html#iris-vision" style="display:inline-flex;font-size:.85rem;">Apply for a Creator's Corner</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== FAN ENGAGEMENT ===== -->
+<section class="fans-section">
+  <div class="fans-inner">
+    <div class="fans-text">
+      <h2>Fan-First.<br><span class="bigo">Creator-Powered.</span></h2>
+      <p>
+        I-RIS puts fans directly in the creator's world. Every featured Bigo Live creator gets
+        a dedicated hub where their community lives — live stream alerts, stats, exclusive content,
+        and a direct line to show their support.
+      </p>
+      <p>
+        No algorithm hiding your favorite streamer. No missing a live because you weren't on Bigo
+        at that exact moment. I-RIS keeps you connected.
+      </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
+        <a class="btn btn-bigo" href="#creators">See Creators</a>
+        <a class="btn btn-outline" href="../../petition.html#donate">Support I-RIS</a>
+      </div>
+    </div>
+    <div>
+      <div class="fans-perks">
+        <div class="fans-perk"><span class="p-icon">🔴</span><span class="p-text">Live Now alerts when your creator goes live</span></div>
+        <div class="fans-perk"><span class="p-icon">📊</span><span class="p-text">Real-time viewer counts & peak stats</span></div>
+        <div class="fans-perk"><span class="p-icon">🏆</span><span class="p-text">Trending leaderboard — see who's hot right now</span></div>
+        <div class="fans-perk"><span class="p-icon">🎯</span><span class="p-text">Dedicated Creator's Corner for each featured streamer</span></div>
+        <div class="fans-perk"><span class="p-icon">💬</span><span class="p-text">Direct fan-to-creator engagement hub</span></div>
+        <div class="fans-perk"><span class="p-icon">📈</span><span class="p-text">Follower growth, avg viewers & performance trends</span></div>
+      </div>
+      <div class="fans-visual" style="margin-top:16px;">
+        <div class="fans-stat-card"><div class="fsn" id="totalLiveCreators">—</div><div class="fsl">Currently Live</div></div>
+        <div class="fans-stat-card"><div class="fsn" id="totalViewers">—</div><div class="fsl">Live Viewers</div></div>
+        <div class="fans-stat-card"><div class="fsn">Bigo</div><div class="fsl">Platform</div></div>
+        <div class="fans-stat-card"><div class="fsn">I-RIS</div><div class="fsl">Studio Partner</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-section">
+  <div class="how-inner">
+    <div class="how-header">
+      <h2>How <span class="accent">Creator's Corner</span> Works</h2>
+      <p>From Bigo Live to I-RIS — a seamless bridge between your stream and your fans' experience.</p>
+    </div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="step-num">1</div>
+        <div class="step-title">Creator Joins I-RIS</div>
+        <div class="step-desc">Bigo Live creators apply for a featured spot on the I-RIS platform — no exclusivity required.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">2</div>
+        <div class="step-title">Creator's Corner Built</div>
+        <div class="step-desc">I-RIS builds a dedicated hub with the creator's bio, stats, content, and community section.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">3</div>
+        <div class="step-title">Stats Go Live</div>
+        <div class="step-desc">StreamsCharts data powers real-time viewer counts, live indicators, and trending rankings.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">4</div>
+        <div class="step-title">Fans Engage</div>
+        <div class="step-desc">Fans find their creator on I-RIS, see when they're live, follow their stats, and support them directly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <h2>Ready to Join the<br><span class="bigo">Bigo × I-RIS</span> Network?</h2>
+    <p>Whether you're a Bigo creator looking for your own hub, or a fan who wants to support the platform — there's a place for you here.</p>
+    <div class="cta-btns">
+      <a class="btn btn-bigo" href="../../movie.html#iris-vision">I'm a Creator — Tell Me More</a>
+      <a class="btn btn-outline" href="../../petition.html#donate">I'm a Fan — Support I-RIS</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col"><h4>I-RIS</h4><a href="../../movie.html">Home</a><a href="../../movie.html#originals">Originals</a><a href="../../movie.html#irl">IRL Shows</a><a href="../../movie.html#about">About</a></div>
+    <div class="footer-col"><h4>Creator Corners</h4><a href="../HouseOfYoung">House of Young</a><a href="../SwamiTsunami">Swami Tsunami</a><a href="../RizzRateDating">Rizz Rate Dating</a><a href="../Yashhh">YASHHH</a><a href="./" style="color:var(--bigo);font-weight:700;">Bigo Live Hub</a></div>
+    <div class="footer-col"><h4>Platform</h4><a href="../../movie.html#iris-vision">For Creators</a><a href="../../movie.html#networks">For Networks</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="../../petition.html">LivePay Petition</a><a href="../../petition.html#donate">Support I-RIS</a></div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-logo">I-RIS</span>
+    <p>&copy; 2026 Illy Robotic Instruments Studios. Powered by StreamsCharts.</p>
+  </div>
+</footer>
+
+<script>
+// ===== UTILITIES =====
+function fmt(n) {
+  if (n == null || n === '') return '—';
+  n = parseInt(n);
+  if (isNaN(n)) return '—';
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return n.toLocaleString();
+}
+
+const API_BASE = '/api/bigo';
+let apiOk = true;
+
+async function apiFetch(path) {
+  try {
+    const r = await fetch(API_BASE + path, { signal: AbortSignal.timeout(6000) });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.json();
+  } catch (e) {
+    apiOk = false;
+    return null;
+  }
+}
+
+// ===== HERO PARTICLES =====
+(function() {
+  const container = document.getElementById('heroParticles');
+  const colors = ['rgba(255,0,128,', 'rgba(255,107,53,', 'rgba(79,209,255,'];
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement('span');
+    const size = Math.random() * 6 + 3;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    s.style.cssText = `
+      left:${Math.random() * 100}%;
+      width:${size}px;height:${size}px;
+      background:${color + (Math.random() * 0.4 + 0.1) + ')'};
+      animation-duration:${Math.random() * 20 + 15}s;
+      animation-delay:${Math.random() * -20}s;
+    `;
+    container.appendChild(s);
+  }
+})();
+
+// ===== LOAD TRENDING LEADERBOARD =====
+async function loadTrending() {
+  const data = await apiFetch('/trending?limit=10');
+  const grid = document.getElementById('leaderboardGrid');
+
+  if (!data || !data.data || !Array.isArray(data.data)) {
+    // Show API offline state
+    document.getElementById('apiStatus').classList.add('show');
+    grid.innerHTML = `
+      <div class="lb-card" style="grid-column:1/-1;justify-content:center;text-align:center;padding:40px;gap:0;flex-direction:column;">
+        <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">Live data unavailable</div>
+        <div style="font-size:.85rem;color:var(--text-muted);">Run <code style="background:var(--surface3);padding:2px 8px;border-radius:4px;">node backend-server.js</code> locally to load real trending data from StreamsCharts.</div>
+      </div>`;
+    return;
+  }
+
+  const channels = data.data.slice(0, 10);
+  let totalViewers = 0;
+  grid.innerHTML = channels.map((ch, i) => {
+    const isLive = ch.is_live;
+    const viewers = ch.current_viewers || 0;
+    if (isLive) totalViewers += viewers;
+    const rank = i + 1;
+    const top3 = rank <= 3;
+    return `
+      <div class="lb-card ${isLive ? 'is-live' : ''}">
+        <div class="lb-rank ${top3 ? 'top3' : ''}">${rank}</div>
+        <img class="lb-avatar ${isLive ? 'is-live' : ''}"
+             src="${ch.avatar || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect fill=%22%23222%22 width=%2240%22 height=%2240%22/></svg>'}"
+             alt="${ch.channel_name || ch.username || 'Creator'}"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect fill=%22%23222%22 width=%2240%22 height=%2240%22/></svg>'">
+        <div class="lb-info">
+          <div class="lb-name">${ch.channel_name || ch.username || 'Unknown'}</div>
+          <div class="lb-title">${ch.stream_title || (isLive ? 'Streaming now' : 'Not live')}</div>
+          <div class="lb-stats">
+            <span class="lb-stat"><strong>${fmt(ch.peak_viewers)}</strong> peak</span>
+            <span class="lb-stat"><strong>${fmt(ch.avg_viewers)}</strong> avg</span>
+            <span class="lb-stat"><strong>${fmt(ch.followers_count)}</strong> followers</span>
+          </div>
+        </div>
+        ${isLive ? `<div class="lb-live-badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--bigo);display:inline-block;"></span> Live</div>` : ''}
+        <div class="lb-viewers">
+          <span class="v-num">${isLive ? fmt(viewers) : '—'}</span>
+          <span class="v-label">${isLive ? 'viewers' : 'offline'}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('liveCount').textContent = fmt(totalViewers);
+  document.getElementById('totalViewers').textContent = fmt(totalViewers);
+  const liveCount = channels.filter(c => c.is_live).length;
+  document.getElementById('totalLiveCreators').textContent = liveCount;
+  document.getElementById('statCreators').textContent = channels.length;
+  const maxPeak = Math.max(...channels.map(c => c.peak_viewers || 0));
+  document.getElementById('statPeak').textContent = fmt(maxPeak);
+  const totalFollowers = channels.reduce((s, c) => s + (c.followers_count || 0), 0);
+  document.getElementById('statFollowers').textContent = fmt(totalFollowers);
+}
+
+// ===== LOAD FEATURED CREATORS =====
+// Add Bigo usernames below to activate live stats for featured creator slots.
+// Set the data-bigo-username attribute on each .creator-card or configure here:
+const FEATURED_CREATORS = [
+  // { slot: 1, username: 'bigoUsername1', cornerHref: '../HouseOfYoung' },
+  // { slot: 2, username: 'bigoUsername2', cornerHref: '../SwamiTsunami' },
+  // { slot: 3, username: 'bigoUsername3', cornerHref: '#' },
+];
+
+async function loadFeaturedCreators() {
+  if (!FEATURED_CREATORS.length) return;
+  const usernames = FEATURED_CREATORS.map(c => c.username).join(',');
+  const data = await apiFetch('/live?users=' + encodeURIComponent(usernames));
+  if (!data || !data.creators) return;
+
+  data.creators.forEach((cr, i) => {
+    const cfg = FEATURED_CREATORS[i];
+    if (!cfg) return;
+    const s = cfg.slot;
+    const liveEl = document.getElementById(`cc${s}-live`);
+    if (cr.live && liveEl) { liveEl.style.display = 'flex'; }
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set(`cc${s}-followers`, fmt(cr.followers));
+    set(`cc${s}-peak`, fmt(cr.peak_viewers));
+    set(`cc${s}-avg`, fmt(cr.avg_viewers));
+    const card = document.getElementById(`cc-slot-${s}`);
+    if (card && cr.live) card.classList.add('live-now');
+    const cornerBtn = document.getElementById(`cc${s}-corner`);
+    if (cornerBtn && cfg.cornerHref !== '#') {
+      cornerBtn.href = cfg.cornerHref;
+      cornerBtn.style.pointerEvents = '';
+      cornerBtn.style.opacity = '';
+    }
+  });
+}
+
+// ===== INIT =====
+loadTrending();
+loadFeaturedCreators();
+
+// Refresh live data every 3 minutes
+setInterval(loadTrending, 3 * 60 * 1000);
+setInterval(loadFeaturedCreators, 3 * 60 * 1000);
+</script>
+
+</body>
+</html>

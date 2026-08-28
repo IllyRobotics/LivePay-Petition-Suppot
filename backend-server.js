@@ -15,6 +15,49 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
+
+// Load .env without requiring dotenv package
+try {
+  fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split('\n').forEach(line => {
+    line = line.trim();
+    if (!line || line.startsWith('#')) return;
+    const eq = line.indexOf('=');
+    if (eq === -1) return;
+    const k = line.slice(0, eq).trim();
+    const v = line.slice(eq + 1).trim();
+    if (k && !(k in process.env)) process.env[k] = v;
+  });
+} catch {}
+
+const SC_BASE = 'https://streamscharts.com/api/jazz';
+const SC_CLIENT_ID = process.env.STREAMSCHARTS_CLIENT_ID || '';
+const SC_TOKEN = process.env.STREAMSCHARTS_TOKEN || '';
+
+function scFetch(apiPath) {
+  return new Promise((resolve, reject) => {
+    const url = new URL(SC_BASE + apiPath);
+    const req = https.get({
+      hostname: url.hostname,
+      path: url.pathname + url.search,
+      headers: {
+        'Client-ID': SC_CLIENT_ID,
+        'Authorization': `Bearer ${SC_TOKEN}`,
+        'Accept': 'application/json',
+        'User-Agent': 'IRIS-Studio/1.0',
+      },
+    }, (res) => {
+      let raw = '';
+      res.on('data', c => raw += c);
+      res.on('end', () => {
+        try { resolve({ status: res.statusCode, data: JSON.parse(raw) }); }
+        catch { resolve({ status: res.statusCode, data: raw }); }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(8000, () => { req.destroy(); reject(new Error('timeout')); });
+  });
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -242,6 +285,66 @@ app.get('/api/stats', (req, res) => {
     },
   });
 });
+
+// ===== STREAMSCHARTS / BIGO LIVE API PROXY =====
+
+// GET /api/bigo/trending?limit=10 — top trending Bigo Live creators
+app.get('/api/bigo/trending', async (req, res) => {
+  if (!SC_CLIENT_ID) return res.status(503).json({ error: 'StreamsCharts credentials not configured' });
+  try {
+    const limit = Math.min(parseInt(req.query.limit) || 10, 50);
+    const result = await scFetch(`/channels?platform=bigo&limit=${limit}`);
+    res.status(result.status).json(result.data);
+  } catch (err) {
+    console.error('StreamsCharts trending error:', err.message);
+    res.status(502).json({ error: 'StreamsCharts API unavailable', detail: err.message });
+  }
+});
+
+// GET /api/bigo/creator/:username — stats for a specific Bigo creator
+app.get('/api/bigo/creator/:username', async (req, res) => {
+  if (!SC_CLIENT_ID) return res.status(503).json({ error: 'StreamsCharts credentials not configured' });
+  const username = encodeURIComponent(req.params.username.slice(0, 64));
+  try {
+    const result = await scFetch(`/channels/${username}?platform=bigo`);
+    res.status(result.status).json(result.data);
+  } catch (err) {
+    console.error('StreamsCharts creator error:', err.message);
+    res.status(502).json({ error: 'StreamsCharts API unavailable', detail: err.message });
+  }
+});
+
+// GET /api/bigo/live?users=alice,bob,charlie — bulk live-status check (max 20)
+app.get('/api/bigo/live', async (req, res) => {
+  if (!SC_CLIENT_ID) return res.status(503).json({ error: 'StreamsCharts credentials not configured' });
+  const usernames = (req.query.users || '').split(',').map(u => u.trim()).filter(Boolean).slice(0, 20);
+  if (!usernames.length) return res.json({ creators: [] });
+  try {
+    const results = await Promise.allSettled(
+      usernames.map(u => scFetch(`/channels/${encodeURIComponent(u)}?platform=bigo`))
+    );
+    const creators = results.map((r, i) => {
+      const d = r.status === 'fulfilled' ? r.value.data : {};
+      return {
+        username: usernames[i],
+        live: d.is_live || false,
+        viewers: d.current_viewers || 0,
+        peak_viewers: d.peak_viewers || 0,
+        avg_viewers: d.avg_viewers || 0,
+        followers: d.followers_count || 0,
+        title: d.stream_title || '',
+        thumbnail: d.thumbnail_url || '',
+      };
+    });
+    res.json({ creators });
+  } catch (err) {
+    console.error('StreamsCharts live-check error:', err.message);
+    res.status(502).json({ error: 'StreamsCharts API unavailable', detail: err.message });
+  }
+});
+
+// Serve static files from project root for the IRIS pages
+app.use(express.static(path.join(__dirname)));
 
 // Health check
 app.get('/health', (req, res) => {
