@@ -1612,7 +1612,7 @@ window.addEventListener('scroll', () => {
     const container = document.getElementById('movie-bigo-lb');
     if (!container) return;
     try {
-      const r = await fetch('/api/bigo/trending?limit=5', { signal: AbortSignal.timeout(5000) });
+      const r = await fetch('https://vivacious-forgiveness-production-dc09.up.railway.app/api/bigo/trending?limit=5', { signal: AbortSignal.timeout(5000) });
       if (!r.ok) throw new Error('HTTP '+r.status);
       const json = await r.json();
       const channels = (json.data || []).slice(0, 5);
