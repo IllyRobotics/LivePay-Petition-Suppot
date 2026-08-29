@@ -248,6 +248,7 @@
     .admin-btn.remove:hover{background:rgba(229,9,20,.25);}
     .admin-empty{font-size:.82rem;color:var(--text-dim);padding:10px 0;}
     body.has-admin{padding-bottom:56px;}
+    #adminPwInput:focus{border-color:rgba(255,0,128,.5);outline:none;}
 
     /* ===== FANS ENGAGEMENT ===== */
     .fans-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 48px;margin:0;}
@@ -703,6 +704,21 @@
   </div>
 </footer>
 
+<!-- ===== ADMIN LOGIN BUTTON ===== -->
+<button id="adminLoginBtn" title="Admin login" style="position:fixed;bottom:16px;right:16px;z-index:199;width:40px;height:40px;border-radius:50%;background:rgba(20,20,20,.9);border:1px solid rgba(255,255,255,.12);color:var(--text-dim);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);" onmouseover="this.style.borderColor='rgba(255,0,128,.5)';this.style.color='#FF0080'" onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='var(--text-dim)'">🔐</button>
+
+<!-- ===== ADMIN LOGIN MODAL ===== -->
+<div id="adminLoginModal" class="modal-overlay">
+  <div class="modal-box" style="max-width:360px;">
+    <button class="modal-close" id="adminLoginClose">&times;</button>
+    <div style="font-size:1.4rem;font-weight:900;margin-bottom:4px;">Admin Access</div>
+    <div style="font-size:.85rem;color:var(--text-muted);margin-bottom:20px;">Enter your admin password to manage creator applications.</div>
+    <div id="adminLoginError" style="display:none;background:rgba(229,9,20,.1);border:1px solid rgba(229,9,20,.3);border-radius:8px;padding:10px 14px;font-size:.82rem;color:#ff6b6b;margin-bottom:12px;"></div>
+    <input id="adminPwInput" type="password" placeholder="Admin password" autocomplete="current-password" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:.9rem;outline:none;margin-bottom:12px;">
+    <button id="adminLoginSubmit" class="btn btn-bigo" style="width:100%;">Log In</button>
+  </div>
+</div>
+
 <!-- ===== ADMIN PANEL (rendered only in admin mode) ===== -->
 <div class="admin-bar" id="adminBar" style="display:none;">
   <div class="admin-bar-header" id="adminBarHeader">
@@ -725,7 +741,7 @@
 <script>
 // ===== CONFIG =====
 const API_BASE   = 'https://vivacious-forgiveness-production-dc09.up.railway.app/api/bigo';
-const ADMIN_TOKEN = new URLSearchParams(location.search).get('admin');
+let ADMIN_TOKEN = new URLSearchParams(location.search).get('admin') || sessionStorage.getItem('iris_admin_token') || '';
 const BLANK_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23222' width='40' height='40'/%3E%3C/svg%3E";
 
 // ===== MIAMI VICE BANNER GENERATOR =====
@@ -1091,6 +1107,45 @@ async function initAdmin() {
   render();
   setInterval(render, 30000);
 }
+
+// ===== ADMIN LOGIN =====
+function openAdminLogin() {
+  document.getElementById('adminLoginModal').classList.add('open');
+  setTimeout(() => document.getElementById('adminPwInput').focus(), 100);
+}
+function closeAdminLogin() {
+  document.getElementById('adminLoginModal').classList.remove('open');
+  document.getElementById('adminPwInput').value = '';
+  document.getElementById('adminLoginError').style.display = 'none';
+}
+document.getElementById('adminLoginClose').addEventListener('click', closeAdminLogin);
+document.getElementById('adminLoginModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAdminLogin(); });
+document.getElementById('adminPwInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('adminLoginSubmit').click(); });
+
+document.getElementById('adminLoginSubmit').addEventListener('click', async () => {
+  const token = document.getElementById('adminPwInput').value.trim();
+  if (!token) return;
+  const btn = document.getElementById('adminLoginSubmit');
+  btn.disabled = true; btn.textContent = 'Checking…';
+  const testRes = await apiFetch('/creators/applications', { headers: { 'x-admin-token': token } });
+  btn.disabled = false; btn.textContent = 'Log In';
+  if (testRes.ok) {
+    ADMIN_TOKEN = token;
+    sessionStorage.setItem('iris_admin_token', token);
+    closeAdminLogin();
+    document.getElementById('adminLoginBtn').style.display = 'none';
+    initAdmin();
+  } else {
+    const err = document.getElementById('adminLoginError');
+    err.textContent = 'Wrong password. Try again.';
+    err.style.display = 'block';
+    document.getElementById('adminPwInput').value = '';
+    document.getElementById('adminPwInput').focus();
+  }
+});
+
+document.getElementById('adminLoginBtn').addEventListener('click', openAdminLogin);
+if (ADMIN_TOKEN) document.getElementById('adminLoginBtn').style.display = 'none';
 
 // ===== INIT =====
 loadTrending();
