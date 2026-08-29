@@ -3,9 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Bigo Live × I-RIS — Creator's Corner</title>
-  <meta name="description" content="Featured Bigo Live creators on I-RIS. Live viewer counts, trending leaderboards, creator stats, and fan engagement — all in one place." />
-  <meta name="theme-color" content="#0a0a0a">
+  <title>Bigo Live Creator Hub — Official Bigo Ads Partner | I-RIS Studio</title>
+  <meta name="description" content="I-RIS is an official Bigo Ads partner. Bigo Live creators get a dedicated Creator's Corner on illy-ris.com — live viewer stats, trending leaderboard, fan engagement hub, and network exposure. Apply now and grow your brand beyond Bigo." />
+  <meta name="keywords" content="bigo live creators, bigo tv, bigo ads partner, bigo live creator hub, bigo creator platform, bigo live IRL, bigoads, bigo live tv, bigo streaming, bigo live stats, bigo creator corner, illy-ris bigo" />
+  <link rel="canonical" href="https://illy-ris.com/BigoLive" />
+  <meta name="theme-color" content="#FF0080">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="I-RIS Studio — Illy Robotic Instruments Studios">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://illy-ris.com/BigoLive" />
+  <meta property="og:title" content="Bigo Live Creator Hub — Official Bigo Ads Partner | I-RIS Studio" />
+  <meta property="og:description" content="I-RIS is an official Bigo Ads partner. Get your own Creator's Corner on illy-ris.com — live stats, trending leaderboard, fan hub, and network exposure. No exclusivity required." />
+  <meta property="og:image" content="https://illy-ris.com/images/I-RISWEBCARD.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="I-RIS Studio" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Bigo Live Creator Hub | I-RIS × Official Bigo Ads Partner" />
+  <meta name="twitter:description" content="I-RIS is an official Bigo Ads partner. Get your Creator's Corner — live viewer stats, fan hub, and network exposure." />
+  <meta name="twitter:image" content="https://illy-ris.com/images/I-RISWEBCARD.png" />
+  <meta name="twitter:site" content="@illyrobotic" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://illy-ris.com/BigoLive",
+        "url": "https://illy-ris.com/BigoLive",
+        "name": "Bigo Live Creator Hub — Official Bigo Ads Partner | I-RIS Studio",
+        "description": "I-RIS is an official Bigo Ads partner. Bigo Live creators get a dedicated Creator's Corner — live stats, trending leaderboard, fan engagement, and network exposure.",
+        "inLanguage": "en-US",
+        "isPartOf": { "@id": "https://illy-ris.com/" },
+        "publisher": { "@id": "https://illy-ris.com/#organization" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://illy-ris.com/#organization",
+        "name": "I-RIS Studio",
+        "alternateName": "Illy Robotic Instruments Studios",
+        "url": "https://illy-ris.com",
+        "description": "I-RIS is a creator incubator and network scaler — the first platform bridging exclusive networks and free social platforms for live content creators.",
+        "sameAs": ["https://illy-ris.com"]
+      },
+      {
+        "@type": "ItemList",
+        "name": "Bigo Live Featured Creators on I-RIS",
+        "url": "https://illy-ris.com/BigoLive",
+        "description": "Featured Bigo Live content creators with dedicated Creator's Corner pages on I-RIS Studio, powered by official Bigo Ads partnership."
+      }
+    ]
+  }
+  </script>
+
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23FF0080' width='100' height='100'/><text x='50%' y='55%' font-size='52' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>BL</text></svg>">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
@@ -295,6 +352,13 @@
 </head>
 <body>
 
+<!-- ===== PARTNERSHIP ANNOUNCEMENT BANNER ===== -->
+<div style="background:linear-gradient(90deg,#FF0080,#FF6B35,#FF0080);background-size:200% 100%;animation:bannerShift 6s linear infinite;padding:10px 24px;text-align:center;font-size:.82rem;font-weight:700;color:#fff;letter-spacing:.5px;position:relative;z-index:200;">
+  <style>@keyframes bannerShift{0%{background-position:0%}100%{background-position:200%}}</style>
+  🤝 I-RIS IS NOW AN <strong>OFFICIAL BIGO ADS PARTNER</strong> — Bigo Live creators, claim your Creator's Corner &nbsp;
+  <a href="#apply" style="color:#fff;text-decoration:underline;font-weight:800;">Apply Now &rarr;</a>
+</div>
+
 <!-- API status warning (shown when backend unreachable) -->
 <div class="api-status" id="apiStatus">
   ⚠ Live data unavailable — run <strong>node backend-server.js</strong> locally to enable real-time stats.
@@ -331,19 +395,33 @@
   <div class="hero-content">
     <div class="hero-eyebrow">
       <span class="live-dot"></span>
-      Live on Bigo × I-RIS
+      Official Bigo Ads Partner × I-RIS Studio
     </div>
 
     <h1 class="hero-title">
-      <span class="bigo-text">Bigo Live</span><br>
-      <span style="color:#fff;font-size:.55em;letter-spacing:2px;font-weight:600;text-transform:uppercase;">meets</span><br>
-      <span class="iris-text">I-RIS Studio</span>
+      <span style="color:#fff;font-size:.38em;letter-spacing:3px;font-weight:700;text-transform:uppercase;display:block;margin-bottom:8px;opacity:.9;">Bigo Live Creators —</span>
+      <span class="bigo-text">Your Home</span><br>
+      <span style="color:#fff;font-size:.38em;letter-spacing:3px;font-weight:600;text-transform:uppercase;">on I-RIS Studio</span>
     </h1>
 
     <p class="hero-sub">
-      Your favorite Bigo Live creators — now with their own Creator's Corner on I-RIS.
-      Live viewer counts, trending leaderboards, stats, and direct fan engagement, all in one place.
+      I-RIS is an <strong style="color:#fff;">Official Bigo Ads Partner</strong>. We built this platform for you —
+      get your own Creator's Corner at <strong style="color:#fff;">illy-ris.com/BigoLive/YourName</strong>,
+      powered by live stats, real fans, and network exposure. No exclusivity. No contracts. Just growth.
     </p>
+
+    <!-- Partnership credential pills -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:999px;background:rgba(255,0,128,.15);border:1px solid rgba(255,0,128,.4);font-size:.78rem;font-weight:700;color:#FF0080;">
+        ✓ Official Bigo Ads Partner
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:999px;background:rgba(79,209,255,.1);border:1px solid rgba(79,209,255,.3);font-size:.78rem;font-weight:700;color:#4fd1ff;">
+        📊 Powered by StreamsCharts
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:999px;background:rgba(70,211,105,.1);border:1px solid rgba(70,211,105,.3);font-size:.78rem;font-weight:700;color:#46d369;">
+        🔒 No Exclusivity Required
+      </span>
+    </div>
 
     <div class="live-ticker">
       <span class="live-dot"></span>
@@ -368,8 +446,57 @@
     </div>
 
     <div class="hero-actions">
-      <a class="btn btn-bigo" href="#creators">&#9654; See Featured Creators</a>
-      <a class="btn btn-outline" href="#trending">View Trending Leaderboard</a>
+      <a class="btn btn-bigo" href="#apply">🎯 Claim Your Creator's Corner</a>
+      <a class="btn btn-outline" href="#trending">View Trending Live Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BIGO ADS PARTNERSHIP SECTION ===== -->
+<section style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 48px;">
+  <div style="max-width:1400px;margin:auto;">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div style="display:inline-flex;align-items:center;gap:12px;padding:8px 20px;border-radius:999px;background:rgba(255,0,128,.1);border:1px solid rgba(255,0,128,.3);font-size:.78rem;font-weight:700;color:#FF0080;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#FF0080;display:inline-block;"></span>
+        Official Partnership
+      </div>
+      <h2 style="font-size:2.2rem;font-weight:900;margin-bottom:12px;">I-RIS × <span style="background:linear-gradient(135deg,#FF0080,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Bigo Live TV</span></h2>
+      <p style="color:var(--text-muted);max-width:640px;margin:auto;font-size:1rem;line-height:1.7;">
+        I-RIS has partnered with Bigo Live TV through the <strong style="color:#fff;">Bigo Ads partnership program</strong> to give Bigo creators a professional home base that grows their brand, expands their audience, and connects them with networks and studios — without leaving Bigo.
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;border-top:3px solid #FF0080;">
+        <div style="font-size:2.5rem;margin-bottom:16px;">🎯</div>
+        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:10px;">Your Own URL</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">A dedicated page at <strong style="color:#fff;">illy-ris.com/BigoLive/YourName</strong> that fans can always find — whether you're live or offline.</p>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;border-top:3px solid #4fd1ff;">
+        <div style="font-size:2.5rem;margin-bottom:16px;">📊</div>
+        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:10px;">Live Stats Dashboard</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Real-time viewer counts, peak stats, follower growth, and trending rankings — all powered by StreamsCharts and displayed to your fans automatically.</p>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;border-top:3px solid #7c5cff;">
+        <div style="font-size:2.5rem;margin-bottom:16px;">📡</div>
+        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:10px;">Network Exposure</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">I-RIS is actively pitching creators to TV networks, streaming platforms, and studios. Your Creator's Corner is your professional media kit.</p>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;border-top:3px solid #46d369;">
+        <div style="font-size:2.5rem;margin-bottom:16px;">🔒</div>
+        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:10px;">No Exclusivity</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Keep streaming on Bigo, TikTok, YouTube — everywhere. I-RIS is non-exclusive. We amplify what you already do, not restrict it.</p>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;border-top:3px solid #f5c518;">
+        <div style="font-size:2.5rem;margin-bottom:16px;">🔴</div>
+        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:10px;">Live Now Alerts</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">When you go live on Bigo, your I-RIS page shows a pulsing Live badge and your current viewer count. Fans never miss a stream.</p>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;border-top:3px solid #FF6B35;">
+        <div style="font-size:2.5rem;margin-bottom:16px;">🏆</div>
+        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:10px;">Trending Leaderboard</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Featured creators appear on the I-RIS Bigo trending leaderboard — discoverable by new fans, networks, and the I-RIS audience every day.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -451,19 +578,18 @@
 <section class="fans-section">
   <div class="fans-inner">
     <div class="fans-text">
-      <h2>Fan-First.<br><span class="bigo">Creator-Powered.</span></h2>
+      <h2>Your Fans Are<br><span class="bigo">Already Waiting.</span></h2>
       <p>
-        I-RIS puts fans directly in the creator's world. Every featured Bigo Live creator gets
-        a dedicated hub where their community lives — live stream alerts, stats, exclusive content,
-        and a direct line to show their support.
+        As an <strong style="color:#fff;">Official Bigo Ads Partner</strong>, I-RIS is building the first professional web presence for Bigo Live creators.
+        Every featured creator gets a dedicated page that fans can find through Google — not just through the Bigo app.
       </p>
       <p>
-        No algorithm hiding your favorite streamer. No missing a live because you weren't on Bigo
-        at that exact moment. I-RIS keeps you connected.
+        When you go live on Bigo, your I-RIS page lights up with a real-time viewer count and a pulsing Live badge.
+        Your fans can follow your stats, share your corner, and help new viewers find you — even when you're offline.
       </p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
-        <a class="btn btn-bigo" href="#creators">See Creators</a>
-        <a class="btn btn-outline" href="https://illy-ris.com/petition.html#donate">Support I-RIS</a>
+        <a class="btn btn-bigo" href="#apply">Claim Your Corner</a>
+        <a class="btn btn-outline" href="#creators">See Featured Creators</a>
       </div>
     </div>
     <div>
@@ -517,15 +643,48 @@
   </div>
 </section>
 
-<!-- ===== CTA ===== -->
-<section class="cta-section">
-  <div class="cta-bg"></div>
-  <div class="cta-inner">
-    <h2>Ready to Join the<br><span class="bigo">Bigo × I-RIS</span> Network?</h2>
-    <p>Whether you're a Bigo creator looking for your own hub, or a fan who wants to support the platform — there's a place for you here.</p>
-    <div class="cta-btns">
-      <a class="btn btn-bigo" href="https://illy-ris.com/#iris-vision">I'm a Creator — Tell Me More</a>
-      <a class="btn btn-outline" href="https://illy-ris.com/petition.html#donate">I'm a Fan — Support I-RIS</a>
+<!-- ===== APPLY / CTA ===== -->
+<section id="apply" style="background:linear-gradient(135deg,rgba(255,0,128,.12),rgba(255,107,53,.08));border-top:1px solid rgba(255,0,128,.3);padding:80px 48px;">
+  <div style="max-width:860px;margin:auto;text-align:center;">
+    <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 20px;border-radius:999px;background:rgba(255,0,128,.15);border:1px solid rgba(255,0,128,.4);font-size:.78rem;font-weight:700;color:#FF0080;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;">
+      <span style="animation:livePulse 1.2s ease-in-out infinite;width:8px;height:8px;border-radius:50%;background:#FF0080;display:inline-block;"></span>
+      Now Accepting Applications
+    </div>
+
+    <h2 style="font-size:2.8rem;font-weight:900;line-height:1.15;margin-bottom:16px;">
+      Claim Your<br>
+      <span style="background:linear-gradient(135deg,#FF0080,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Creator's Corner</span>
+    </h2>
+    <p style="color:var(--text-muted);font-size:1.05rem;line-height:1.7;max-width:620px;margin:0 auto 16px;">
+      As an <strong style="color:#fff;">Official Bigo Ads Partner</strong>, I-RIS gives Bigo creators a professional web presence at <strong style="color:#4fd1ff;">illy-ris.com/BigoLive/YourName</strong> — free, no exclusivity, powered by real StreamsCharts data.
+    </p>
+    <p style="color:var(--text-dim);font-size:.9rem;margin-bottom:40px;">No contracts. No exclusivity. Built in 24 hours.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:680px;margin:0 auto 40px;text-align:left;">
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:20px 18px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">✅</div>
+        <div style="font-size:.82rem;font-weight:700;margin-bottom:4px;">Free to Join</div>
+        <div style="font-size:.78rem;color:var(--text-muted);">No cost, no catch. The Bigo Ads partnership makes this possible.</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:20px 18px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">⚡</div>
+        <div style="font-size:.82rem;font-weight:700;margin-bottom:4px;">Built in 24 Hours</div>
+        <div style="font-size:.78rem;color:var(--text-muted);">Submit your Bigo ID and we'll build your page same day.</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:20px 18px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🔓</div>
+        <div style="font-size:.82rem;font-weight:700;margin-bottom:4px;">No Exclusivity</div>
+        <div style="font-size:.78rem;color:var(--text-muted);">Keep streaming everywhere. I-RIS only expands your reach.</div>
+      </div>
+    </div>
+
+    <button class="btn btn-bigo" id="applyBtn" style="font-size:1.05rem;padding:16px 40px;border-radius:12px;">
+      🎯 Apply for Your Creator's Corner
+    </button>
+    <div style="margin-top:16px;color:var(--text-dim);font-size:.82rem;">
+      Already featured?
+      <a href="https://illy-ris.com/petition.html#donate" style="color:var(--bigo);text-decoration:none;">Support I-RIS</a>
+      and help us grow the network.
     </div>
   </div>
 </section>
@@ -794,6 +953,7 @@ async function loadFeaturedCreators() {
   const creators = data?.creators || [];
   grid.innerHTML = creators.map(creatorCardHTML).join('') + APPLY_CARD_HTML;
   document.getElementById('openApplyBtn')?.addEventListener('click', openApplyModal);
+document.getElementById('applyBtn')?.addEventListener('click', openApplyModal);
   document.getElementById('statCreators').textContent = creators.length;
 }
 
