@@ -9,7 +9,7 @@ const { URL } = require('url');
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const CACHE_FILE = path.join(__dirname, 'data', 'bigo-trending.json');
-const CACHE_TTL  = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_TTL  = 60 * 60 * 1000; // 1 hour
 
 // Realistic browser User-Agents — rotated per request
 const USER_AGENTS = [
@@ -95,18 +95,24 @@ function request(targetUrl, opts = {}) {
 
 function normalise(rooms) {
   return rooms.map(r => ({
-    channel_name    : r.nick || r.nickName || r.userName || r.roomTopic || 'Unknown',
-    username        : r.siteId || r.uid || r.userId || '',
+    channel_name    : r.nick || r.nickName || r.userName || r.displayName || r.roomTopic || 'Unknown',
+    username        : r.siteId || r.uid || r.userId || r.userName || '',
     is_live         : true,
-    current_viewers : parseInt(r.clickCount || r.audienceCount || r.userCount || 0) || 0,
-    peak_viewers    : parseInt(r.clickCount || r.peakViewers || r.audienceCount || 0) || 0,
-    followers_count : parseInt(r.fanCount  || r.followers || 0) || 0,
-    room_topic      : r.roomTopic || r.gameInfo?.gameName || '',
-    avatar          : r.snapshot || r.headPicture || r.coverUrl || '',
+    current_viewers : parseInt(r.clickCount || r.audienceCount || r.userCount || r.viewerCount || 0) || 0,
+    peak_viewers    : parseInt(r.peakViewers || r.clickCount || r.audienceCount || 0) || 0,
+    followers_count : parseInt(r.fanCount || r.fans || r.followers || 0) || 0,
+    room_topic      : r.roomTopic || r.title || r.gameInfo?.gameName || '',
+    thumbnail       : r.snapshot || r.coverUrl || r.bgImageUrl || '',   // stream screenshot
+    avatar          : r.headPicture || r.avatarUrl || r.snapshot || '', // profile pic
+    country         : r.countryCode || r.country || '',
   }));
 }
 
 // ─── Bigo Live API endpoints (tried in order) ─────────────────────────────────
+
+function parseRooms(json) {
+  return json.rooms || json.list || json.data || json.channelList || json.roomList || [];
+}
 
 async function tryHotNewLive(limit) {
   const body = JSON.stringify({ area: 0, page: 1, pageSize: Math.min(limit, 50) });
@@ -116,8 +122,33 @@ async function tryHotNewLive(limit) {
     body,
   });
   if (r.status !== 200) throw new Error(`HTTP ${r.status}`);
-  const json = JSON.parse(r.body);
-  const rooms = json.rooms || json.list || json.data || [];
+  const rooms = parseRooms(JSON.parse(r.body));
+  if (!rooms.length) throw new Error('empty response');
+  return normalise(rooms).slice(0, limit);
+}
+
+async function tryBgapiList(limit) {
+  const body = JSON.stringify({ area: 0, page: 1, pageSize: Math.min(limit, 50), type: 1 });
+  const r = await request('https://www.bigo.tv/bgapi/channel/list', {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+    body,
+  });
+  if (r.status !== 200) throw new Error(`HTTP ${r.status}`);
+  const rooms = parseRooms(JSON.parse(r.body));
+  if (!rooms.length) throw new Error('empty response');
+  return normalise(rooms).slice(0, limit);
+}
+
+async function tryBgapiHostList(limit) {
+  const body = JSON.stringify({ area: 0, page: 1, pageSize: Math.min(limit, 50), type: 1 });
+  const r = await request('https://bgapi.bigo.tv/bgapi/channel/list', {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+    body,
+  });
+  if (r.status !== 200) throw new Error(`HTTP ${r.status}`);
+  const rooms = parseRooms(JSON.parse(r.body));
   if (!rooms.length) throw new Error('empty response');
   return normalise(rooms).slice(0, limit);
 }
@@ -127,8 +158,7 @@ async function tryDiscover(limit) {
     `https://www.bigo.tv/api/discover?page=1&pageSize=${Math.min(limit, 50)}&type=1`
   );
   if (r.status !== 200) throw new Error(`HTTP ${r.status}`);
-  const json = JSON.parse(r.body);
-  const rooms = json.rooms || json.list || json.data || [];
+  const rooms = parseRooms(JSON.parse(r.body));
   if (!rooms.length) throw new Error('empty response');
   return normalise(rooms).slice(0, limit);
 }
@@ -138,14 +168,24 @@ async function tryOBHotLive(limit) {
     `https://www.bigo.tv/OB.WEB.WEBSITE/api/bigo/hotlive?page=0&size=${Math.min(limit, 50)}`
   );
   if (r.status !== 200) throw new Error(`HTTP ${r.status}`);
-  const json = JSON.parse(r.body);
-  const rooms = json.rooms || json.list || json.data || [];
+  const rooms = parseRooms(JSON.parse(r.body));
+  if (!rooms.length) throw new Error('empty response');
+  return normalise(rooms).slice(0, limit);
+}
+
+async function tryOBDiscover(limit) {
+  const r = await request(
+    `https://www.bigo.tv/OB.WEB.WEBSITE/api/bigo/discover?page=0&size=${Math.min(limit, 50)}&type=0`
+  );
+  if (r.status !== 200) throw new Error(`HTTP ${r.status}`);
+  const rooms = parseRooms(JSON.parse(r.body));
   if (!rooms.length) throw new Error('empty response');
   return normalise(rooms).slice(0, limit);
 }
 
 async function fetchLive(limit) {
-  for (const fn of [tryHotNewLive, tryDiscover, tryOBHotLive]) {
+  const fns = [tryBgapiList, tryBgapiHostList, tryHotNewLive, tryDiscover, tryOBHotLive, tryOBDiscover];
+  for (const fn of fns) {
     try {
       const data = await fn(limit);
       console.log(`[bigo-scraper] fetched ${data.length} creators via ${fn.name}`);
