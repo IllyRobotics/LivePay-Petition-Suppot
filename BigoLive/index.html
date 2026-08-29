@@ -461,6 +461,57 @@
   </div>
 </section>
 
+<!-- ===== FEATURED LIVE PLAYER ===== -->
+<section id="featured-live" style="display:none;background:var(--surface);border-top:2px solid rgba(229,9,20,.5);border-bottom:1px solid rgba(255,0,110,.2);padding:40px 48px;">
+  <div style="max-width:1200px;margin:auto;">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap;">
+      <div id="livePlayerBadge" style="display:inline-flex;align-items:center;gap:7px;background:rgba(229,9,20,.18);border:1px solid rgba(229,9,20,.5);border-radius:999px;padding:6px 14px;font-size:.75rem;font-weight:900;color:#ff4242;text-transform:uppercase;letter-spacing:1.5px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#e50914;display:inline-block;animation:livePulse 1.2s ease-in-out infinite;"></span>
+        Live Now on Bigo
+      </div>
+      <h2 id="livePlayerTitle" style="font-size:1.35rem;font-weight:800;margin:0;"></h2>
+      <span id="livePlayerViewers" style="margin-left:auto;font-size:.82rem;color:var(--text-muted);"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start;">
+      <div style="position:relative;padding-top:56.25%;background:#000;border-radius:16px;overflow:hidden;box-shadow:0 0 60px rgba(229,9,20,.25);">
+        <iframe
+          id="bigoPlayerFrame"
+          style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+          allowfullscreen
+          allow="autoplay; fullscreen; picture-in-picture"
+          scrolling="no"
+          title="Live stream"
+        ></iframe>
+        <div id="playerLoadMsg" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:rgba(255,255,255,.5);font-size:.85rem;pointer-events:none;">
+          <div style="font-size:2rem;">📡</div>
+          <div>Loading stream…</div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:16px;">
+        <div id="liveCreatorAvatar" style="width:64px;height:64px;border-radius:50%;background:var(--surface3);overflow:hidden;border:2px solid #e50914;">
+          <img id="liveAvatarImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;">
+        </div>
+        <div>
+          <div id="liveCreatorName" style="font-weight:800;font-size:1.1rem;margin-bottom:4px;"></div>
+          <div id="liveCreatorTopic" style="font-size:.78rem;color:var(--text-muted);"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface3);border-radius:10px;">
+            <span style="font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;">Viewers</span>
+            <span id="liveStatViewers" style="font-weight:800;font-size:1rem;color:#fff;">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface3);border-radius:10px;">
+            <span style="font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;">Followers</span>
+            <span id="liveStatFollowers" style="font-weight:800;font-size:1rem;color:#fff;">—</span>
+          </div>
+        </div>
+        <a id="liveWatchBtn" href="https://www.bigo.tv/1133294616" target="_blank" rel="noopener" class="btn btn-bigo" style="text-align:center;text-decoration:none;">Watch on Bigo →</a>
+        <p style="font-size:.68rem;color:var(--text-dim);text-align:center;margin:0;">Powered by I-RIS × Bigo Live partnership</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== BIGO ADS PARTNERSHIP SECTION ===== -->
 <section style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 48px;">
   <div style="max-width:1400px;margin:auto;">
@@ -1170,12 +1221,57 @@ document.getElementById('adminLoginSubmit').addEventListener('click', async () =
 document.getElementById('adminLoginBtn').addEventListener('click', openAdminLogin);
 if (ADMIN_TOKEN) document.getElementById('adminLoginBtn').style.display = 'none';
 
+// ===== FEATURED LIVE PLAYER =====
+const FEATURED_BIGO_ID = '1133294616';
+const RAIL_PROXY = 'https://vivacious-forgiveness-production-dc09.up.railway.app';
+
+async function checkFeaturedLive() {
+  let data;
+  try {
+    const res = await fetch(`${API_BASE}/creator/${FEATURED_BIGO_ID}`, { signal: AbortSignal.timeout(10000) });
+    data = await res.json();
+  } catch (_) { return; }
+  if (!data || !data.is_live) return;
+
+  const section = document.getElementById('featured-live');
+  const frame   = document.getElementById('bigoPlayerFrame');
+
+  // Title row
+  const name  = data.channel_name || 'I-RIS Creator';
+  const topic = data.room_topic   || '';
+  const views = data.current_viewers || 0;
+  const fans  = data.followers_count || 0;
+
+  document.getElementById('livePlayerTitle').textContent    = name;
+  document.getElementById('livePlayerViewers').textContent  = views ? `👁 ${fmt(views)} watching` : '';
+  document.getElementById('liveCreatorName').textContent    = name;
+  document.getElementById('liveCreatorTopic').textContent   = topic;
+  document.getElementById('liveStatViewers').textContent    = views ? fmt(views) : '—';
+  document.getElementById('liveStatFollowers').textContent  = fans  ? fmt(fans)  : '—';
+
+  const avatarImg = document.getElementById('liveAvatarImg');
+  const avatarSrc = data.avatar || data.thumbnail || '';
+  if (avatarSrc) { avatarImg.src = avatarSrc; avatarImg.style.display = 'block'; }
+
+  // Load iframe (proxy strips X-Frame-Options so Bigo page can be embedded)
+  frame.src = `${RAIL_PROXY}/proxy/bigo/${FEATURED_BIGO_ID}`;
+  frame.addEventListener('load', () => {
+    const msg = document.getElementById('playerLoadMsg');
+    if (msg) msg.style.display = 'none';
+  }, { once: true });
+
+  section.style.display = 'block';
+  section.scrollIntoView = undefined; // don't auto-scroll
+}
+
 // ===== INIT =====
 loadTrending();
 loadFeaturedCreators();
 initAdmin();
+checkFeaturedLive();
 setInterval(loadTrending, 3 * 60 * 1000);
 setInterval(loadFeaturedCreators, 3 * 60 * 1000);
+setInterval(checkFeaturedLive, 5 * 60 * 1000);
 </script>
 
 </body>
