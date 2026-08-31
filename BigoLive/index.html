@@ -477,7 +477,6 @@
         <iframe
           id="bigoPlayerFrame"
           style="position:absolute;inset:0;width:100%;height:100%;border:none;"
-          allowfullscreen
           allow="autoplay; fullscreen; picture-in-picture"
           scrolling="no"
           title="Live stream"
@@ -775,8 +774,10 @@
     <div style="font-size:1.4rem;font-weight:900;margin-bottom:4px;">Admin Access</div>
     <div style="font-size:.85rem;color:var(--text-muted);margin-bottom:20px;">Enter your admin password to manage creator applications.</div>
     <div id="adminLoginError" style="display:none;background:rgba(229,9,20,.1);border:1px solid rgba(229,9,20,.3);border-radius:8px;padding:10px 14px;font-size:.82rem;color:#ff6b6b;margin-bottom:12px;"></div>
-    <input id="adminPwInput" type="password" placeholder="Admin password" autocomplete="current-password" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:.9rem;outline:none;margin-bottom:12px;">
-    <button id="adminLoginSubmit" class="btn btn-bigo" style="width:100%;">Log In</button>
+    <form onsubmit="return false;" style="margin:0;">
+      <input id="adminPwInput" type="password" placeholder="Admin password" autocomplete="current-password" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:.9rem;outline:none;margin-bottom:12px;">
+      <button id="adminLoginSubmit" class="btn btn-bigo" style="width:100%;" type="submit">Log In</button>
+    </form>
   </div>
 </div>
 
@@ -957,8 +958,9 @@ async function loadTrending() {
     const live = ch.is_live;
     const v = ch.current_viewers || 0;
     if (live) { totalViewers += v; liveN++; }
-    const thumb = ch.thumbnail || ch.avatar || '';
-    const avatarUrl = ch.avatar || '';
+    const toHttps = u => u ? u.replace(/^http:\/\//, 'https://') : u;
+    const thumb = toHttps(ch.thumbnail || ch.avatar || '');
+    const avatarUrl = toHttps(ch.avatar || '');
     const name = ch.channel_name || ch.username || 'Creator';
     const topic = ch.room_topic || (live ? 'Live now on Bigo' : '');
     const bigoUrl = `https://www.bigo.tv/${encodeURIComponent(ch.username || '')}`;
@@ -972,7 +974,7 @@ async function loadTrending() {
         ${live && v ? `<div class="stream-viewers-badge">👁 ${fmt(v)}</div>` : ''}
       </div>
       <div class="stream-info">
-        <img class="stream-avatar-sm" src="${avatarUrl || BLANK_AVATAR}" alt="${name}" onerror="this.src='${BLANK_AVATAR}'">
+        <img class="stream-avatar-sm" src="${avatarUrl || BLANK_AVATAR}" alt="${name}" onerror="this.src=BLANK_AVATAR">
         <div class="stream-meta">
           <div class="stream-name">${name}</div>
           ${topic ? `<div class="stream-topic">${topic}</div>` : ''}
@@ -1004,7 +1006,7 @@ function creatorCardHTML(cr) {
           </div>
         </div>
         <div class="cc-avatar-wrap">
-          <img class="cc-avatar" src="${avatar}" alt="${cr.display_name}" onerror="this.src='${BLANK_AVATAR}'">
+          <img class="cc-avatar" src="${avatar}" alt="${cr.display_name}" onerror="this.src=BLANK_AVATAR">
         </div>
       </div>
       <div class="cc-body">
